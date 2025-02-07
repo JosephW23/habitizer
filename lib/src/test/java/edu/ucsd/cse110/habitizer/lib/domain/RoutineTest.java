@@ -10,7 +10,7 @@ import java.util.List;
 public class RoutineTest {
 
     @Test
-    public void getTasks() {
+    public void tasks() {
         Routine routine = new Routine("Test Routine", List.of(
                 new RoutineTask("Brush Teeth", 1, false),
                 new RoutineTask("Shower", 2, false)

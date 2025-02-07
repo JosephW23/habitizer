@@ -18,6 +18,14 @@ public class RoutineTaskTest {
         } catch (IllegalArgumentException e) {
             assertEquals("RoutineTask title cannot be blank", e.getMessage());
         }
+
+        // Try-Catch for null title
+        try {
+            new RoutineTask(null, 1, false);
+            fail("Expected: IllegalArgumentException, null title");
+        } catch (IllegalArgumentException e) {
+            assertEquals("RoutineTask title cannot be blank", e.getMessage());
+        }
     }
 
     @Test

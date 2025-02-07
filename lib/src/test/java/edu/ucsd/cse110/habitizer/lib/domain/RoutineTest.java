@@ -33,11 +33,22 @@ public class RoutineTest {
         var expected = "Test Routine";
         assertEquals(routine.title(), expected);
 
+        // Try-Catch for blank title
         try {
             new Routine(" ", List.of(
                     new RoutineTask("Brush Teeth", 1, false)
                 ));
             fail("Expected: IllegalArgumentException, blank title");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Routine title cannot be blank", e.getMessage());
+        }
+
+        // Try-Catch for null title
+        try {
+            new Routine(null, List.of(
+                    new RoutineTask("Brush Teeth", 1, false)
+            ));
+            fail("Expected: IllegalArgumentException, null title");
         } catch (IllegalArgumentException e) {
             assertEquals("Routine title cannot be blank", e.getMessage());
         }

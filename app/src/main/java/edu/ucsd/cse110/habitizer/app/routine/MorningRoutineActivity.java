@@ -1,12 +1,16 @@
 package edu.ucsd.cse110.habitizer.app.routine;
-import edu.ucsd.cse110.habitizer.app.R;
+
+
+
 import android.os.Bundle;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.ArrayList;
-import java.util.List;
 
+import edu.ucsd.cse110.habitizer.app.R;
 
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 
 public class MorningRoutineActivity extends AppCompatActivity implements RoutineContract.View {
 
@@ -18,13 +22,15 @@ public class MorningRoutineActivity extends AppCompatActivity implements Routine
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_morning_routine);
 
+        // This matches the TextView in activity_morning_routine.xml
         tasksDisplay = findViewById(R.id.tasks_display);
-        List<String> initialTasks = new ArrayList<>();
-        initialTasks.add("Exercise");
-        initialTasks.add("Meditation");
-        initialTasks.add("Reading");
 
-        presenter = new MorningRoutinePresenter(this, initialTasks);
+        // Initialize data + repository US1-1 classes
+        InMemoryDataSource dataSource = InMemoryDataSource.fromDefault();
+        RoutineRepository routineRepository = new RoutineRepository(dataSource);
+
+
+        presenter = new MorningRoutinePresenter(this, routineRepository);
         presenter.start();
     }
 

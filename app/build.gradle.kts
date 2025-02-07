@@ -42,4 +42,6 @@ dependencies {
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.ext.espresso.core)
+    // <-- Add this line to pull in the :lib module
+    implementation(project(":lib"))
 }

@@ -35,11 +35,16 @@ public class MorningRoutineActivity extends AppCompatActivity implements Routine
     }
 
     @Override
-    public void displayTasks(String[] tasks) {
+    public void displayTasks(List<RoutineTask> tasks) {
         StringBuilder tasksText = new StringBuilder();
-        for (String task : tasks) {
-            tasksText.append(task).append("\n");
+
+        for (RoutineTask task : tasks) {
+            tasksText.append("Title: ").append(task.title())
+                    .append(", Priority: ").append(task.priority())
+                    .append(", Completed: ").append(task.isChecked() ? "Yes" : "No")
+                    .append("\n");
         }
+
         tasksDisplay.setText(tasksText.toString());
     }
 }

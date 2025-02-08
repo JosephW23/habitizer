@@ -20,7 +20,6 @@ public class MorningRoutinePresenterTest {
     public void setUp() {
         mockView = mock(RoutineContract.View.class);
         mockRepository = mock(RoutineRepository.class);
-
         Routine mockRoutine = new Routine("Test Routine", List.of(
                 new RoutineTask("Exercise", 1, false),
                 new RoutineTask("Meditation", 2, false),
@@ -28,13 +27,16 @@ public class MorningRoutinePresenterTest {
         ));
 
         when(mockRepository.routine("Test Routine")).thenReturn(mockRoutine);
-
         presenter = new MorningRoutinePresenter(mockView, mockRepository);
     }
 
     @Test
     public void testLoadTasks_callsDisplayTasks() {
         presenter.loadTasks();
-        verify(mockView).displayTasks(new String[]{"Exercise", "Meditation", "Reading"});
+        verify(mockView).displayTasks(List.of(
+                new RoutineTask("Exercise", 1, false),
+                new RoutineTask("Meditation", 2, false),
+                new RoutineTask("Reading", 3, false)
+        ));
     }
 }

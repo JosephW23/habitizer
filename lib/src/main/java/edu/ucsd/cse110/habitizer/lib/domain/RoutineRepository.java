@@ -15,4 +15,13 @@ public class RoutineRepository {
     public List<RoutineTask> getTaskList() {
         return dataSource.getTaskList();
     }
+
+    public RoutineTask getTaskWithId(int id) {
+        for (var task : this.getTaskList()) {
+            if (task.id() == id) {
+                return task;
+            }
+        }
+        return null;
+    }
 }

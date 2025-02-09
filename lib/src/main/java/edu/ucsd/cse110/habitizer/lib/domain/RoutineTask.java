@@ -32,6 +32,10 @@ public class RoutineTask {
 
     public boolean isChecked() { return isChecked; }
 
+    public void checkOffTask() {
+        this.isChecked = true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

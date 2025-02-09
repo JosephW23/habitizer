@@ -16,9 +16,9 @@ public class InMemoryDataSource {
     public void initializeDefaultRoutine() {
         Routine DEFAULT_ROUTINE = new Routine("Test Routine",
                 List.of(
-                        new RoutineTask("Wake Up", 1, false),
-                        new RoutineTask("Eat Breakfast", 2, false),
-                        new RoutineTask("Brush Teeth", 3, false)
+                        new RoutineTask(0, "Wake Up", 1, false),
+                        new RoutineTask(1,"Eat Breakfast", 2, false),
+                        new RoutineTask(2, "Brush Teeth", 3, false)
                 ));
 
         routines.put(DEFAULT_ROUTINE.title(), DEFAULT_ROUTINE);

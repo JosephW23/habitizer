@@ -2,4 +2,7 @@
     <string name="app_name">Habitizer</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="card_front_text">Card Front Text</string>
+    <string name="_35">35</string>
+    <string name="end_routine">End Routine</string>
 </resources>

@@ -12,13 +12,13 @@ public class RoutineTest {
     @Test
     public void tasks() {
         Routine routine = new Routine("Test Routine", List.of(
-                new RoutineTask("Brush Teeth", 1, false),
-                new RoutineTask("Shower", 2, false)
+                new RoutineTask(0, "Brush Teeth", 1, false),
+                new RoutineTask(1, "Shower", 2, false)
         ));
 
         List<RoutineTask> expected = new ArrayList<RoutineTask>(List.of(
-                new RoutineTask("Brush Teeth", 1, false),
-                new RoutineTask("Shower", 2, false)
+                new RoutineTask(0, "Brush Teeth", 1, false),
+                new RoutineTask(1, "Shower", 2, false)
         ));
 
         assertEquals(routine.tasks(), expected);
@@ -27,7 +27,7 @@ public class RoutineTest {
     @Test
     public void title() {
         Routine routine = new Routine("Test Routine", List.of(
-                new RoutineTask("Brush Teeth", 1, false)
+                new RoutineTask(1, "Brush Teeth", 1, false)
         ));
 
         var expected = "Test Routine";
@@ -36,7 +36,7 @@ public class RoutineTest {
         // Try-Catch for blank title
         try {
             new Routine(" ", List.of(
-                    new RoutineTask("Brush Teeth", 1, false)
+                    new RoutineTask(0, "Brush Teeth", 1, false)
                 ));
             fail("Expected: IllegalArgumentException, blank title");
         } catch (IllegalArgumentException e) {
@@ -46,7 +46,7 @@ public class RoutineTest {
         // Try-Catch for null title
         try {
             new Routine(null, List.of(
-                    new RoutineTask("Brush Teeth", 1, false)
+                    new RoutineTask(0, "Brush Teeth", 1, false)
             ));
             fail("Expected: IllegalArgumentException, null title");
         } catch (IllegalArgumentException e) {

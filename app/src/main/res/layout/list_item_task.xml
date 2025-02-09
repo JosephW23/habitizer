@@ -6,34 +6,65 @@
     android:layout_height="96dp">
 
     <!-- TODO: replace variable name task_front_text-->
+
     <TextView
         android:id="@+id/task_front_text"
-        android:layout_width="276dp"
-        android:layout_height="68dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="274dp"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Card Front Text"
+        android:gravity="center"
+        android:text="@string/card_front_text"
         android:textAlignment="textStart"
         android:textSize="34sp"
         android:textStyle="bold"
+        app:flow_verticalAlign="top"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/task_time_placeholder"
+        app:layout_constraintStart_toEndOf="@+id/taskCheck"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="TextSizeCheck,VisualLintOverlap" />
 
     <TextView
         android:id="@+id/task_time_placeholder"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="61dp"
+        android:layout_height="53dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="35"
+        android:gravity="center"
+        android:text="@string/_35"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/task_front_text"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.545"
+        tools:ignore="TextSizeCheck,VisualLintOverlap" />
+
+    <ImageView
+        android:id="@+id/taskCheck"
+        android:layout_width="38dp"
+        android:layout_height="51dp"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/task_front_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_check"
+        app:tint="?android:attr/textColorSecondary"
+        tools:ignore="ContentDescription" />
+
+    <Button
+        android:id="@+id/task_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="VisualLintButtonSize" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

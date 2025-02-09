@@ -32,7 +32,7 @@ public class RoutineTask {
 
     public boolean isChecked() { return isChecked; }
 
-    public void checkOffTask() {
+    public void checkOff() {
         this.isChecked = true;
     }
 

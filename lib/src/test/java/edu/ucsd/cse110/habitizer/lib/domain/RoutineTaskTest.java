@@ -89,7 +89,7 @@ public class RoutineTaskTest {
         var task = new RoutineTask(0, "Brush Teeth", 1, false);
 
         assertFalse(task.isChecked());
-        task.checkOffTask();
+        task.checkOff();
         assertTrue(task.isChecked());
     }
 }

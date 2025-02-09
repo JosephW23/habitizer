@@ -11,6 +11,7 @@ public class RoutineTask {
     private int priority;
     private boolean isChecked;
 
+    // Todo: Need timer object to track how much time is used for this task.
     public RoutineTask(@Nullable Integer id, @NonNull String title, int priority, boolean isChecked) {
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("RoutineTask title cannot be blank");

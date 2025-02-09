@@ -41,8 +41,8 @@ public class MainViewModel extends ViewModel {
     }
 
     public void checkOffTask(int id) {
-        Log.d("Task", "checkoff");
-//        var task = routineRepository.getTaskWithId(id);
-//        task.checkOff();
+        var task = routineRepository.getTaskWithId(id);
+        task.checkOff();
+        taskList.setValue(routineRepository.getTaskList());
     }
 }

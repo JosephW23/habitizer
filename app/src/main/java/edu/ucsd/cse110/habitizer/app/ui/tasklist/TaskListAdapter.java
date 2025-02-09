@@ -41,6 +41,13 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
 
         binding.taskFrontText.setText(task.title());
 
+        if (task.isChecked()) {
+            Log.d("Task", "Set Alpha");
+            binding.taskCheck.setAlpha(255);
+        } else {
+            binding.taskCheck.setAlpha(0);
+        }
+
         binding.taskButton.setOnClickListener(v -> {
             var id = task.id();
             onCheckOffClick.accept(id);

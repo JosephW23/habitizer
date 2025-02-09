@@ -7,24 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/evening_routine_button"
-        android:layout_width="189dp"
-        android:layout_height="48dp"
-        android:text="Evening Routine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/morning_routine_button" />
-
-    <Button
-        android:id="@+id/morning_routine_button"
-        android:layout_width="193dp"
-        android:layout_height="48dp"
-        android:text="Morning Routine"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:name="edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </androidx.constraintlayout.widget.ConstraintLayout>

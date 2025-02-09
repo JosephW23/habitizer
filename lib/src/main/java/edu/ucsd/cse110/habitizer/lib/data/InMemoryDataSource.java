@@ -32,4 +32,7 @@ public class InMemoryDataSource {
 
     public Routine routine(String name) { return routines.get(name); }
 
+    public List<RoutineTask> getTaskList() {
+        return routines.get("Test Routine").tasks();
+    }
 }

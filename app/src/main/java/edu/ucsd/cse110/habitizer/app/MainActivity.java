@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    // Todo: we have to call this from MainViewModel based on onClick method.
     // This method swap fragments between routine list and task list.
     // This method would be called when the main page showing list of routines gets implemented
     public void swapFragments() {

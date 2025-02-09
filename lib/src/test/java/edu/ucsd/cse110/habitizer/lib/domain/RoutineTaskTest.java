@@ -81,4 +81,15 @@ public class RoutineTaskTest {
         expectedId = null;
         assertEquals(expectedId, taskWithNullId.id());
     }
+
+    @Test
+    public void checkOff() {
+        Integer expectedId;
+
+        var task = new RoutineTask(0, "Brush Teeth", 1, false);
+
+        assertFalse(task.isChecked());
+        task.checkOffTask();
+        assertTrue(task.isChecked());
+    }
 }

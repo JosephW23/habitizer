@@ -30,9 +30,9 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel(RoutineRepository routineRepository) {
         this.routineRepository = routineRepository;
-
         this.taskList = new Subject<>();
 
+        // set initial task list here
         taskList.setValue(routineRepository.getTaskList());
     }
 

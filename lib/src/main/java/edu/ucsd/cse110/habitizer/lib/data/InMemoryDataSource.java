@@ -32,6 +32,7 @@ public class InMemoryDataSource {
 
     public Routine routine(String name) { return routines.get(name); }
 
+    // return List of RoutineTask of Routine object from HashMap (routines).
     public List<RoutineTask> getTaskList() {
         return routines.get("Test Routine").tasks();
     }

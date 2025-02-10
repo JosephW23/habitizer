@@ -42,7 +42,11 @@ public class TaskListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel::checkOffTask);
+
         activityModel.loadTaskList().observe(tasks -> {
+            // when a change is detected by observer
+            // this will clear all contents in the adapter
+            // and then get repopulate with new data
             if (tasks == null) return;
 
             adapter.clear();

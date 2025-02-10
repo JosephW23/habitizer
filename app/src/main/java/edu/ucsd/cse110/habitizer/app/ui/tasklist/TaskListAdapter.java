@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
 public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
-    public TaskListAdapter(Context context, List<RoutineTask> tasks) {
+    Consumer<Integer> onCheckOffClick;
+    private MainViewModel activityModel;
+    public TaskListAdapter(Context context, List<RoutineTask> tasks, Consumer<Integer> onCheckOffClick) {
         super(context, 0, new ArrayList<>(tasks));
+        this.onCheckOffClick = onCheckOffClick;
     }
 
     @NonNull
@@ -35,6 +40,18 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
         }
 
         binding.taskFrontText.setText(task.title());
+
+        if (task.isChecked()) {
+            Log.d("Task", "Set Alpha");
+            binding.taskCheck.setAlpha(255);
+        } else {
+            binding.taskCheck.setAlpha(0);
+        }
+
+        binding.taskButton.setOnClickListener(v -> {
+            var id = task.id();
+            onCheckOffClick.accept(id);
+        });
 
         return binding.getRoot();
     }

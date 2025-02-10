@@ -40,7 +40,9 @@ public class MainViewModel extends ViewModel {
         return taskList;
     }
 
-    public void swapFragments() {
-
+    public void checkOffTask(int id) {
+        var task = routineRepository.getTaskWithId(id);
+        task.checkOff();
+        taskList.setValue(routineRepository.getTaskList());
     }
 }

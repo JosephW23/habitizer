@@ -18,7 +18,7 @@
         app:flow_verticalAlign="top"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/task_time_placeholder"
-        app:layout_constraintStart_toEndOf="@+id/taskCheck"
+        app:layout_constraintStart_toEndOf="@+id/task_check"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextSizeCheck,VisualLintOverlap" />
 
@@ -40,10 +40,9 @@
         tools:ignore="TextSizeCheck,VisualLintOverlap" />
 
     <ImageView
-        android:id="@+id/taskCheck"
+        android:id="@+id/task_check"
         android:layout_width="38dp"
         android:layout_height="51dp"
-        android:alpha="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/task_front_text"
         app:layout_constraintStart_toStartOf="parent"

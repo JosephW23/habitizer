@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.habitizer.app;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import androidx.appcompat.app.AppCompatActivity;

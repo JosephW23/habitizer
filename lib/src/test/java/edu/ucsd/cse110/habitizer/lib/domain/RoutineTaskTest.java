@@ -92,4 +92,16 @@ public class RoutineTaskTest {
         task.checkOff();
         assertTrue(task.isChecked());
     }
+
+    @Test
+    public void checkOffTwice() {
+        Integer expectedId;
+
+        var task = new RoutineTask(0, "Brush Teeth", 1, false);
+
+        task.checkOff();
+        assertTrue(task.isChecked());
+        task.checkOff();
+        assertTrue(task.isChecked());
+    }
 }

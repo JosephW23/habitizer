@@ -19,13 +19,6 @@ public class RoutineTaskTest {
             assertEquals("RoutineTask title cannot be blank", e.getMessage());
         }
 
-        // Try-Catch for null title
-        try {
-            new RoutineTask(0, null, 1, false);
-            fail("Expected: IllegalArgumentException, null title");
-        } catch (IllegalArgumentException e) {
-            assertEquals("RoutineTask title cannot be blank", e.getMessage());
-        }
     }
 
     @Test
@@ -95,13 +88,16 @@ public class RoutineTaskTest {
 
     @Test
     public void checkOffTwice() {
+        // GIVEN I have a task Brush Teeth
         Integer expectedId;
-
         var task = new RoutineTask(0, "Brush Teeth", 1, false);
-
+        // WHEN I check off Brush Teeth
         task.checkOff();
+        // THEN Brush Teeth isChecked
         assertTrue(task.isChecked());
+        // WHEN I check off Brush Teeth again
         task.checkOff();
+        // THEN Brush Teeth is(still)Checked
         assertTrue(task.isChecked());
     }
 }

@@ -5,19 +5,12 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Routine {
-    private List<RoutineTask> tasks;
-    private @NonNull final String title;
-
-    public Routine(String title, List<RoutineTask> tasks) {
-        if (title == null || title.trim().isEmpty()) {
+public record Routine(@NonNull String title, @NonNull List<RoutineTask> tasks) {
+    public Routine(@NonNull String title, List<RoutineTask> tasks) {
+        if (title.isBlank()) {
             throw new IllegalArgumentException("Routine title cannot be blank");
         }
         this.title = title;
-        this.tasks = tasks;
+        this.tasks = List.copyOf(tasks);
     }
-
-    public List<RoutineTask> tasks() { return new ArrayList<>(tasks); }
-
-    public String title() { return title; }
 }

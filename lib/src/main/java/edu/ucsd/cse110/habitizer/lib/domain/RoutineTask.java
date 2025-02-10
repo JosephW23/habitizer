@@ -6,14 +6,14 @@ import androidx.annotation.Nullable;
 import java.util.Objects;
 
 public class RoutineTask {
-    private @Nullable Integer id;
-    private @NonNull String title;
-    private int priority;
+    private final @Nullable Integer id;
+    private final @NonNull String title;
+    private final int priority;
     private boolean isChecked;
 
     // Todo: Need timer object to track how much time is used for this task.
     public RoutineTask(@Nullable Integer id, @NonNull String title, int priority, boolean isChecked) {
-        if (title == null || title.trim().isEmpty()) {
+        if (title.isBlank()) {
             throw new IllegalArgumentException("RoutineTask title cannot be blank");
         }
         if (priority <= 0) {

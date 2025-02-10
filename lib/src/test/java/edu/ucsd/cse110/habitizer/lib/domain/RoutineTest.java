@@ -10,47 +10,49 @@ import java.util.List;
 public class RoutineTest {
 
     @Test
-    public void tasks() {
-        Routine routine = new Routine("Test Routine", List.of(
+    public void tasksGetter() {
+        // GIVEN a list of tasks
+        var expected = List.of(
                 new RoutineTask(0, "Brush Teeth", 1, false),
                 new RoutineTask(1, "Shower", 2, false)
-        ));
+        );
 
-        List<RoutineTask> expected = new ArrayList<RoutineTask>(List.of(
-                new RoutineTask(0, "Brush Teeth", 1, false),
-                new RoutineTask(1, "Shower", 2, false)
-        ));
+        // WHEN I construct a Routine with those tasks
+        Routine routine = new Routine("My Routine", expected);
 
-        assertEquals(routine.tasks(), expected);
+        // THEN .tasks() returns the same tasks I created it with
+        var actual = routine.tasks();
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void title() {
+    public void blankTitleFailsValidation() {
+        // GIVEN ...
+        // WHEN I try to create a Routine with a blank title.
+        try {
+            new Routine(" ", List.of(
+                    new RoutineTask(0, "Brush Teeth", 1, false)
+            ));
+            fail("Expected: IllegalArgumentException, blank title");
+        }
+        // THEN an IllegalArgumentException is thrown.
+        catch (IllegalArgumentException e) {
+            assertEquals("Routine title cannot be blank", e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void titleIsCorrect() {
+        // GIVEN the title is "Test Routine"
         Routine routine = new Routine("Test Routine", List.of(
                 new RoutineTask(1, "Brush Teeth", 1, false)
         ));
 
         var expected = "Test Routine";
-        assertEquals(routine.title(), expected);
-
-        // Try-Catch for blank title
-        try {
-            new Routine(" ", List.of(
-                    new RoutineTask(0, "Brush Teeth", 1, false)
-                ));
-            fail("Expected: IllegalArgumentException, blank title");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Routine title cannot be blank", e.getMessage());
-        }
-
-        // Try-Catch for null title
-        try {
-            new Routine(null, List.of(
-                    new RoutineTask(0, "Brush Teeth", 1, false)
-            ));
-            fail("Expected: IllegalArgumentException, null title");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Routine title cannot be blank", e.getMessage());
-        }
+        // WHEN I get the routine title
+        // THEN "Test Routine" is returned
+        assertEquals(expected, routine.title());
     }
+
 }

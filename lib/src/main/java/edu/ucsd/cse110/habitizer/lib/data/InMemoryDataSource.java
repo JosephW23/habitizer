@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.habitizer.lib.data;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

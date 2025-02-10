@@ -18,7 +18,7 @@ import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
 public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
-    Consumer<Integer> onCheckOffClick;
+    Consumer<Integer> onCheckOffClick; // this variable tracks when a task is clicked
     private MainViewModel activityModel;
     public TaskListAdapter(Context context, List<RoutineTask> tasks, Consumer<Integer> onCheckOffClick) {
         super(context, 0, new ArrayList<>(tasks));
@@ -41,13 +41,17 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
 
         binding.taskFrontText.setText(task.title());
 
+        // This if-else block updates opacity of checkmark in UI
+        // so that checkmark appears when clicked
         if (task.isChecked()) {
-            Log.d("Task", "Set Alpha");
+            //Log.d("Task", "Set Alpha");
             binding.taskCheck.setAlpha(255);
         } else {
             binding.taskCheck.setAlpha(0);
         }
 
+        // When task is clicked, the hidden button is clicked
+        // and the events for checking off task are called
         binding.taskButton.setOnClickListener(v -> {
             var id = task.id();
             onCheckOffClick.accept(id);

@@ -41,6 +41,8 @@ public class MainViewModel extends ViewModel {
     }
 
     public void checkOffTask(int id) {
+        // given id, find corresponding task and check it off
+        // then send updates to taskList subject so observers are notified of changes
         var task = routineRepository.getTaskWithId(id);
         task.checkOff();
         taskList.setValue(routineRepository.getTaskList());

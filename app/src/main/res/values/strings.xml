@@ -5,4 +5,10 @@
     <string name="card_front_text">Card Front Text</string>
     <string name="_35">35</string>
     <string name="end_routine">End Routine</string>
+    <string name="example_routine">Example Routine</string>
+    <string name="of">of</string>
+    <string name="_40">40</string>
+    <string name="_60">60</string>
+    <string name="add">Add</string>
+    <string name="pause">Pause</string>
 </resources>

@@ -83,12 +83,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="@string/_40"
+            android:text="40"
             android:textAlignment="center"
             android:textSize="24sp"
             app:layout_constraintEnd_toStartOf="@+id/of_text"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextSizeCheck" />
+
 
         <TextView
             android:id="@+id/routine_name"

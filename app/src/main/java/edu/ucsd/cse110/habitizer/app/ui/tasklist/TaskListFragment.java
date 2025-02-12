@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,8 +59,31 @@ public class TaskListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
-
         view.taskList.setAdapter(adapter);
+
+        // Bind routine_updating_timer to elapsed time from MainViewModel
+        activityModel.getElapsedTime().observe(time -> {
+            view.routineUpdatingTimer.setText(time); // Updates UI dynamically
+        });
+
+        // Pause Button functionality
+        // For Resume and Pause I know you have to use R and add it to string xml but couldn't get it to work
+        view.routinePauseTimeButton.setOnClickListener(v -> {
+            if (activityModel.getTimer() instanceof MockElapsedTimer) {
+                MockElapsedTimer timer = (MockElapsedTimer) activityModel.getTimer();
+                if (timer.isRunning()) {
+                    timer.pauseTimer();
+                    view.routinePauseTimeButton.setText("Resume");
+                } else {
+                    timer.resumeTimer();
+                    view.routinePauseTimeButton.setText("Pause");
+                }
+            }
+        });
+        // Add Elapse Time Button functionality
+        view.routineAdd30SecButton.setOnClickListener(v -> {
+            activityModel.advanceRoutineTimer(); // Advances timer by 30 seconds
+        });
 
         return view.getRoot();
     }

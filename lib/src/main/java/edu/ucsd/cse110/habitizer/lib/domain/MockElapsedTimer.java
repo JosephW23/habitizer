@@ -6,11 +6,11 @@ import java.time.temporal.Temporal;
 import java.util.Objects;
 
 public class MockElapsedTimer implements ElapsedTimer {
-    private Temporal start; // Not necessarily a "timer" per se, more of a timestamp in Java LocalTime (local machine time)
+    private Temporal start;
     private Duration duration;
     private boolean isRunning;
 
-    MockElapsedTimer() {
+    public MockElapsedTimer() {
         this.duration = Duration.ZERO;
         this.isRunning = false;
         this.start = null;
@@ -18,8 +18,7 @@ public class MockElapsedTimer implements ElapsedTimer {
 
     @Override
     public void startTimer() {
-        // Handles if the timer is already started
-        if (this.isRunning == true) return;
+        if (this.isRunning) return;
 
         start = LocalTime.now();
         isRunning = true;
@@ -27,43 +26,59 @@ public class MockElapsedTimer implements ElapsedTimer {
 
     @Override
     public void stopTimer() {
-        // Handles if the timer isn't running yet
-        if (this.isRunning == false || Objects.isNull(start)) return;
-
-        // Calculating the time between when the "timer" started and now
-        duration = duration.plus(Duration.between(
-                (LocalTime) start, LocalTime.now()
-        ));
+        if (!this.isRunning || Objects.isNull(start)) return;
 
         this.isRunning = false;
+        this.start = null;
+        this.duration = Duration.ZERO; // ✅ Reset elapsed time when stopping
     }
 
     @Override
     public String getTime() {
         Duration currDuration = duration;
 
-        // Calculating the time between when the "timer" started and now
-        if (this.isRunning == true && Objects.nonNull(start)) {
+        if (this.isRunning && Objects.nonNull(start)) {
             currDuration = duration.plus(Duration.between(
                     (LocalTime) start, LocalTime.now()
             ));
         }
 
-        // Duration class returns long integers, have to convert
         var longSeconds = currDuration.getSeconds();
-
-        // int casting should handle conversion but will check more later
         int hours = (int)(longSeconds / 3600);
         int minutes = (int)((longSeconds % 3600) / 60);
         int seconds = (int)(longSeconds % 60);
 
-        // Redundant, but helps debug imo
-        String message = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        return message;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-    // Advances the timer by 30 seconds
     public void advanceTimer() {
+        if (!isRunning) {
+            return; // This prevents advancing while paused
+        }
         this.duration = this.duration.plusSeconds(30);
+        start = LocalTime.now();
+    }
+
+    public void pauseTimer() {
+        if (!isRunning || Objects.isNull(start)) return;
+
+        // Properly stop time updates while paused
+        duration = duration.plus(Duration.between(
+                (LocalTime) start, LocalTime.now()
+        ));
+
+        this.isRunning = false;
+        this.start = null; // Prevents further time updates
+    }
+
+    public void resumeTimer() {
+        if (isRunning) return;
+
+        this.start = LocalTime.now();
+        this.isRunning = true;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 }

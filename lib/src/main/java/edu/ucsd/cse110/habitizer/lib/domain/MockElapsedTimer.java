@@ -1,28 +1,69 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.time.temporal.Temporal;
+import java.util.Objects;
 
 public class MockElapsedTimer implements ElapsedTimer {
-    private Temporal timer;
+    private Temporal start; // Not necessarily a "timer" per se, more of a timestamp in Java LocalTime (local machine time)
+    private Duration duration;
+    private boolean isRunning;
+
     MockElapsedTimer() {
-
+        this.duration = Duration.ZERO;
+        this.isRunning = false;
+        this.start = null;
     }
 
+    @Override
     public void startTimer() {
-        return;
+        // Handles if the timer is already started
+        if (this.isRunning == true) return;
+
+        start = LocalTime.now();
+        isRunning = true;
     }
 
+    @Override
     public void stopTimer() {
+        // Handles if the timer isn't running yet
+        if (this.isRunning == false || Objects.isNull(start)) return;
 
+        // Calculating the time between when the "timer" started and now
+        duration = duration.plus(Duration.between(
+                (LocalTime) start, LocalTime.now()
+        ));
+
+        this.isRunning = false;
     }
 
     @Override
     public String getTime() {
-        return "";
+        Duration currDuration = duration;
+
+        // Calculating the time between when the "timer" started and now
+        if (this.isRunning == true && Objects.nonNull(start)) {
+            currDuration = duration.plus(Duration.between(
+                    (LocalTime) start, LocalTime.now()
+            ));
+        }
+
+        // Duration class returns long integers, have to convert
+        var longSeconds = currDuration.getSeconds();
+
+        // int casting should handle conversion but will check more later
+        int hours = (int)(longSeconds / 3600);
+        int minutes = (int)((longSeconds % 3600) / 60);
+        int seconds = (int)(longSeconds % 60);
+
+        // Redundant, but helps debug imo
+        String message = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        return message;
     }
 
     // Advances the timer by 30 seconds
     public void advanceTimer() {
-
+        this.duration = this.duration.plusSeconds(30);
     }
 }

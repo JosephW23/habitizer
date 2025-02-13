@@ -120,4 +120,8 @@ public class MainViewModel extends ViewModel {
     private void updateElapsedTime() {
         elapsedTime.setValue(timer.getTime());
     }
+
+    public void editGoalTime() {
+
+    }
 }

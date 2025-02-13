@@ -54,20 +54,14 @@ public class MainViewModel extends ViewModel {
 
         this.timer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
-
-        this.goalTime = new Subject<>();
-
-        // Set initial values
-        goalTime.setValue("60");
-        taskList.setValue(routineRepository.getTaskList());
-        elapsedTime.setValue("00:00"); // Default to 0 time
-      
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskElapsedTime = new Subject<>();  // Initialize elapsed time tracking
+        this.goalTime = new Subject<>();
 
         // Set initial values
         this.currentTaskId = 0; // Initialize the first task id as 0.
         this.routineName = "Morning";
+        goalTime.setValue("60");
 
         taskList.setValue(routineRepository.getTaskList(this.routineName));
         isRoutineDone.setValue(false);

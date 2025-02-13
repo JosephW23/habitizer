@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.ElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
@@ -48,7 +47,7 @@ public class MainViewModel extends ViewModel {
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
 
         // Set initial values
-        taskList.setValue(routineRepository.getTaskList());
+        taskList.setValue(routineRepository.getTaskList("Morning"));
         elapsedTime.setValue("00:00"); // Default to 0 time
 
         // Start updating elapsed time periodically
@@ -61,9 +60,9 @@ public class MainViewModel extends ViewModel {
 
     public void checkOffTask(int id) {
         // Given id, find corresponding task and check it off
-        var task = routineRepository.getTaskWithId(id);
+        var task = routineRepository.getTaskWithIdandName("Morning", id);
         task.checkOff();
-        taskList.setValue(routineRepository.getTaskList());
+        taskList.setValue(routineRepository.getTaskList("Morning"));
     }
 
     public ElapsedTimer getTimer() {

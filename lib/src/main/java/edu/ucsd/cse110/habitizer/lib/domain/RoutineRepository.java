@@ -12,12 +12,12 @@ public class RoutineRepository {
     public Routine routine(String title) { return dataSource.routine(title); }
 
     // return a List of RoutineTask
-    public List<RoutineTask> getTaskList() {
-        return dataSource.getTaskList();
+    public List<RoutineTask> getTaskList(String name) {
+        return dataSource.getTaskList(name);
     }
 
-    public RoutineTask getTaskWithId(int id) {
-        for (var task : this.getTaskList()) {
+    public RoutineTask getTaskWithIdandName(String name, int id) {
+        for (var task : this.getTaskList(name)) {
             if (task.id() == id) {
                 return task;
             }

@@ -7,6 +7,7 @@ import java.util.Locale;
 
 public class MockElapsedTimer implements ElapsedTimer {
     private Temporal start;
+    private Temporal end;
     private Duration duration;   // Needed to keep track of elapsed time
     private boolean isRunning;   // Needed to track status of timer
 
@@ -37,10 +38,10 @@ public class MockElapsedTimer implements ElapsedTimer {
     public void stopTimer() {
         // Should handle stopping the timer even if the timer hasn't been started
         if (isRunning == false && start == null) return;
-
         isRunning = false;
-        start = null;
-        // duration = Duration.ZERO; // Reset elapsed time when stopping
+        duration = Duration.ZERO;
+        end = LocalTime.now();
+        // This is a FINAL stop; i.e. NOTHING CAN RECOVER THE TIMER AFTER THIS
     }
 
     @Override
@@ -51,7 +52,7 @@ public class MockElapsedTimer implements ElapsedTimer {
         // Capture the elapsed time since the timer started/resumed
         duration = duration.plus(Duration.between((LocalTime)start, LocalTime.now()));
         isRunning = false;
-        start = null;
+        end = LocalTime.now();
     }
 
     @Override
@@ -79,11 +80,10 @@ public class MockElapsedTimer implements ElapsedTimer {
     public String getTime() {
         // If the timer hasn't started or has been stopped, return "00:00"
         Duration currentDuration = duration;
-        if (isRunning && start != null) {
+        if (isRunning == true) {
             currentDuration = currentDuration.plus(Duration.between((LocalTime)start, LocalTime.now()));
-        }
-        if (!isRunning && start == null && duration.equals(Duration.ZERO)) {
-            return "00:00";
+        } else {
+            currentDuration = currentDuration.plus(Duration.between((LocalTime)start, (LocalTime)end));
         }
 
         long totalSeconds = currentDuration.getSeconds();

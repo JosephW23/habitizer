@@ -128,7 +128,7 @@ public class RoutineTaskTest {
         task.start();
         Thread.sleep(1100);
         task.end();
-        String expected = "00:00";
+        String expected = "00:01";
         String actual = task.getTime();
         assertEquals(expected, actual);
     }
@@ -137,6 +137,7 @@ public class RoutineTaskTest {
     public void getTime() throws InterruptedException {
         MockElapsedTimer timer = new MockElapsedTimer();
         var task = new RoutineTask(0, "Brush Teeth", 1, false, timer);
+        task.start();
 
         String actual, expected;
 
@@ -152,7 +153,7 @@ public class RoutineTaskTest {
         task.end();
 
         actual = task.getTime();
-        expected = "00:00";
+        expected = "00:03";
         assertEquals(expected, actual);
     }
 }

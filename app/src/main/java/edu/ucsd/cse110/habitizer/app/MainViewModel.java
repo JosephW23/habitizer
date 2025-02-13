@@ -21,7 +21,8 @@ public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
     private final Subject<List<RoutineTask>> taskList;
     private final Subject<Integer> currentTaskId;
-    private final Subject<boolean> isTaskDone;
+    private final Subject<Boolean> isTaskDone;
+    private final Subject<String> taskElapsedTime;
 
     // ElapsedTimer instance to track routine elapsed time
     private final ElapsedTimer timer;
@@ -48,6 +49,7 @@ public class MainViewModel extends ViewModel {
         this.taskList = new Subject<>();
         this.currentTaskId = new Subject<>();
         this.isTaskDone = new Subject<>();
+        this.taskElapsedTime = new Subject<>();
         this.timer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
 
@@ -55,6 +57,8 @@ public class MainViewModel extends ViewModel {
         taskList.setValue(routineRepository.getTaskList());
         currentTaskId.setValue(0);
         isTaskDone.setValue(false);
+
+        taskElapsedTime.setValue("00:00");
         elapsedTime.setValue("00:00"); // Default to 0 time
 
         // Start updating elapsed time periodically
@@ -69,6 +73,7 @@ public class MainViewModel extends ViewModel {
         // Given id, find corresponding task and check it off
         var task = routineRepository.getTaskWithId(id);
         task.checkOff();
+        taskElapsedTime.setValue("00:00");
         taskList.setValue(routineRepository.getTaskList());
 
         // Increment current task id by 1.
@@ -86,6 +91,10 @@ public class MainViewModel extends ViewModel {
     // Expose elapsed time for UI updates
     public Subject<String> getElapsedTime() {
         return elapsedTime;
+    }
+
+    public Subject<String> getTaskElapsedTime() {
+        return taskElapsedTime;
     }
 
     // Start routine timer and begin elapsed time tracking

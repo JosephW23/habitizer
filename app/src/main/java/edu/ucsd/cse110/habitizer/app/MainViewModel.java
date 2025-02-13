@@ -19,6 +19,7 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
     private final Subject<List<RoutineTask>> taskList;
+    private String routineName;
 
     // ElapsedTimer instance to track routine elapsed time
     private final ElapsedTimer timer;
@@ -43,11 +44,12 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(RoutineRepository routineRepository) {
         this.routineRepository = routineRepository;
         this.taskList = new Subject<>();
+        this.routineName = "Morning";
         this.timer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
 
         // Set initial values
-        taskList.setValue(routineRepository.getTaskList("Morning"));
+        taskList.setValue(routineRepository.getTaskList(routineName));
         elapsedTime.setValue("00:00"); // Default to 0 time
 
         // Start updating elapsed time periodically
@@ -60,9 +62,14 @@ public class MainViewModel extends ViewModel {
 
     public void checkOffTask(int id) {
         // Given id, find corresponding task and check it off
-        var task = routineRepository.getTaskWithIdandName("Morning", id);
+        var task = routineRepository.getTaskWithIdandName(routineName, id);
         task.checkOff();
-        taskList.setValue(routineRepository.getTaskList("Morning"));
+        taskList.setValue(routineRepository.getTaskList(routineName));
+    }
+
+    // set routine name
+    public void setRoutineName(String name) {
+        this.routineName = name;
     }
 
     public ElapsedTimer getTimer() {

@@ -4,6 +4,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
@@ -26,6 +27,8 @@ public class MainViewModel extends ViewModel {
 
     // Subject to store and update elapsed time dynamically (Lab 5)
     private final Subject<String> elapsedTime;
+    // Subject to store and update goal time
+    private final Subject<String> goalTime;
 
     // Handler for periodic timer updates (Lab 4 )
     private final Handler timerHandler = new Handler(Looper.getMainLooper());
@@ -46,8 +49,10 @@ public class MainViewModel extends ViewModel {
         this.taskList = new Subject<>();
         this.timer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
+        this.goalTime = new Subject<>();
 
         // Set initial values
+        goalTime.setValue("60");
         taskList.setValue(routineRepository.getTaskList());
         elapsedTime.setValue("00:00"); // Default to 0 time
 
@@ -121,7 +126,15 @@ public class MainViewModel extends ViewModel {
         elapsedTime.setValue(timer.getTime());
     }
 
-    public void editGoalTime() {
-
+    public void updateGoalTime(String time) {
+        Log.d("DEBUG","Update Goal Time");
+        System.out.println("Time received: " + time);
+        goalTime.setValue(time);
     }
+
+    public Subject<String> getGoalTime() {
+        Log.d("DEBUG","Getting Time");
+        return goalTime;
+    }
+
 }

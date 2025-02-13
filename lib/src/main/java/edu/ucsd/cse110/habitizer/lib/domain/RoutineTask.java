@@ -33,12 +33,12 @@ public class RoutineTask {
 
     public boolean isChecked() { return isChecked; }
 
+    public String getElapsedTime() { return elapsedTime; }
+
     public void checkOff(String elapsedTime) {
         this.isChecked = true;
-        this.elapsedTime = elapsedTime;
+        this.elapsedTime = elapsedTime; // set elapsed time when task is done
     }
-
-    public String getElapsedTime() { return elapsedTime; }
 
     @Override
     public boolean equals(Object o) {

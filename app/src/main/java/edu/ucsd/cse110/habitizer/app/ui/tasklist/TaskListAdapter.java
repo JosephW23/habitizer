@@ -43,6 +43,7 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
             binding = ListItemTaskBinding.inflate(layoutInflater, parent, false);
         }
 
+        // Set a tile of a task.
         binding.taskFrontText.setText(task.title());
 
         // This if-else block updates opacity of checkmark in UI
@@ -60,14 +61,17 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
             activityModel.checkOffTask(id);
         });
 
+        // When the elapsed time changes for task, update task_view text view.
         activityModel.getTaskElapsedTime().observe(time -> {
             if (task.id() == activityModel.getCurrentTaskId()) {
-                binding.taskTime.setText(time); // Updates UI dynamically
+                // sync with timer if task id is matched with current id.
+                binding.taskTime.setText(time);
             } else {
+                // sync with elapsed time field inside RoutineTask object
+                // if it is already done or not yet started.
                 binding.taskTime.setText(task.getElapsedTime());
             }
         });
-
 
         return binding.getRoot();
     }

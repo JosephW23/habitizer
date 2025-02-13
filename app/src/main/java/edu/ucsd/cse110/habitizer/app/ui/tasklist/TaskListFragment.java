@@ -67,14 +67,6 @@ public class TaskListFragment extends Fragment {
             view.routineUpdatingTimer.setText(time); // Updates UI dynamically
         });
 
-        activityModel.getIsRoutineDone().observe(isTaskDone -> {
-            if (isTaskDone) {
-                activityModel.endRoutine(); // Ends routine and stop timers
-                view.endRoutineButton.setText("Routine Ended"); // Updates button text
-                view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
-            }
-        });
-
         // Pause Button functionality
         // For Resume and Pause I know you have to use R and add it to string xml but couldn't get it to work
         view.routinePauseTimeButton.setOnClickListener(v -> {
@@ -89,15 +81,24 @@ public class TaskListFragment extends Fragment {
                 }
             }
         });
+
         // Add Elapse Time Button functionality
         view.routineAdd30SecButton.setOnClickListener(v -> {
             activityModel.advanceRoutineTimer(); // Advances timer by 30 seconds
         });
+
         // End Routine Button functionality
         view.endRoutineButton.setOnClickListener(v -> {
-            activityModel.getIsRoutineDone().setValue(true);
-            view.endRoutineButton.setText("Routine Ended"); // Updates button text
-            view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
+            activityModel.getIsRoutineDone().setValue(true); // Mark a routine as done
+        });
+
+        // When routine is marked as done, disable button.
+        activityModel.getIsRoutineDone().observe(isTaskDone -> {
+            if (isTaskDone) {
+                activityModel.endRoutine(); // Ends routine and stop timers
+                view.endRoutineButton.setText("Routine Ended"); // Updates button text
+                view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
+            }
         });
 
         return view.getRoot();

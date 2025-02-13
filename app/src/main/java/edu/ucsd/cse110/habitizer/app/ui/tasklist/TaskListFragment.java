@@ -44,7 +44,8 @@ public class TaskListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel::checkOffTask);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(),
+                activityModel::checkOffTask, activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
             // when a change is detected by observer
@@ -63,6 +64,9 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
         view.taskList.setAdapter(adapter);
+
+        // start two timers
+        activityModel.startRoutine();
 
         // Bind routine_updating_timer to elapsed time from MainViewModel
         activityModel.getElapsedTime().observe(time -> {
@@ -100,6 +104,19 @@ public class TaskListFragment extends Fragment {
             view.routineTotalTime.setText(time); // Updates UI dynamically
         });
 
+        // End Routine Button functionality
+        view.endRoutineButton.setOnClickListener(v -> {
+            activityModel.getIsRoutineDone().setValue(true); // Mark a routine as done
+        });
+
+        // When routine is marked as done, disable button.
+        activityModel.getIsRoutineDone().observe(isTaskDone -> {
+            if (isTaskDone) {
+                activityModel.endRoutine(); // Ends routine and stop timers
+                view.endRoutineButton.setText("Routine Ended"); // Updates button text
+                view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
+            }
+        });
 
         return view.getRoot();
     }

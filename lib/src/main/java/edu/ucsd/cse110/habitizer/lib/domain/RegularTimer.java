@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
+import java.time.Duration;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Timer;
@@ -9,10 +10,13 @@ public class RegularTimer implements ElapsedTimer {
     private Timer timer;
     private TimerTask timerTask;
     private int secondsElapsed; // Needed to keep track of seconds
+    private int secondsFinal; // Needed to keep the duration AFTER timer is stopped
     private boolean isRunning;  // Needed to track status of timer
+    public static final long TIMER_INTERVAL_MS = 1000; // Updates every second
 
-    RegularTimer() {
-        this.secondsElapsed = 0; // Needs to be -1 since the timer begins IMMEDIATELY (i.e. resolves to 0 when started)
+    public RegularTimer() {
+        this.secondsElapsed = 0;
+        this.secondsFinal = 0; // Zero temporarily
         this.isRunning = false;
         this.timer = null;     // Not instantiated until we startTimer()
         this.timerTask = null; // Also not instantiated until we startTimer()
@@ -33,7 +37,7 @@ public class RegularTimer implements ElapsedTimer {
             public void run() {
                 secondsElapsed++;
             }
-        }, 1000, 1000);
+        }, TIMER_INTERVAL_MS, TIMER_INTERVAL_MS);
 
         isRunning = true;
     }
@@ -48,18 +52,19 @@ public class RegularTimer implements ElapsedTimer {
         if (!Objects.isNull(timer)) timer.cancel();
 
         isRunning = false;
-        secondsElapsed = 0;
+        secondsFinal = secondsElapsed;
     }
 
     @Override
     public void pauseTimer() {
-        if (isRunning == false) return;
+        if (!isRunning) return;
 
-        if (!Objects.isNull(timerTask)) timerTask.cancel();
-
-        if (!Objects.isNull(timer)) timer.cancel();
+        if (timerTask != null) timerTask.cancel();
+        if (timer != null) timer.cancel();
 
         isRunning = false;
+        // Lock in the elapsed time so getTime() returns the correct value when paused
+        secondsFinal = secondsElapsed;
     }
 
     @Override
@@ -74,7 +79,7 @@ public class RegularTimer implements ElapsedTimer {
             public void run() {
                 secondsElapsed++;
             }
-        }, 1000, 1000);
+        }, TIMER_INTERVAL_MS, TIMER_INTERVAL_MS);
 
         this.isRunning = true;
     }
@@ -86,14 +91,26 @@ public class RegularTimer implements ElapsedTimer {
     }
 
     @Override
-    public String getTime() {
-        // If the timer hasn't started or has been stopped, return "00:00"
-        if (secondsElapsed < 0) {
-            return "00:00";
-        }
+    public void resetTimer() {
+        this.secondsElapsed = 0; // Needs to be -1 since the timer begins IMMEDIATELY (i.e. resolves to 0 when started)
+        this.isRunning = false;
+        this.timer = null;     // Not instantiated until we startTimer()
+        this.timerTask = null; // Also not instantiated until we startTimer()
+    }
 
-        int minutes = (secondsElapsed % 3600) / 60;
-        int seconds = secondsElapsed % 60;
+    @Override
+    public String getTime() {
+
+        int minutes;
+        int seconds;
+
+        if (isRunning == false) {
+            minutes = (secondsFinal % 3600) / 60;
+            seconds = secondsFinal % 60;
+        } else {
+            minutes = (secondsElapsed % 3600) / 60;
+            seconds = secondsElapsed % 60;
+        }
 
         // Using Locale to test whether or not this is better than just a formatted string
         return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);

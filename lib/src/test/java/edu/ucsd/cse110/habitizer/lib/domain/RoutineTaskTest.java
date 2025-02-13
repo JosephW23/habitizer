@@ -79,10 +79,11 @@ public class RoutineTaskTest {
     public void checkOff() {
         Integer expectedId;
 
+        RegularTimer timer = new RegularTimer();
         var task = new RoutineTask(0, "Brush Teeth", 1, false);
 
         assertFalse(task.isChecked());
-        task.checkOff();
+        task.checkOff(timer.getTime());
         assertTrue(task.isChecked());
     }
 
@@ -90,13 +91,16 @@ public class RoutineTaskTest {
     public void checkOffTwice() {
         // GIVEN I have a task Brush Teeth
         Integer expectedId;
+
+        RegularTimer timer = new RegularTimer();
+
         var task = new RoutineTask(0, "Brush Teeth", 1, false);
         // WHEN I check off Brush Teeth
-        task.checkOff();
+        task.checkOff(timer.getTime());
         // THEN Brush Teeth isChecked
         assertTrue(task.isChecked());
         // WHEN I check off Brush Teeth again
-        task.checkOff();
+        task.checkOff(timer.getTime());
         // THEN Brush Teeth is(still)Checked
         assertTrue(task.isChecked());
     }

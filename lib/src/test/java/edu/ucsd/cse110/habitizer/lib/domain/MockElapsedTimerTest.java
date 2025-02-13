@@ -44,10 +44,8 @@ public class MockElapsedTimerTest {
         Thread.sleep(1100);
         // WHEN I stop the timer
         timer.stopTimer();
-        // THEN the timer should be reset, reporting "00:00"
-        String expected = "00:00";
-        String actual = timer.getTime();
-        assertEquals(expected, actual);
+        // THEN the timer should have a false isRunning
+        assertFalse(timer.isRunning());
     }
 
     @Test
@@ -132,6 +130,23 @@ public class MockElapsedTimerTest {
         timer.stopTimer();
         // THEN the timer should return that it is NOT running
         assertFalse(timer.isRunning());
+    }
+
+    @Test
+    public void pauseTwice() throws InterruptedException {
+        // GIVEN I have a paused timer
+        var timer = new MockElapsedTimer();
+        timer.startTimer();
+        Thread.sleep(1100);
+        timer.pauseTimer();
+        var timeAfterFirstPause = timer.getTime();
+        // WHEN I pause the timer again
+        // (Wait another second)
+        Thread.sleep(1100);
+        timer.pauseTimer();
+        Thread.sleep(1100);
+        // THEN the time should not have advanced further
+        assertEquals(timeAfterFirstPause, timer.getTime());
     }
 }
 

@@ -4,14 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Objects;
-
 public class RoutineTask {
     private final @Nullable Integer id;
     private final @NonNull String title;
     private final int priority;
     private boolean isChecked;
 
-    // Todo: Need timer object to track how much time is used for this task.
+    private String elapsedTime;
+
     public RoutineTask(@Nullable Integer id, @NonNull String title, int priority, boolean isChecked) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("RoutineTask title cannot be blank");
@@ -23,6 +23,7 @@ public class RoutineTask {
         this.title = title;
         this.priority = priority;
         this.isChecked = isChecked;
+        this.elapsedTime = "00:00";
     }
 
     public @Nullable Integer id() { return id; }
@@ -32,8 +33,11 @@ public class RoutineTask {
 
     public boolean isChecked() { return isChecked; }
 
-    public void checkOff() {
+    public String getElapsedTime() { return elapsedTime; }
+
+    public void checkOff(String elapsedTime) {
         this.isChecked = true;
+        this.elapsedTime = elapsedTime; // set elapsed time when task is done
     }
 
     @Override

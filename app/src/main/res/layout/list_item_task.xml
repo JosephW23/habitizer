@@ -18,7 +18,7 @@
         android:textStyle="bold"
         app:flow_verticalAlign="top"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/task_time_placeholder"
+        app:layout_constraintEnd_toStartOf="@+id/task_time"
         app:layout_constraintStart_toEndOf="@+id/task_check"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextSizeCheck,VisualLintOverlap" />

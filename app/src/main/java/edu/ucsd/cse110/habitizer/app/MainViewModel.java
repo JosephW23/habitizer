@@ -4,12 +4,12 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.ElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
@@ -21,8 +21,9 @@ public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
     private final Subject<List<RoutineTask>> taskList;
     private final Subject<Integer> currentTaskId;
-    private final Subject<Boolean> isTaskDone;
+    private final Subject<Boolean> isRoutineDone;
     private final Subject<String> taskElapsedTime;
+    private Runnable currentRunner;
 
     // ElapsedTimer instance to track routine elapsed time
     private final ElapsedTimer timer;
@@ -48,7 +49,7 @@ public class MainViewModel extends ViewModel {
         this.routineRepository = routineRepository;
         this.taskList = new Subject<>();
         this.currentTaskId = new Subject<>();
-        this.isTaskDone = new Subject<>();
+        this.isRoutineDone = new Subject<>();
         this.taskElapsedTime = new Subject<>();
         this.timer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
@@ -56,13 +57,17 @@ public class MainViewModel extends ViewModel {
         // Set initial values
         taskList.setValue(routineRepository.getTaskList());
         currentTaskId.setValue(0);
-        isTaskDone.setValue(false);
+        isRoutineDone.setValue(false);
 
         taskElapsedTime.setValue("00:00");
         elapsedTime.setValue("00:00"); // Default to 0 time
 
         // Start updating elapsed time periodically
         startTimerUpdates();
+
+        var task = routineRepository.getTaskWithId(0);
+        task.start();
+        currentRunner = startTaskTimerUpdates(0);
     }
 
     public Subject<List<RoutineTask>> loadTaskList() {
@@ -71,21 +76,23 @@ public class MainViewModel extends ViewModel {
 
     public void checkOffTask(int id) {
         // Given id, find corresponding task and check it off
+        timerHandler.removeCallbacks(currentRunner);
         var task = routineRepository.getTaskWithId(id);
         task.checkOff();
-        taskElapsedTime.setValue("00:00");
-        taskList.setValue(routineRepository.getTaskList());
-
         // Increment current task id by 1.
-        int newTaskId = currentTaskId.getValue() + 1;
-        currentTaskId.setValue(newTaskId);
+        int nextTaskId = currentTaskId.getValue() + 1;
 
-        var nextTask = routineRepository.getTaskWithId(newTaskId);
+        var nextTask = routineRepository.getTaskWithId(nextTaskId);
         if (nextTask == null) {
-            isTaskDone.setValue(true);
+            isRoutineDone.setValue(true);
         } else {
             nextTask.start();
+            currentRunner = startTaskTimerUpdates(nextTaskId);
+            Log.d("Success", getTaskElapsedTime().getValue());
         }
+
+        currentTaskId.setValue(nextTaskId);
+        taskList.setValue(routineRepository.getTaskList());
     }
 
     public ElapsedTimer getTimer() {
@@ -99,6 +106,10 @@ public class MainViewModel extends ViewModel {
 
     public Subject<String> getTaskElapsedTime() {
         return taskElapsedTime;
+    }
+
+    public Subject<Integer> getCurrentTaskId() {
+        return currentTaskId;
     }
 
     // Start routine timer and begin elapsed time tracking
@@ -140,6 +151,19 @@ public class MainViewModel extends ViewModel {
                 timerHandler.postDelayed(this, TIMER_INTERVAL_MS);
             }
         }, TIMER_INTERVAL_MS);
+    }
+
+    public Runnable startTaskTimerUpdates(int id) {
+        var task = routineRepository.getTaskWithId(id);
+        var runner = new Runnable() {
+            @Override
+            public void run() {
+                taskElapsedTime.setValue(task.getTime());
+                timerHandler.postDelayed(this, TIMER_INTERVAL_MS);
+            }
+        };
+        boolean success = timerHandler.postDelayed(runner, 0);
+        return runner;
     }
 
     // Helper function to update elapsed time for UI

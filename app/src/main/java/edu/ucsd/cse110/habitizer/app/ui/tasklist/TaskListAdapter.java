@@ -1,12 +1,16 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +23,10 @@ import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
     Consumer<Integer> onCheckOffClick; // this variable tracks when a task is clicked
     private MainViewModel activityModel;
-    public TaskListAdapter(Context context, List<RoutineTask> tasks, Consumer<Integer> onCheckOffClick) {
+    public TaskListAdapter(Context context, List<RoutineTask> tasks, Consumer<Integer> onCheckOffClick, MainViewModel activityModel) {
         super(context, 0, new ArrayList<>(tasks));
         this.onCheckOffClick = onCheckOffClick;
+        this.activityModel = activityModel;
     }
 
     @NonNull
@@ -43,7 +48,6 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
         // This if-else block updates opacity of checkmark in UI
         // so that checkmark appears when clicked
         if (task.isChecked()) {
-            //Log.d("Task", "Set Alpha");
             binding.taskCheck.setAlpha(255);
         } else {
             binding.taskCheck.setAlpha(0);
@@ -53,8 +57,17 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
         // and the events for checking off task are called
         binding.taskButton.setOnClickListener(v -> {
             var id = task.id();
-            onCheckOffClick.accept(id);
+            activityModel.checkOffTask(id);
         });
+
+        activityModel.getTaskElapsedTime().observe(time -> {
+            if (task.id() == activityModel.getCurrentTaskId().getValue()) {
+                binding.taskTime.setText(time); // Updates UI dynamically
+            } else {
+                binding.taskTime.setText(task.getTime());
+            }
+        });
+
 
         return binding.getRoot();
     }

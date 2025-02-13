@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Objects;
-
 public class RoutineTask {
     private final @Nullable Integer id;
     private final @NonNull String title;

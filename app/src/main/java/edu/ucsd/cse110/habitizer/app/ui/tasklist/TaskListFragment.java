@@ -41,7 +41,8 @@ public class TaskListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel::checkOffTask);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(),
+                activityModel::checkOffTask, activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
             // when a change is detected by observer

@@ -10,6 +10,7 @@ public class RegularTimer implements ElapsedTimer {
     private TimerTask timerTask;
     private int secondsElapsed; // Needed to keep track of seconds
     private boolean isRunning;  // Needed to track status of timer
+    public static final long TIMER_INTERVAL_MS = 1000; // Updates every second
 
     RegularTimer() {
         this.secondsElapsed = 0; // Needs to be -1 since the timer begins IMMEDIATELY (i.e. resolves to 0 when started)
@@ -33,7 +34,7 @@ public class RegularTimer implements ElapsedTimer {
             public void run() {
                 secondsElapsed++;
             }
-        }, 1000, 1000);
+        }, TIMER_INTERVAL_MS, TIMER_INTERVAL_MS);
 
         isRunning = true;
     }
@@ -48,7 +49,7 @@ public class RegularTimer implements ElapsedTimer {
         if (!Objects.isNull(timer)) timer.cancel();
 
         isRunning = false;
-        secondsElapsed = 0;
+        // secondsElapsed = 0;
     }
 
     @Override
@@ -74,7 +75,7 @@ public class RegularTimer implements ElapsedTimer {
             public void run() {
                 secondsElapsed++;
             }
-        }, 1000, 1000);
+        }, TIMER_INTERVAL_MS, TIMER_INTERVAL_MS);
 
         this.isRunning = true;
     }

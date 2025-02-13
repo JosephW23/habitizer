@@ -20,7 +20,7 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
     private final Subject<List<RoutineTask>> taskList;
-    private final Subject<Integer> currentTaskId;
+    private int currentTaskId;
     private final Subject<Boolean> isRoutineDone;
     private Runnable currentRunner;
 
@@ -50,7 +50,7 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(RoutineRepository routineRepository) {
         this.routineRepository = routineRepository;
         this.taskList = new Subject<>();
-        this.currentTaskId = new Subject<>();
+        this.currentTaskId = 0;
         this.isRoutineDone = new Subject<>();
 
         this.taskTimer = MockElapsedTimer.immediateTimer();
@@ -60,7 +60,6 @@ public class MainViewModel extends ViewModel {
 
         // Set initial values
         taskList.setValue(routineRepository.getTaskList());
-        currentTaskId.setValue(0);
         isRoutineDone.setValue(false);
 
         taskElapsedTime.setValue("00:00");
@@ -78,7 +77,7 @@ public class MainViewModel extends ViewModel {
 
     public void checkOffTask(int id) {
         // if you try to check off previous tasks, it does not since it is invalid.
-        if (id < currentTaskId.getValue()) {
+        if (id < currentTaskId) {
             return;
         }
 
@@ -98,7 +97,7 @@ public class MainViewModel extends ViewModel {
             currentRunner = startTaskTimerUpdates();
         }
 
-        currentTaskId.setValue(nextTaskId);
+        currentTaskId = nextTaskId;
         taskList.setValue(routineRepository.getTaskList());
     }
 
@@ -115,7 +114,7 @@ public class MainViewModel extends ViewModel {
         return taskElapsedTime;
     }
 
-    public Subject<Integer> getCurrentTaskId() {
+    public int getCurrentTaskId() {
         return currentTaskId;
     }
 

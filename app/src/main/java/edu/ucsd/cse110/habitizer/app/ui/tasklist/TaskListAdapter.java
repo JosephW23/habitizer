@@ -61,7 +61,7 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
         });
 
         activityModel.getTaskElapsedTime().observe(time -> {
-            if (task.id() == activityModel.getCurrentTaskId().getValue()) {
+            if (task.id() == activityModel.getCurrentTaskId()) {
                 binding.taskTime.setText(time); // Updates UI dynamically
             } else {
                 binding.taskTime.setText(task.getTime());

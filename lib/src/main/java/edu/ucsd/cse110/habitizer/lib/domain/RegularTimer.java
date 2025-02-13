@@ -14,7 +14,7 @@ public class RegularTimer implements ElapsedTimer {
     public static final long TIMER_INTERVAL_MS = 1000; // Updates every second
 
     public RegularTimer() {
-        this.secondsElapsed = 0; // Needs to be -1 since the timer begins IMMEDIATELY (i.e. resolves to 0 when started)
+        this.secondsElapsed = 0;
         this.secondsFinal = 0; // Zero temporarily
         this.isRunning = false;
         this.timer = null;     // Not instantiated until we startTimer()
@@ -56,13 +56,14 @@ public class RegularTimer implements ElapsedTimer {
 
     @Override
     public void pauseTimer() {
-        if (isRunning == false) return;
+        if (!isRunning) return;
 
-        if (!Objects.isNull(timerTask)) timerTask.cancel();
-
-        if (!Objects.isNull(timer)) timer.cancel();
+        if (timerTask != null) timerTask.cancel();
+        if (timer != null) timer.cancel();
 
         isRunning = false;
+        // Lock in the elapsed time so getTime() returns the correct value when paused
+        secondsFinal = secondsElapsed;
     }
 
     @Override

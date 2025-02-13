@@ -7,7 +7,6 @@ import java.util.Locale;
 
 public class MockElapsedTimer implements ElapsedTimer {
     private Temporal start;
-    private Temporal end;
     private Duration duration;   // Needed to keep track of elapsed time
     private boolean isRunning;   // Needed to track status of timer
 
@@ -36,23 +35,23 @@ public class MockElapsedTimer implements ElapsedTimer {
 
     @Override
     public void stopTimer() {
-        // Should handle stopping the timer even if the timer hasn't been started
-        if (isRunning == false && start == null) return;
+        // If the timer is running, update the duration before stopping.
+        if (isRunning && start != null) {
+            duration = duration.plus(Duration.between((LocalTime) start, LocalTime.now()));
+        }
         isRunning = false;
-        duration = Duration.ZERO;
-        end = LocalTime.now();
-        // This is a FINAL stop; i.e. NOTHING CAN RECOVER THE TIMER AFTER THIS
+        start = null;       // Clear start to ensure getTime() returns the final duration.
+        // Do NOT reset duration to zero here.
     }
 
     @Override
     public void pauseTimer() {
-        // Should handle pausing the timer
-        if (isRunning == false) return;
+        if (!isRunning) return;
 
         // Capture the elapsed time since the timer started/resumed
-        duration = duration.plus(Duration.between((LocalTime)start, LocalTime.now()));
+        duration = duration.plus(Duration.between((LocalTime) start, LocalTime.now()));
         isRunning = false;
-        end = LocalTime.now();
+        start = null;       // Clear start to prevent double-adding in getTime()
     }
 
     @Override
@@ -78,19 +77,15 @@ public class MockElapsedTimer implements ElapsedTimer {
 
     @Override
     public String getTime() {
-        // If the timer hasn't started or has been stopped, return "00:00"
+        // If the timer is running, add the time since the last start to duration.
         Duration currentDuration = duration;
-        if (isRunning == true) {
-            currentDuration = currentDuration.plus(Duration.between((LocalTime)start, LocalTime.now()));
-        } else {
-            currentDuration = currentDuration.plus(Duration.between((LocalTime)start, (LocalTime)end));
+        if (isRunning && start != null) {
+            currentDuration = currentDuration.plus(Duration.between((LocalTime) start, LocalTime.now()));
         }
 
         long totalSeconds = currentDuration.getSeconds();
-        int minutes = (int) ((totalSeconds % 3600) / 60);
-        int seconds = (int) (totalSeconds % 60);
-
-        // Using Locale to test whether or not this is better than just a formatted string
+        int minutes = (int)((totalSeconds % 3600) / 60);
+        int seconds = (int)(totalSeconds % 60);
         return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
     }
 

@@ -12,7 +12,7 @@ public class RegularTimer implements ElapsedTimer {
     private boolean isRunning;  // Needed to track status of timer
     public static final long TIMER_INTERVAL_MS = 1000; // Updates every second
 
-    RegularTimer() {
+    public RegularTimer() {
         this.secondsElapsed = 0; // Needs to be -1 since the timer begins IMMEDIATELY (i.e. resolves to 0 when started)
         this.isRunning = false;
         this.timer = null;     // Not instantiated until we startTimer()

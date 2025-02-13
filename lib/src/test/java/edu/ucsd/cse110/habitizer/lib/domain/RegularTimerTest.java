@@ -38,8 +38,8 @@ public class RegularTimerTest {
         Thread.sleep(1100);
         // WHEN I stop the timer
         timer.stopTimer();
-        // THEN the timer should be reset to "00:00"
-        var expected = "00:00";
+        // THEN the timer should be equal to 00:01
+        var expected = "00:01";
         var actual = timer.getTime();
         assertEquals(expected, actual);
     }
@@ -92,4 +92,22 @@ public class RegularTimerTest {
         var actual = timer.getTime();
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void pauseTwice() throws InterruptedException {
+        // GIVEN I have a paused timer
+        var timer = new RegularTimer();
+        timer.startTimer();
+        Thread.sleep(1100);
+        timer.pauseTimer();
+        var timeAfterFirstPause = timer.getTime();
+        // WHEN I pause the timer again
+        // (Wait another second)
+        Thread.sleep(1100);
+        timer.pauseTimer();
+        Thread.sleep(1100);
+        // THEN the time should not have advanced further
+        assertEquals(timeAfterFirstPause, timer.getTime());
+    }
+
 }

@@ -8,13 +8,12 @@ public class RoutineTaskTest {
 
     @Test
     public void title() {
-        RegularTimer timer = new RegularTimer();
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, timer);
+        var task = new RoutineTask(0, "Brush Teeth", 1, false);
         assertEquals("Brush Teeth", task.title());
 
         // Try-Catch for blank title
         try {
-            new RoutineTask(0, " ", 1, false, timer);
+            new RoutineTask(0, " ", 1, false);
             fail("Expected: IllegalArgumentException, blank title");
         } catch (IllegalArgumentException e) {
             assertEquals("RoutineTask title cannot be blank", e.getMessage());
@@ -24,13 +23,12 @@ public class RoutineTaskTest {
 
     @Test
     public void priority() {
-        RegularTimer timer = new RegularTimer();
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, timer);
+        var task = new RoutineTask(0, "Brush Teeth", 1, false);
         assertEquals(1, task.priority());
 
         // Try-Catch for negative priority
         try {
-            new RoutineTask(0, "Brush Teeth", -1, false, timer);
+            new RoutineTask(0, "Brush Teeth", -1, false);
             fail("Expected: IllegalArgumentException, negative priority");
         } catch (IllegalArgumentException e) {
             assertEquals("RoutineTask priority must be an integer greater than 0", e.getMessage());
@@ -38,7 +36,7 @@ public class RoutineTaskTest {
 
         // Try-Catch for zero priority
         try {
-            new RoutineTask(0,"Brush Teeth", 0, false, timer);
+            new RoutineTask(0,"Brush Teeth", 0, false);
             fail("Expected: IllegalArgumentException, zero priority");
         } catch (IllegalArgumentException e) {
             assertEquals("RoutineTask priority must be an integer greater than 0", e.getMessage());
@@ -47,34 +45,32 @@ public class RoutineTaskTest {
 
     @Test
     public void isChecked() {
-        RegularTimer timer = new RegularTimer();
         // Check: Initializing isChecked == False
-        var falseIsCheckedTask = new RoutineTask(0, "Brush Teeth", 1, false, timer);
+        var falseIsCheckedTask = new RoutineTask(0, "Brush Teeth", 1, false);
         assertFalse(falseIsCheckedTask.isChecked());
 
         // Check: Initializing isChecked == True
-        var trueIsCheckedTask = new RoutineTask(0, "Brush Teeth", 1, true, timer);
+        var trueIsCheckedTask = new RoutineTask(0, "Brush Teeth", 1, true);
         assertTrue(trueIsCheckedTask.isChecked());
     }
 
     @Test
     public void id() {
         Integer expectedId;
-        RegularTimer timer = new RegularTimer();
 
-        var taskWithZeroId = new RoutineTask(0, "Brush Teeth", 1, false, timer);
+        var taskWithZeroId = new RoutineTask(0, "Brush Teeth", 1, false);
         expectedId = 0;
         assertEquals(expectedId, taskWithZeroId.id());
 
-        var taskWithNonZeroId = new RoutineTask(3, "Brush Teeth", 1, false, timer);
+        var taskWithNonZeroId = new RoutineTask(3, "Brush Teeth", 1, false);
         expectedId = 3;
         assertEquals(expectedId, taskWithNonZeroId.id());
 
-        var taskWithNegativeId = new RoutineTask(-2, "Brush Teeth", 1, false, timer);
+        var taskWithNegativeId = new RoutineTask(-2, "Brush Teeth", 1, false);
         expectedId = -2;
         assertEquals(expectedId, taskWithNegativeId.id());
 
-        var taskWithNullId = new RoutineTask(null, "Brush Teeth", 1, false, timer);
+        var taskWithNullId = new RoutineTask(null, "Brush Teeth", 1, false);
         expectedId = null;
         assertEquals(expectedId, taskWithNullId.id());
     }
@@ -84,10 +80,10 @@ public class RoutineTaskTest {
         Integer expectedId;
 
         RegularTimer timer = new RegularTimer();
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, timer);
+        var task = new RoutineTask(0, "Brush Teeth", 1, false);
 
         assertFalse(task.isChecked());
-        task.checkOff();
+        task.checkOff(timer.getTime());
         assertTrue(task.isChecked());
     }
 
@@ -97,62 +93,15 @@ public class RoutineTaskTest {
         Integer expectedId;
 
         RegularTimer timer = new RegularTimer();
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, timer);
+
+        var task = new RoutineTask(0, "Brush Teeth", 1, false);
         // WHEN I check off Brush Teeth
-        task.checkOff();
+        task.checkOff(timer.getTime());
         // THEN Brush Teeth isChecked
         assertTrue(task.isChecked());
         // WHEN I check off Brush Teeth again
-        task.checkOff();
+        task.checkOff(timer.getTime());
         // THEN Brush Teeth is(still)Checked
         assertTrue(task.isChecked());
-    }
-
-    @Test
-    public void startTask() throws InterruptedException{
-        MockElapsedTimer timer = new MockElapsedTimer();
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, timer);
-
-        task.start();
-        Thread.sleep(1100);
-        String expected = "00:01";
-        String actual = task.getTime();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void endTask() throws InterruptedException {
-        MockElapsedTimer timer = new MockElapsedTimer();
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, timer);
-
-        task.start();
-        Thread.sleep(1100);
-        task.end();
-        String expected = "00:00";
-        String actual = task.getTime();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void getTime() throws InterruptedException {
-        MockElapsedTimer timer = new MockElapsedTimer();
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, timer);
-
-        String actual, expected;
-
-        actual = task.getTime();
-        expected = "00:00";
-        assertEquals(expected, actual);
-
-        task.start();
-        Thread.sleep(3100);
-        actual = task.getTime();
-        expected = "00:03";
-        assertEquals(expected, actual);
-        task.end();
-
-        actual = task.getTime();
-        expected = "00:00";
-        assertEquals(expected, actual);
     }
 }

@@ -41,7 +41,8 @@ public class TaskListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel::checkOffTask);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(),
+                activityModel::checkOffTask, activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
             // when a change is detected by observer
@@ -80,9 +81,24 @@ public class TaskListFragment extends Fragment {
                 }
             }
         });
+
         // Add Elapse Time Button functionality
         view.routineAdd30SecButton.setOnClickListener(v -> {
             activityModel.advanceRoutineTimer(); // Advances timer by 30 seconds
+        });
+
+        // End Routine Button functionality
+        view.endRoutineButton.setOnClickListener(v -> {
+            activityModel.getIsRoutineDone().setValue(true); // Mark a routine as done
+        });
+
+        // When routine is marked as done, disable button.
+        activityModel.getIsRoutineDone().observe(isTaskDone -> {
+            if (isTaskDone) {
+                activityModel.endRoutine(); // Ends routine and stop timers
+                view.endRoutineButton.setText("Routine Ended"); // Updates button text
+                view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
+            }
         });
 
         return view.getRoot();

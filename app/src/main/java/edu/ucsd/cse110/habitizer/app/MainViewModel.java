@@ -127,13 +127,11 @@ public class MainViewModel extends ViewModel {
     }
 
     public void updateGoalTime(String time) {
-        Log.d("DEBUG","Update Goal Time");
         System.out.println("Time received: " + time);
         goalTime.setValue(time);
     }
 
     public Subject<String> getGoalTime() {
-        Log.d("DEBUG","Getting Time");
         return goalTime;
     }
 

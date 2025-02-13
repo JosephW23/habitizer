@@ -57,16 +57,12 @@ public class GoalTimeDialogFragment extends DialogFragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
-        Log.d("DEBUG","Updating Time");
         var time = view.routineGoalTime.getText().toString();
         activityModel.updateGoalTime(time);
-
-        Log.d("DEBUG","Updating Time");
         dialog.dismiss();
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
-        Log.d("DEBUG","Canceled");
         dialog.cancel();
     }
 

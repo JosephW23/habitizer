@@ -1,12 +1,16 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +23,10 @@ import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
     Consumer<Integer> onCheckOffClick; // this variable tracks when a task is clicked
     private MainViewModel activityModel;
-    public TaskListAdapter(Context context, List<RoutineTask> tasks, Consumer<Integer> onCheckOffClick) {
+    public TaskListAdapter(Context context, List<RoutineTask> tasks, Consumer<Integer> onCheckOffClick, MainViewModel activityModel) {
         super(context, 0, new ArrayList<>(tasks));
         this.onCheckOffClick = onCheckOffClick;
+        this.activityModel = activityModel;
     }
 
     @NonNull
@@ -38,12 +43,12 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
             binding = ListItemTaskBinding.inflate(layoutInflater, parent, false);
         }
 
+        // Set a tile of a task.
         binding.taskFrontText.setText(task.title());
 
         // This if-else block updates opacity of checkmark in UI
         // so that checkmark appears when clicked
         if (task.isChecked()) {
-            //Log.d("Task", "Set Alpha");
             binding.taskCheck.setAlpha(255);
         } else {
             binding.taskCheck.setAlpha(0);
@@ -53,7 +58,19 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
         // and the events for checking off task are called
         binding.taskButton.setOnClickListener(v -> {
             var id = task.id();
-            onCheckOffClick.accept(id);
+            activityModel.checkOffTask(id);
+        });
+
+        // When the elapsed time changes for task, update task_view text view.
+        activityModel.getTaskElapsedTime().observe(time -> {
+            if (task.id() == activityModel.getCurrentTaskId()) {
+                // sync with timer if task id is matched with current id.
+                binding.taskTime.setText(time);
+            } else {
+                // sync with elapsed time field inside RoutineTask object
+                // if it is already done or not yet started.
+                binding.taskTime.setText(task.getElapsedTime());
+            }
         });
 
         return binding.getRoot();

@@ -24,4 +24,13 @@ public class RoutineRepository {
         }
         return null;
     }
+
+    public RoutineTask getNextTask(int id) {
+        for (var task : this.getTaskList()) {
+            if (task.id() != id && !task.isChecked()) {
+                return task;
+            }
+        }
+        return null;
+    }
 }

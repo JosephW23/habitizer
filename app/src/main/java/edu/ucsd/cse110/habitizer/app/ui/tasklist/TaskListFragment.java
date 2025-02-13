@@ -62,6 +62,9 @@ public class TaskListFragment extends Fragment {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
         view.taskList.setAdapter(adapter);
 
+        // start two timers
+        activityModel.startRoutine();
+
         // Bind routine_updating_timer to elapsed time from MainViewModel
         activityModel.getElapsedTime().observe(time -> {
             view.routineUpdatingTimer.setText(time); // Updates UI dynamically

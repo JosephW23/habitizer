@@ -23,6 +23,7 @@ public class MainViewModel extends ViewModel {
     private int currentTaskId; // track the current task id (task the time is working)
     private final Subject<Boolean> isRoutineDone; // track if the routine is done.
     private Runnable currentRunner; // track runner for timer so that it can be stopped when checkoff.
+    private String routineName;
 
     private final ElapsedTimer timer; // ElapsedTimer instance to track routine elapsed time
     private final Subject<String> elapsedTime;  // Subject to store and update elapsed time dynamically (Lab 5)
@@ -55,24 +56,37 @@ public class MainViewModel extends ViewModel {
 
         // Set initial values
         this.currentTaskId = 0; // Initialize the first task id as 0.
+        this.routineName = "Morning";
 
-        taskList.setValue(routineRepository.getTaskList());
+        taskList.setValue(routineRepository.getTaskList(this.routineName));
         isRoutineDone.setValue(false);
 
         // Initialize timers.
         taskElapsedTime.setValue("00:00");
         elapsedTime.setValue("00:00");
+    }
 
+    public void startRoutine() {
         // Start updating elapsed time periodically
+        timer.resetTimer();
+        timer.startTimer();
         startTimerUpdates();
 
         // Start updating task elapsed time periodically
+        taskTimer.resetTimer();
+        taskTimer.startTimer();
         currentRunner = startTaskTimerUpdates();
     }
 
     // load a list of tasks
     public Subject<List<RoutineTask>> loadTaskList() {
         return taskList;
+    }
+
+    // set routine name
+    public void setRoutineName(String name) {
+        this.routineName = name;
+        taskList.setValue(routineRepository.getTaskList(routineName));
     }
 
     // check off a task with id
@@ -87,12 +101,12 @@ public class MainViewModel extends ViewModel {
         timerHandler.removeCallbacks(currentRunner);
 
         // Given id, find corresponding task and check it off
-        var task = routineRepository.getTaskWithId(id);
+        var task = routineRepository.getTaskWithIdandName(this.routineName, id);
         task.checkOff(taskTimer.getTime());
 
         // Increment current task id by 1.
         int nextTaskId = id + 1;
-        var nextTask = routineRepository.getTaskWithId(nextTaskId);
+        var nextTask = routineRepository.getTaskWithIdandName(this.routineName, nextTaskId);
 
         // Check if there is a next task remaining
         if (nextTask == null) {
@@ -106,7 +120,7 @@ public class MainViewModel extends ViewModel {
 
         // update current task id and task list
         currentTaskId = nextTaskId;
-        taskList.setValue(routineRepository.getTaskList());
+        taskList.setValue(routineRepository.getTaskList(this.routineName));
     }
 
     // Get the current task id

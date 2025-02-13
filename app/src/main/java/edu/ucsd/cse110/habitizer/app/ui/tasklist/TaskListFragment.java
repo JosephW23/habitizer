@@ -85,6 +85,12 @@ public class TaskListFragment extends Fragment {
         view.routineAdd30SecButton.setOnClickListener(v -> {
             activityModel.advanceRoutineTimer(); // Advances timer by 30 seconds
         });
+        // End Routine Button functionality
+        view.endRoutineButton.setOnClickListener(v -> {
+            activityModel.stopRoutineTimer(); // Stops the routine timer
+            view.endRoutineButton.setText("Routine Ended"); // Updates button text
+            view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
+        });
 
         return view.getRoot();
     }

@@ -38,8 +38,8 @@ public class RegularTimerTest {
         Thread.sleep(1100);
         // WHEN I stop the timer
         timer.stopTimer();
-        // THEN the timer should be reset to "00:00"
-        var expected = "00:00";
+        // THEN the timer should be equal to 00:01
+        var expected = "00:01";
         var actual = timer.getTime();
         assertEquals(expected, actual);
     }

@@ -70,6 +70,7 @@ public class MainViewModel extends ViewModel {
     // set routine name
     public void setRoutineName(String name) {
         this.routineName = name;
+        taskList.setValue(routineRepository.getTaskList(routineName));
     }
 
     public ElapsedTimer getTimer() {

@@ -1,7 +1,5 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
-import androidx.annotation.Nullable;
-
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
@@ -14,13 +12,12 @@ public class RoutineRepository {
     public Routine routine(String title) { return dataSource.routine(title); }
 
     // return a List of RoutineTask
-    public List<RoutineTask> getTaskList() {
-        return dataSource.getTaskList();
+    public List<RoutineTask> getTaskList(String name) {
+        return dataSource.getTaskList(name);
     }
 
-    // get a RoutineTask object with id
-    public RoutineTask getTaskWithId(int id) {
-        for (var task : this.getTaskList()) {
+    public RoutineTask getTaskWithIdandName(String name, int id) {
+        for (var task : this.getTaskList(name)) {
             if (task.id() == id) {
                 return task;
             }

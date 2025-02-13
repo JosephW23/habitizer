@@ -131,5 +131,22 @@ public class MockElapsedTimerTest {
         // THEN the timer should return that it is NOT running
         assertFalse(timer.isRunning());
     }
+
+    @Test
+    public void pauseTwice() throws InterruptedException {
+        // GIVEN I have a paused timer
+        var timer = new MockElapsedTimer();
+        timer.startTimer();
+        Thread.sleep(1100);
+        timer.pauseTimer();
+        var timeAfterFirstPause = timer.getTime();
+        // WHEN I pause the timer again
+        // (Wait another second)
+        Thread.sleep(1100);
+        timer.pauseTimer();
+        Thread.sleep(1100);
+        // THEN the time should not have advanced further
+        assertEquals(timeAfterFirstPause, timer.getTime());
+    }
 }
 

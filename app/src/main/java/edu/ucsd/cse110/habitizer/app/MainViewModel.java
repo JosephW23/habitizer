@@ -79,8 +79,12 @@ public class MainViewModel extends ViewModel {
         // Increment current task id by 1.
         int newTaskId = currentTaskId.getValue() + 1;
         currentTaskId.setValue(newTaskId);
-        if (routineRepository.getTaskWithId(newTaskId) == null) {
+
+        var nextTask = routineRepository.getTaskWithId(newTaskId);
+        if (nextTask == null) {
             isTaskDone.setValue(true);
+        } else {
+            //
         }
     }
 

@@ -22,7 +22,6 @@ public class MainViewModel extends ViewModel {
     private final Subject<List<RoutineTask>> taskList;
     private final Subject<Integer> currentTaskId;
     private final Subject<Boolean> isRoutineDone;
-    private final Subject<String> taskElapsedTime;
     private Runnable currentRunner;
 
     // ElapsedTimer instance to track routine elapsed time
@@ -30,6 +29,9 @@ public class MainViewModel extends ViewModel {
 
     // Subject to store and update elapsed time dynamically (Lab 5)
     private final Subject<String> elapsedTime;
+
+    private final ElapsedTimer taskTimer;
+    private final Subject<String> taskElapsedTime;
 
     // Handler for periodic timer updates (Lab 4 )
     private final Handler timerHandler = new Handler(Looper.getMainLooper());
@@ -50,6 +52,8 @@ public class MainViewModel extends ViewModel {
         this.taskList = new Subject<>();
         this.currentTaskId = new Subject<>();
         this.isRoutineDone = new Subject<>();
+
+        this.taskTimer = MockElapsedTimer.immediateTimer();
         this.taskElapsedTime = new Subject<>();
         this.timer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
@@ -65,9 +69,7 @@ public class MainViewModel extends ViewModel {
         // Start updating elapsed time periodically
         startTimerUpdates();
 
-        var task = routineRepository.getTaskWithId(0);
-        task.start();
-        currentRunner = startTaskTimerUpdates(0);
+        currentRunner = startTaskTimerUpdates();
     }
 
     public Subject<List<RoutineTask>> loadTaskList() {
@@ -75,20 +77,25 @@ public class MainViewModel extends ViewModel {
     }
 
     public void checkOffTask(int id) {
+        // if you try to check off previous tasks, it does not since it is invalid.
+        if (id < currentTaskId.getValue()) {
+            return;
+        }
+
         // Given id, find corresponding task and check it off
         timerHandler.removeCallbacks(currentRunner);
         var task = routineRepository.getTaskWithId(id);
         task.checkOff();
         // Increment current task id by 1.
-        int nextTaskId = currentTaskId.getValue() + 1;
+        int nextTaskId = id + 1;
 
         var nextTask = routineRepository.getTaskWithId(nextTaskId);
         if (nextTask == null) {
             isRoutineDone.setValue(true);
         } else {
-            nextTask.start();
-            currentRunner = startTaskTimerUpdates(nextTaskId);
-            Log.d("Success", getTaskElapsedTime().getValue());
+            taskTimer.resetTimer();
+            taskTimer.startTimer();
+            currentRunner = startTaskTimerUpdates();
         }
 
         currentTaskId.setValue(nextTaskId);
@@ -153,16 +160,15 @@ public class MainViewModel extends ViewModel {
         }, TIMER_INTERVAL_MS);
     }
 
-    public Runnable startTaskTimerUpdates(int id) {
-        var task = routineRepository.getTaskWithId(id);
+    public Runnable startTaskTimerUpdates() {
         var runner = new Runnable() {
             @Override
             public void run() {
-                taskElapsedTime.setValue(task.getTime());
+                taskElapsedTime.setValue(taskTimer.getTime());
                 timerHandler.postDelayed(this, TIMER_INTERVAL_MS);
             }
         };
-        boolean success = timerHandler.postDelayed(runner, 0);
+        timerHandler.postDelayed(runner, 0);
         return runner;
     }
 

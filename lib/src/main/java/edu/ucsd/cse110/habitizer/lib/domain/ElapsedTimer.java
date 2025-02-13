@@ -20,4 +20,7 @@ public interface ElapsedTimer {
     // Advances the timer by 30 seconds (For testing in US3c)
     void advanceTimer();
 
+    // Reset the timer to 00:00
+    void resetTimer();
+
 }

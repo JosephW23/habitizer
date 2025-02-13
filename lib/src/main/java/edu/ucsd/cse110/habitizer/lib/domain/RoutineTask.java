@@ -10,10 +10,10 @@ public class RoutineTask {
     private final @NonNull String title;
     private final int priority;
     private boolean isChecked;
-    private RegularTimer timer;
+    private ElapsedTimer timer;
 
     // Todo: Need timer object to track how much time is used for this task.
-    public RoutineTask(@Nullable Integer id, @NonNull String title, int priority, boolean isChecked, RegularTimer timer) {
+    public RoutineTask(@Nullable Integer id, @NonNull String title, int priority, boolean isChecked, ElapsedTimer timer) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("RoutineTask title cannot be blank");
         }
@@ -46,8 +46,8 @@ public class RoutineTask {
         this.timer.stopTimer();
     }
 
-    public void getTime() {
-        this.timer.getTime();
+    public String getTime() {
+        return this.timer.getTime();
     }
 
     @Override

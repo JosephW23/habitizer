@@ -20,6 +20,7 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
     private final Subject<List<RoutineTask>> taskList;
+    private final Subject<Integer> currentTaskId;
 
     // ElapsedTimer instance to track routine elapsed time
     private final ElapsedTimer timer;
@@ -44,11 +45,13 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(RoutineRepository routineRepository) {
         this.routineRepository = routineRepository;
         this.taskList = new Subject<>();
+        this.currentTaskId = new Subject<>();
         this.timer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
 
         // Set initial values
         taskList.setValue(routineRepository.getTaskList());
+        currentTaskId.setValue(0);
         elapsedTime.setValue("00:00"); // Default to 0 time
 
         // Start updating elapsed time periodically
@@ -64,6 +67,9 @@ public class MainViewModel extends ViewModel {
         var task = routineRepository.getTaskWithId(id);
         task.checkOff();
         taskList.setValue(routineRepository.getTaskList());
+
+        int newTaskId = currentTaskId.getValue() + 1;
+        currentTaskId.setValue(newTaskId);
     }
 
     public ElapsedTimer getTimer() {

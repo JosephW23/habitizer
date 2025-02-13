@@ -44,10 +44,8 @@ public class MockElapsedTimerTest {
         Thread.sleep(1100);
         // WHEN I stop the timer
         timer.stopTimer();
-        // THEN the timer should be reset, reporting "00:00"
-        String expected = "00:00";
-        String actual = timer.getTime();
-        assertEquals(expected, actual);
+        // THEN the timer should have a false isRunning
+        assertFalse(timer.isRunning());
     }
 
     @Test

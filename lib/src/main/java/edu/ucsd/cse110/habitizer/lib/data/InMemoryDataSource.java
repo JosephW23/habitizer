@@ -18,16 +18,16 @@ public class InMemoryDataSource {
         RegularTimer timer = new RegularTimer();
         Routine DEFAULT_MORNING_ROUTINE = new Routine("Morning",
                 List.of(
-                        new RoutineTask(0, "Wake Up", 1, false, timer),
-                        new RoutineTask(1,"Eat Breakfast", 2, false, timer),
-                        new RoutineTask(2, "Brush Teeth", 3, false, timer)
+                        new RoutineTask(0, "Wake Up", 1, false),
+                        new RoutineTask(1,"Eat Breakfast", 2, false),
+                        new RoutineTask(2, "Brush Teeth", 3, false)
                 ));
 
         Routine DEFAULT_EVENING_ROUTINE = new Routine("Evening",
                 List.of(
-                        new RoutineTask(0, "Eat Dinner", 1, false, timer),
-                        new RoutineTask(1,"Brush Teeth", 2, false, timer),
-                        new RoutineTask(2, "Go To Bed", 3, false, timer)
+                        new RoutineTask(0, "Eat Dinner", 1, false),
+                        new RoutineTask(1,"Brush Teeth", 2, false),
+                        new RoutineTask(2, "Go To Bed", 3, false)
                 ));
 
         routines.put(DEFAULT_MORNING_ROUTINE.title(), DEFAULT_MORNING_ROUTINE);

@@ -40,7 +40,7 @@ public class MockElapsedTimer implements ElapsedTimer {
 
         isRunning = false;
         start = null;
-        duration = Duration.ZERO; // Reset elapsed time when stopping
+        // duration = Duration.ZERO; // Reset elapsed time when stopping
     }
 
     @Override

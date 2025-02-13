@@ -89,6 +89,13 @@ public class MockElapsedTimer implements ElapsedTimer {
         return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
     }
 
+    @Override
+    public void resetTimer() {
+        this.duration = Duration.ZERO; // Start with zero elapsed time
+        this.isRunning = false;
+        this.start = null;
+    }
+
     public boolean isRunning() {
         return this.isRunning;
     }

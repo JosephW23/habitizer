@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
+import java.time.Duration;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Timer;
@@ -87,6 +88,14 @@ public class RegularTimer implements ElapsedTimer {
     public void advanceTimer() {
         // Advance timer by 30 seconds regardless of whether it's paused
         this.secondsElapsed += 30;
+    }
+
+    @Override
+    public void resetTimer() {
+        this.secondsElapsed = 0; // Needs to be -1 since the timer begins IMMEDIATELY (i.e. resolves to 0 when started)
+        this.isRunning = false;
+        this.timer = null;     // Not instantiated until we startTimer()
+        this.timerTask = null; // Also not instantiated until we startTimer()
     }
 
     @Override

@@ -84,7 +84,7 @@ public class MainViewModel extends ViewModel {
         if (nextTask == null) {
             isTaskDone.setValue(true);
         } else {
-            //
+            nextTask.start();
         }
     }
 

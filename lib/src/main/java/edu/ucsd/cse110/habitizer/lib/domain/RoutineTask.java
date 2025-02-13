@@ -36,6 +36,7 @@ public class RoutineTask {
 
     public void checkOff() {
         this.isChecked = true;
+        this.end();
     }
 
     public void start() {

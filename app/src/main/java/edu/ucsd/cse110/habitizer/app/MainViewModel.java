@@ -64,11 +64,17 @@ public class MainViewModel extends ViewModel {
         // Initialize timers.
         taskElapsedTime.setValue("00:00");
         elapsedTime.setValue("00:00");
+    }
 
+    public void startRoutine() {
         // Start updating elapsed time periodically
+        timer.resetTimer();
+        timer.startTimer();
         startTimerUpdates();
 
         // Start updating task elapsed time periodically
+        taskTimer.resetTimer();
+        taskTimer.startTimer();
         currentRunner = startTaskTimerUpdates();
     }
 

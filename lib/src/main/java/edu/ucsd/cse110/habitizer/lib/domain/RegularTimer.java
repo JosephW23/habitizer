@@ -12,7 +12,7 @@ public class RegularTimer implements ElapsedTimer {
     private boolean isRunning;  // Needed to track status of timer
 
     RegularTimer() {
-        this.secondsElapsed = -1; // Needs to be -1 since the timer begins IMMEDIATELY (i.e. resolves to 0 when started)
+        this.secondsElapsed = 0; // Needs to be -1 since the timer begins IMMEDIATELY (i.e. resolves to 0 when started)
         this.isRunning = false;
         this.timer = null;     // Not instantiated until we startTimer()
         this.timerTask = null; // Also not instantiated until we startTimer()
@@ -33,7 +33,7 @@ public class RegularTimer implements ElapsedTimer {
             public void run() {
                 secondsElapsed++;
             }
-        }, 0, 1000);
+        }, 1000, 1000);
 
         isRunning = true;
     }
@@ -48,7 +48,7 @@ public class RegularTimer implements ElapsedTimer {
         if (!Objects.isNull(timer)) timer.cancel();
 
         isRunning = false;
-        secondsElapsed = -1;
+        secondsElapsed = 0;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class RegularTimer implements ElapsedTimer {
             public void run() {
                 secondsElapsed++;
             }
-        }, 0, 1000);
+        }, 1000, 1000);
 
         this.isRunning = true;
     }

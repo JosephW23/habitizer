@@ -14,107 +14,124 @@ public class MockElapsedTimerTest {
     }
 
     @Test
-    public void advanceTimer() {
-        var timer = new MockElapsedTimer();
-        timer.startTimer();
-        timer.advanceTimer();
-        assertEquals("00:00:30", timer.getTime());
+    public void immediateTimer() {
+        // GIVEN a newly UI-test timer that has just been instantiated (testing static method)
+        MockElapsedTimer immediateTimer = MockElapsedTimer.immediateTimer();
+        // WHEN I get the time immediately
+        String actual = immediateTimer.getTime();
+        // THEN the timer should have a time of "00:00"
+        String expected = "00:00";
+        immediateTimer.stopTimer(); // (Stopping timer just in case)
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void pauseKeepsTime() {
+    public void startTimer() throws InterruptedException {
+        // GIVEN a timer
+        // WHEN I start the timer and wait for approximately one second
         timer.startTimer();
-        timer.advanceTimer();
-        String beforePause = timer.getTime();
-
-        timer.pauseTimer();
-        timer.advanceTimer(); // Should NOT change time
-
-        assertEquals(beforePause, timer.getTime());
+        Thread.sleep(1100);
+        // THEN the elapsed time should be about 1 second (i.e. "00:01")
+        String expected = "00:01";
+        String actual = timer.getTime();
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void resumeContinuesTime() {
+    public void stopTimer() throws InterruptedException {
+        // GIVEN a timer that is running
         timer.startTimer();
-        timer.advanceTimer();
-        timer.pauseTimer();
-
-        timer.resumeTimer();
-        timer.advanceTimer();
-
-        assertEquals("00:01:00", timer.getTime());
-    }
-
-    @Test
-    public void stopResetsTime() {
-        timer.startTimer();
-        timer.advanceTimer();
-        timer.advanceTimer();
-
+        Thread.sleep(1100);
+        // WHEN I stop the timer
         timer.stopTimer();
-
-        assertEquals("00:00:00", timer.getTime());
-    }
-    // Test that elapsed time rounds correctly
-    @Test
-    public void elapsedTimeRounding() {
-        timer.startTimer();
-        timer.advanceTimer(); // 30s
-        timer.advanceTimer(); // 60s
-        timer.advanceTimer(); // 90s (1m 30s)
-
-        assertEquals("00:01:30", timer.getTime()); // Ensures correct rounding
+        // THEN the timer should be reset, reporting "00:00"
+        String expected = "00:00";
+        String actual = timer.getTime();
+        assertEquals(expected, actual);
     }
 
-    //Test that pausing stops time progression
     @Test
-    public void pausingStopsTimeProgression() {
+    public void pauseTimer() throws InterruptedException {
+        // GIVEN a timer that is running
         timer.startTimer();
-        timer.advanceTimer(); // 30s
+        Thread.sleep(1100);
+        // WHEN I pause the timer
         timer.pauseTimer();
-        timer.advanceTimer(); // Should NOT increment
-
-        assertEquals("00:00:30", timer.getTime()); // Should remain at 30s
+        String pausedTime = timer.getTime();
+        // Wait another second
+        Thread.sleep(1100);
+        // THEN the elapsed time should remain unchanged while paused
+        String actual = timer.getTime();
+        assertEquals(pausedTime, actual);
     }
 
-    // Test that resuming continues time updates correctly
     @Test
-    public void testResumingAfterPause() {
+    public void resumeTimer() throws InterruptedException {
+        // GIVEN a timer that is running and then paused
         timer.startTimer();
-        timer.advanceTimer(); // 30s
+        Thread.sleep(1100); // Should be about "00:01"
         timer.pauseTimer();
+        String timeAtPause = timer.getTime(); // e.g., "00:01"
+        // WHEN I resume the timer and wait for approximately one second
         timer.resumeTimer();
-        timer.advanceTimer(); // 60s
-
-        assertEquals("00:01:00", timer.getTime()); // Should continue from last state
-    }
-    // New Tests for Manually Advancing Time (US3c)
-
-    @Test
-    public void testManualAdvanceOnce() {
-        timer.startTimer();
-        timer.advanceTimer();
-        assertEquals("00:00:30", timer.getTime()); // Should be 30s
+        Thread.sleep(1100);
+        // THEN the elapsed time should continue from where it left off
+        // If timeAtPause was "00:01", then after one more second we expect "00:02"
+        String expected = "00:02";
+        String actual = timer.getTime();
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void testManualAdvanceMultipleTimes() {
+    public void advanceTimer() throws InterruptedException {
+        // GIVEN a timer that is running
         timer.startTimer();
+        Thread.sleep(1100); // Timer should be roughly at "00:01"
+        // WHEN I advance the timer by 30 seconds
         timer.advanceTimer();
-        timer.advanceTimer();
-        timer.advanceTimer();
-        assertEquals("00:01:30", timer.getTime()); // Should be 1m 30s
+        // THEN the elapsed time should reflect an increase of 30 seconds
+        // (e.g., "00:01" becomes "00:31")
+        String expected = "00:31";
+        String actual = timer.getTime();
+        assertEquals(expected, actual);
     }
 
-    /* @Test
-   // public void testManualAdvanceWhilePaused() {
+    @Test
+    public void getTime() throws InterruptedException {
+        // GIVEN a timer that is started
         timer.startTimer();
-        timer.advanceTimer(); // 30s
+        // WHEN I wait for about 3 seconds
+        Thread.sleep(3100);
+        // THEN getTime() should return "00:03"
+        String expected = "00:03";
+        String actual = timer.getTime();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void isRunning() throws InterruptedException {
+        // GIVEN a timer that has not been started
+        assertFalse(timer.isRunning());
+
+        // WHEN I start the timer
+        timer.startTimer();
+        // THEN the timer should return that it is running
+        assertTrue(timer.isRunning());
+
+        // WHEN I pause the timer
         timer.pauseTimer();
+        // THEN the timer should return that it is NOT running
+        assertFalse(timer.isRunning());
 
-        timer.advanceTimer(); // Should still advance even when paused
-        assertEquals("00:01:00", timer.getTime()); // Should be 60s (1m)
-    }*/
+        // WHEN I resume the timer
+        timer.resumeTimer();
+        // THEN the timer should return that it is running
+        assertTrue(timer.isRunning());
 
+        // WHEN I stop the timer
+        timer.stopTimer();
+        // THEN the timer should return that it is NOT running
+        assertFalse(timer.isRunning());
+    }
 }
 

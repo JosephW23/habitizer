@@ -57,7 +57,7 @@ public class MockElapsedTimer implements ElapsedTimer {
     @Override
     public void resumeTimer() {
         // Only resume if the timer was paused.
-        if (isRunning == true || (start == null && duration.equals(Duration.ZERO))) return;
+        if (isRunning == true) return;
 
         // Resume the timer by setting start to now without resetting duration.
         start = LocalTime.now();

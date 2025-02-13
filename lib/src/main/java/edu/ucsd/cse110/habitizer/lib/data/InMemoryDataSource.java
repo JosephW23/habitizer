@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.ucsd.cse110.habitizer.lib.domain.RegularTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
@@ -14,11 +15,12 @@ public class InMemoryDataSource {
 
     // Todo: make this default routine have two routines (Morning and Evening)
     public void initializeDefaultRoutine() {
+        RegularTimer timer = new RegularTimer();
         Routine DEFAULT_ROUTINE = new Routine("Test Routine",
                 List.of(
-                        new RoutineTask(0, "Wake Up", 1, false),
-                        new RoutineTask(1,"Eat Breakfast", 2, false),
-                        new RoutineTask(2, "Brush Teeth", 3, false)
+                        new RoutineTask(0, "Wake Up", 1, false, timer),
+                        new RoutineTask(1,"Eat Breakfast", 2, false, timer),
+                        new RoutineTask(2, "Brush Teeth", 3, false, timer)
                 ));
 
         routines.put(DEFAULT_ROUTINE.title(), DEFAULT_ROUTINE);

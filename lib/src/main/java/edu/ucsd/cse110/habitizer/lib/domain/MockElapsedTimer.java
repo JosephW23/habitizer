@@ -3,82 +3,98 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.Temporal;
-import java.util.Objects;
+import java.util.Locale;
 
 public class MockElapsedTimer implements ElapsedTimer {
     private Temporal start;
-    private Duration duration;
-    private boolean isRunning;
+    private Duration duration;   // Needed to keep track of elapsed time
+    private boolean isRunning;   // Needed to track status of timer
 
     public MockElapsedTimer() {
-        this.duration = Duration.ZERO;
+        this.duration = Duration.ZERO; // Start with zero elapsed time
         this.isRunning = false;
-        this.start = null;
+        this.start = null;             // Not instantiated until we startTimer()
+    }
+
+    public static MockElapsedTimer immediateTimer() {
+        MockElapsedTimer immediateTimer = new MockElapsedTimer();
+        immediateTimer.startTimer();
+        return immediateTimer;
     }
 
     @Override
     public void startTimer() {
-        if (this.isRunning) return;
+        // Should handle starting the timer again even if the timer has already been started
+        if (isRunning == true) return;
 
-        start = LocalTime.now();
+        // For a fresh start, reset the duration and set start to now
+        this.duration = Duration.ZERO;
+        this.start = LocalTime.now();
         isRunning = true;
     }
 
     @Override
     public void stopTimer() {
-        if (!this.isRunning || Objects.isNull(start)) return;
+        // Should handle stopping the timer even if the timer hasn't been started
+        if (isRunning == false && start == null) return;
 
-        this.isRunning = false;
-        this.start = null;
-        this.duration = Duration.ZERO; // Reset elapsed time when stopping
+        isRunning = false;
+        start = null;
+        duration = Duration.ZERO; // Reset elapsed time when stopping
+    }
+
+    @Override
+    public void pauseTimer() {
+        // Should handle pausing the timer
+        if (isRunning == false) return;
+
+        // Capture the elapsed time since the timer started/resumed
+        duration = duration.plus(Duration.between((LocalTime)start, LocalTime.now()));
+        isRunning = false;
+        start = null;
+    }
+
+    @Override
+    public void resumeTimer() {
+        // Only resume if the timer was paused.
+        if (isRunning == true || (start == null && duration.equals(Duration.ZERO))) return;
+
+        // Resume the timer by setting start to now without resetting duration.
+        start = LocalTime.now();
+        isRunning = true;
+    }
+
+    @Override
+    public void advanceTimer() {
+        // Advance timer by 30 seconds regardless of whether it's paused
+        if (isRunning && start != null) {
+            // Incorporate the time elapsed since the last start before advancing
+            duration = duration.plus(Duration.between((LocalTime)start, LocalTime.now()));
+            start = LocalTime.now();
+        }
+        duration = duration.plusSeconds(30);
     }
 
     @Override
     public String getTime() {
-        Duration currDuration = duration;
-
-        if (this.isRunning && Objects.nonNull(start)) {
-            currDuration = duration.plus(Duration.between(
-                    (LocalTime) start, LocalTime.now()
-            ));
+        // If the timer hasn't started or has been stopped, return "00:00"
+        Duration currentDuration = duration;
+        if (isRunning && start != null) {
+            currentDuration = currentDuration.plus(Duration.between((LocalTime)start, LocalTime.now()));
+        }
+        if (!isRunning && start == null && duration.equals(Duration.ZERO)) {
+            return "00:00";
         }
 
-        var longSeconds = currDuration.getSeconds();
-        int hours = (int)(longSeconds / 3600);
-        int minutes = (int)((longSeconds % 3600) / 60);
-        int seconds = (int)(longSeconds % 60);
+        long totalSeconds = currentDuration.getSeconds();
+        int minutes = (int) ((totalSeconds % 3600) / 60);
+        int seconds = (int) (totalSeconds % 60);
 
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-    }
-
-    public void advanceTimer() {
-        if (!isRunning) {
-            return; // This prevents advancing while paused
-        }
-        this.duration = this.duration.plusSeconds(30);
-        start = LocalTime.now();
-    }
-
-    public void pauseTimer() {
-        if (!isRunning || Objects.isNull(start)) return;
-
-        // Properly stop time updates while paused
-        duration = duration.plus(Duration.between(
-                (LocalTime) start, LocalTime.now()
-        ));
-
-        this.isRunning = false;
-        this.start = null; // Prevents further time updates
-    }
-
-    public void resumeTimer() {
-        if (isRunning) return;
-
-        this.start = LocalTime.now();
-        this.isRunning = true;
+        // Using Locale to test whether or not this is better than just a formatted string
+        return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
     }
 
     public boolean isRunning() {
-        return isRunning;
+        return this.isRunning;
     }
 }

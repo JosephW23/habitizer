@@ -11,11 +11,10 @@ public class RoutineTest {
 
     @Test
     public void tasksGetter() {
-        RegularTimer timer = new RegularTimer();
         // GIVEN a list of tasks
         var expected = List.of(
-                new RoutineTask(0, "Brush Teeth", 1, false, timer),
-                new RoutineTask(1, "Shower", 2, false, timer)
+                new RoutineTask(0, "Brush Teeth", 1, false),
+                new RoutineTask(1, "Shower", 2, false)
         );
 
         // WHEN I construct a Routine with those tasks
@@ -28,12 +27,11 @@ public class RoutineTest {
 
     @Test
     public void blankTitleFailsValidation() {
-        RegularTimer timer = new RegularTimer();
         // GIVEN ...
         // WHEN I try to create a Routine with a blank title.
         try {
             new Routine(" ", List.of(
-                    new RoutineTask(0, "Brush Teeth", 1, false, timer)
+                    new RoutineTask(0, "Brush Teeth", 1, false)
             ));
             fail("Expected: IllegalArgumentException, blank title");
         }
@@ -46,10 +44,9 @@ public class RoutineTest {
 
     @Test
     public void titleIsCorrect() {
-        RegularTimer timer = new RegularTimer();
         // GIVEN the title is "Test Routine"
         Routine routine = new Routine("Test Routine", List.of(
-                new RoutineTask(1, "Brush Teeth", 1, false, timer)
+                new RoutineTask(1, "Brush Teeth", 1, false)
         ));
 
         var expected = "Test Routine";

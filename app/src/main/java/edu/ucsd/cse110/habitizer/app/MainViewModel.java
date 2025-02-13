@@ -84,7 +84,7 @@ public class MainViewModel extends ViewModel {
         // Given id, find corresponding task and check it off
         timerHandler.removeCallbacks(currentRunner);
         var task = routineRepository.getTaskWithId(id);
-        task.checkOff();
+        task.checkOff(taskTimer.getTime());
         // Increment current task id by 1.
         int nextTaskId = id + 1;
 

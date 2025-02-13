@@ -77,7 +77,7 @@ public class MainViewModel extends ViewModel {
 
     public void checkOffTask(int id) {
         // if you try to check off previous tasks, it does not since it is invalid.
-        if (id < currentTaskId) {
+        if ((id < currentTaskId) || isRoutineDone.getValue()) {
             return;
         }
 
@@ -99,6 +99,14 @@ public class MainViewModel extends ViewModel {
 
         currentTaskId = nextTaskId;
         taskList.setValue(routineRepository.getTaskList());
+    }
+
+    public Subject<Boolean> getIsRoutineDone() {
+        return isRoutineDone;
+    }
+
+    public void stopTaskTimer() {
+        taskTimer.stopTimer();
     }
 
     public ElapsedTimer getTimer() {
@@ -174,5 +182,10 @@ public class MainViewModel extends ViewModel {
     // Helper function to update elapsed time for UI
     private void updateElapsedTime() {
         elapsedTime.setValue(timer.getTime());
+    }
+
+    public void endRoutine() {
+        stopRoutineTimer();
+        stopTaskTimer();
     }
 }

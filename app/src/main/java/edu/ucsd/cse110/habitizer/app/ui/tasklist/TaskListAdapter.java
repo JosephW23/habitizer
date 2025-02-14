@@ -21,11 +21,9 @@ import edu.ucsd.cse110.habitizer.app.databinding.ListItemTaskBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
 public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
-    Consumer<Integer> onCheckOffClick; // this variable tracks when a task is clicked
     private MainViewModel activityModel;
-    public TaskListAdapter(Context context, List<RoutineTask> tasks, Consumer<Integer> onCheckOffClick, MainViewModel activityModel) {
+    public TaskListAdapter(Context context, List<RoutineTask> tasks, MainViewModel activityModel) {
         super(context, 0, new ArrayList<>(tasks));
-        this.onCheckOffClick = onCheckOffClick;
         this.activityModel = activityModel;
     }
 

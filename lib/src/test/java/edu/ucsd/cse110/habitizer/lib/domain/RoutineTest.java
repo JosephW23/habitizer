@@ -18,7 +18,7 @@ public class RoutineTest {
         );
 
         // WHEN I construct a Routine with those tasks
-        Routine routine = new Routine("My Routine", expected);
+        Routine routine = new Routine(0, "My Routine", expected);
 
         // THEN .tasks() returns the same tasks I created it with
         var actual = routine.tasks();
@@ -30,7 +30,7 @@ public class RoutineTest {
         // GIVEN ...
         // WHEN I try to create a Routine with a blank title.
         try {
-            new Routine(" ", List.of(
+            new Routine(0, " ", List.of(
                     new RoutineTask(0, "Brush Teeth", 1, false)
             ));
             fail("Expected: IllegalArgumentException, blank title");
@@ -45,7 +45,7 @@ public class RoutineTest {
     @Test
     public void titleIsCorrect() {
         // GIVEN the title is "Test Routine"
-        Routine routine = new Routine("Test Routine", List.of(
+        Routine routine = new Routine(0, "Test Routine", List.of(
                 new RoutineTask(1, "Brush Teeth", 1, false)
         ));
 
@@ -53,6 +53,19 @@ public class RoutineTest {
         // WHEN I get the routine title
         // THEN "Test Routine" is returned
         assertEquals(expected, routine.title());
+    }
+
+    @Test
+    public void checkId() {
+        // GIVEN the title is "Test Routine"
+        Routine routine = new Routine(0, "Test Routine", List.of(
+                new RoutineTask(1, "Brush Teeth", 1, false)
+        ));
+
+        var expected = 0;
+        // WHEN I get the routine title
+        // THEN "Test Routine" is returned
+        assertEquals(expected, routine.id());
     }
 
 }

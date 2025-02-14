@@ -4,7 +4,6 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
@@ -13,6 +12,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.domain.ElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
@@ -20,6 +20,7 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
     private final Subject<List<RoutineTask>> taskList;
+    private final Subject<List<Routine>> routineList;
     private int currentTaskId; // track the current task id (task the time is working)
     private final Subject<Boolean> isRoutineDone; // track if the routine is done.
     private Runnable currentRunner; // track runner for timer so that it can be stopped when checkoff.
@@ -49,6 +50,7 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(RoutineRepository routineRepository) {
         this.routineRepository = routineRepository;
         this.taskList = new Subject<>();
+        this.routineList = new Subject<>();
 
         this.isRoutineDone = new Subject<>(); // Initialize subject for checking the status for routine.
 
@@ -64,6 +66,7 @@ public class MainViewModel extends ViewModel {
         goalTime.setValue("60");
 
         taskList.setValue(routineRepository.getTaskList(this.routineName));
+        routineList.setValue(routineRepository.getRoutineList());
         isRoutineDone.setValue(false);
 
         // Initialize timers.
@@ -86,6 +89,10 @@ public class MainViewModel extends ViewModel {
     // load a list of tasks
     public Subject<List<RoutineTask>> loadTaskList() {
         return taskList;
+    }
+    // load a list of routines
+    public Subject<List<Routine>> loadRoutineList() {
+        return routineList;
     }
 
     // set routine name

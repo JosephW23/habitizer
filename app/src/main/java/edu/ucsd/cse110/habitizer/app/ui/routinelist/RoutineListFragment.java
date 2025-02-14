@@ -10,19 +10,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListAdapter;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-
-import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutineListBinding;
-import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 
 public class RoutineListFragment extends Fragment {
     private MainViewModel activityModel;
+    private RoutineListAdapter adapter; // adapter for ListView
     private FragmentRoutineListBinding view;
 
     public RoutineListFragment() {}
@@ -42,30 +42,27 @@ public class RoutineListFragment extends Fragment {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+
+        this.adapter = new RoutineListAdapter(requireContext(), List.of(), activityModel, modelOwner);
+
+        activityModel.loadRoutineList().observe(routines -> {
+            // when a change is detected by observer
+            // this will clear all contents in the adapter
+            // and then get repopulate with new data
+            if (routines == null) return;
+
+            adapter.clear();
+            adapter.addAll(new ArrayList<>(routines));
+            adapter.notifyDataSetChanged();
+        });
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentRoutineListBinding.inflate(inflater, container, false);
-
-        view.morningRoutineButton.setOnClickListener(v -> {
-            var modelOwner = requireActivity();
-            this.activityModel.setRoutineName("Morning");
-            modelOwner.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, TaskListFragment.newInstance())
-                    .commit();
-        });
-
-        view.eveningRoutineButton.setOnClickListener(v -> {
-            var modelOwner = requireActivity();
-            this.activityModel.setRoutineName("Evening");
-            modelOwner.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, TaskListFragment.newInstance())
-                    .commit();
-        });
+        view.routineList.setAdapter(adapter);
         return view.getRoot();
+
     }
 }

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 
 public class TaskListFragment extends Fragment {
@@ -47,9 +46,7 @@ public class TaskListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-
-        this.adapter = new TaskListAdapter(requireContext(), List.of(),
-                activityModel::checkOffTask, activityModel);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
             // when a change is detected by observer

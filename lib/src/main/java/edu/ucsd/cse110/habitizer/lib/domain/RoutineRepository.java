@@ -9,7 +9,8 @@ public class RoutineRepository {
 
     public RoutineRepository(InMemoryDataSource dataSource) { this.dataSource = dataSource; }
 
-    public Routine routine(String title) { return dataSource.routine(title); }
+    // return a List of Routine
+    public List<Routine> getRoutineList() { return dataSource.getRoutineList(); }
 
     // return a List of RoutineTask
     public List<RoutineTask> getTaskList(String name) {

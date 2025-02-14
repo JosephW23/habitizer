@@ -89,6 +89,10 @@ public class MainViewModel extends ViewModel {
         taskList.setValue(routineRepository.getTaskList(routineName));
     }
 
+    public String getRoutineName() {
+        return routineName;
+    }
+
     // check off a task with id
     public void checkOffTask(int id) {
         // if you try to check off previous tasks or if the routine is already done,

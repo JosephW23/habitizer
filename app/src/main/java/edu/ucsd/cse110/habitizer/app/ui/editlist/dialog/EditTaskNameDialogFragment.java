@@ -1,9 +1,10 @@
-package edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog;
+package edu.ucsd.cse110.habitizer.app.ui.editlist.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,19 +54,30 @@ public class EditTaskNameDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentDialogEditTaskNameBinding.inflate(getLayoutInflater());
 
-        return new AlertDialog.Builder(getActivity())
+        var dialog = new AlertDialog.Builder(getActivity())
                 .setTitle("Set Task Name")
                 .setMessage("Please provide a task name.")
                 .setView(view.getRoot())
                 .setPositiveButton("Set", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
+
+        dialog.setOnShowListener(d -> {
+            Button positiveButton = ((AlertDialog) d).getButton(AlertDialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(v -> onPositiveButtonClick(dialog,0));
+        });
+
+        return dialog;
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var newTitle = view.editTaskName.getText().toString();
-        activityModel.updateTaskName(newTitle, taskId);
-        dialog.dismiss();
+        if (newTitle.isEmpty()) {
+            view.editTaskName.setError("Task name cannot be empty");
+        } else {
+            activityModel.updateTaskName(newTitle, taskId);
+            dialog.dismiss();
+        }
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {

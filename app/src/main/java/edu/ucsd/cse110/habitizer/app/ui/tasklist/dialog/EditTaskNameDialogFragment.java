@@ -4,31 +4,31 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.style.BulletSpan;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import edu.ucsd.cse110.habitizer.app.MainActivity;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogEditTaskNameBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogGoalTimeBinding;
 
 
 public class EditTaskNameDialogFragment extends DialogFragment {
     private FragmentDialogEditTaskNameBinding view;
     private MainViewModel activityModel;
+    private int taskId;
+    private String taskTitle;
 
     EditTaskNameDialogFragment () {
         // Required empty public constructor
     }
 
-    public static EditTaskNameDialogFragment newInstance() {
+    public static EditTaskNameDialogFragment newInstance(int taskId, String taskTitle) {
         var fragment = new EditTaskNameDialogFragment();
         Bundle args = new Bundle();
+        args.putInt("taskId", taskId);
+        args.putString("taskTitle", taskTitle);
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,6 +41,11 @@ public class EditTaskNameDialogFragment extends DialogFragment {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+
+        if (getArguments() != null) {
+            this.taskId = getArguments().getInt("taskId");
+            this.taskTitle = getArguments().getString("taskTitle");
+        }
     }
 
     @NonNull
@@ -58,6 +63,8 @@ public class EditTaskNameDialogFragment extends DialogFragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
+        var newTitle = view.editTaskName.getText().toString();
+        activityModel.updateTaskName(newTitle, taskId);
         dialog.dismiss();
     }
 

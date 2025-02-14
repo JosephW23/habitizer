@@ -48,7 +48,7 @@ public class EditListAdapter extends ArrayAdapter<RoutineTask> {
         binding.taskFrontText.setText(task.title());
 
         binding.renameTaskButton.setOnClickListener(v -> {
-            EditTaskNameDialogFragment dialog = EditTaskNameDialogFragment.newInstance();
+            EditTaskNameDialogFragment dialog = EditTaskNameDialogFragment.newInstance(task.id(), task.title());
             dialog.show(((FragmentActivity) getContext()).getSupportFragmentManager(), "EditTaskNameDialogFragment");
         });
 

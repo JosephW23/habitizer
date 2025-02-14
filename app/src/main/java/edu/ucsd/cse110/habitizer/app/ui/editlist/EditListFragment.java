@@ -11,18 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutineEditListBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
-import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListAdapter;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListAdapter;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutineListBinding;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.EditTaskNameDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.GoalTimeDialogFragment;
 
 public class EditListFragment extends Fragment {
     private MainViewModel activityModel;

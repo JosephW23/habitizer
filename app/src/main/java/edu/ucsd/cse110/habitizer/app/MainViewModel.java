@@ -225,6 +225,15 @@ public class MainViewModel extends ViewModel {
         return goalTime;
     }
 
+    // Updates task name when in edit task dialog
+    public void updateTaskName(String newTitle, int id) {
+        var task = routineRepository.getTaskWithIdandName(this.routineName, id);
+        if (task!= null){
+            task.updateTitle(newTitle);
+            taskList.setValue(routineRepository.getTaskList(this.routineName));
+        }
+    }
+
     // stop two timers when finishing routine
     public void endRoutine() {
         stopRoutineTimer();

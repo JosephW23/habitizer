@@ -149,8 +149,12 @@ public class MainViewModel extends ViewModel {
         return isRoutineDone;
     }
 
+    // Get Timer object
     public ElapsedTimer getTimer() {
         return this.timer;
+    }
+    public ElapsedTimer getTaskTimer() {
+        return this.taskTimer;
     }
 
     // Expose elapsed time for UI updates
@@ -168,12 +172,17 @@ public class MainViewModel extends ViewModel {
     }
     public void stopTaskTimer() {
         taskTimer.stopTimer();
+        updateTaskElapsedTime();
     }
 
     // Manually advance routine timer by 30 seconds (For US3c)
     public void advanceRoutineTimer() {
         timer.advanceTimer();
         updateElapsedTime();
+    }
+    public void advanceTaskTimer() {
+        taskTimer.advanceTimer();
+        updateTaskElapsedTime();
     }
 
     // Periodically update elapsed time every second
@@ -201,6 +210,9 @@ public class MainViewModel extends ViewModel {
     // Helper function to update elapsed time for UI
     private void updateElapsedTime() {
         elapsedTime.setValue(timer.getTime());
+    }
+    private void updateTaskElapsedTime() {
+        taskElapsedTime.setValue(taskTimer.getTime());
     }
 
     public void updateGoalTime(String time) {

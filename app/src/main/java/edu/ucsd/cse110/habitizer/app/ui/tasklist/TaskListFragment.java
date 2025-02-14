@@ -75,11 +75,14 @@ public class TaskListFragment extends Fragment {
         view.routinePauseTimeButton.setOnClickListener(v -> {
             if (activityModel.getTimer() instanceof MockElapsedTimer) {
                 MockElapsedTimer timer = (MockElapsedTimer) activityModel.getTimer();
+                MockElapsedTimer taskTimer = (MockElapsedTimer) activityModel.getTaskTimer();
                 if (timer.isRunning()) {
                     timer.pauseTimer();
+                    taskTimer.pauseTimer();
                     view.routinePauseTimeButton.setText("Resume");
                 } else {
                     timer.resumeTimer();
+                    taskTimer.resumeTimer();
                     view.routinePauseTimeButton.setText("Pause");
                 }
             }
@@ -87,7 +90,9 @@ public class TaskListFragment extends Fragment {
 
         // Add Elapse Time Button functionality
         view.routineAdd30SecButton.setOnClickListener(v -> {
-            activityModel.advanceRoutineTimer(); // Advances timer by 30 seconds
+            // Advances timer by 30 seconds
+            activityModel.advanceRoutineTimer();
+            activityModel.advanceTaskTimer();
         });
 
         // End Routine Button functionality

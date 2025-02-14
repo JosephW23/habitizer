@@ -17,16 +17,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutineEditListBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
-import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListAdapter;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListAdapter;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutineListBinding;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 
 public class EditListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -70,6 +66,7 @@ public class EditListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentRoutineEditListBinding.inflate(inflater, container, false);
         view.routineList.setAdapter(adapter);
+      
         // Set up Add Task Button
         view.addTaskButton.setOnClickListener(v -> showAddTaskDialog());
         // Back Button functionality to navigate back
@@ -81,10 +78,9 @@ public class EditListFragment extends Fragment {
                     .commit();
         });
 
-
         return view.getRoot();
-
     }
+  
     private void showAddTaskDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Add New Task");

@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import java.util.Objects;
 public class RoutineTask {
     private final @Nullable Integer id;
-    private final @NonNull String title;
+    private @NonNull String title;
     private final int priority;
     private boolean isChecked;
 
@@ -38,6 +38,11 @@ public class RoutineTask {
     public void checkOff(String elapsedTime) {
         this.isChecked = true;
         this.elapsedTime = elapsedTime; // set elapsed time when task is done
+    }
+
+    // Updates task name when in edit task dialog
+    public void updateTitle(String newTitle) {
+        this.title = newTitle;
     }
 
     @Override

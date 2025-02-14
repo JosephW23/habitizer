@@ -58,7 +58,8 @@ public class MainViewModel extends ViewModel {
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskElapsedTime = new Subject<>();  // Initialize elapsed time tracking
-        this.goalTime = new Subject<>();
+        this.goalTime = new Subject<>(); // Initialize goal time tracking
+
 
         // Set initial values
         this.currentTaskId = 0; // Initialize the first task id as 0.
@@ -228,6 +229,15 @@ public class MainViewModel extends ViewModel {
 
     public Subject<String> getGoalTime() {
         return goalTime;
+    }
+
+    // Updates task name when in edit task dialog
+    public void updateTaskName(String newTitle, int id) {
+        var task = routineRepository.getTaskWithIdandName(this.routineName, id);
+        if (task!= null){
+            task.updateTitle(newTitle);
+            taskList.setValue(routineRepository.getTaskList(this.routineName));
+        }
     }
 
     // stop two timers when finishing routine

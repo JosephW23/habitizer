@@ -13,12 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.ListItemEditTaskBinding;
-import edu.ucsd.cse110.habitizer.app.databinding.ListItemRoutineBinding;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
-import edu.ucsd.cse110.habitizer.lib.domain.Routine;
-import edu.ucsd.cse110.habitizer.app.ui.editlist.EditListFragment;
+import edu.ucsd.cse110.habitizer.app.ui.editlist.dialog.EditTaskNameDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
 public class EditListAdapter extends ArrayAdapter<RoutineTask> {
@@ -45,6 +41,11 @@ public class EditListAdapter extends ArrayAdapter<RoutineTask> {
 
         // Set a tile of a task.
         binding.taskFrontText.setText(task.title());
+
+        binding.renameTaskButton.setOnClickListener(v -> {
+            EditTaskNameDialogFragment dialog = EditTaskNameDialogFragment.newInstance(task.id(), task.title());
+            dialog.show(((FragmentActivity) getContext()).getSupportFragmentManager(), "EditTaskNameDialogFragment");
+        });
 
         return binding.getRoot();
     }

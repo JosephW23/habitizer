@@ -10,7 +10,7 @@
         android:layout_height="100dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Time..."
+        android:hint="Time..."
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -104,15 +104,27 @@
 
     <Button
         android:id="@+id/end_routine_button"
-        android:layout_width="333dp"
+        android:layout_width="270dp"
         android:layout_height="53dp"
+        android:layout_marginStart="32dp"
         android:layout_marginBottom="16dp"
         android:text="@string/end_routine"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="VisualLintButtonSize" />
+
+    <ImageButton
+        android:id="@+id/add_task_button"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/round_corner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/end_routine_button"
+        app:srcCompat="@drawable/ic_add"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
     <ListView
         android:id="@+id/task_list"

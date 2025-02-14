@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.GoalTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 
 import androidx.annotation.NonNull;
@@ -95,6 +97,17 @@ public class TaskListFragment extends Fragment {
         // Add Elapse Time Button functionality
         view.routineAdd30SecButton.setOnClickListener(v -> {
             activityModel.advanceRoutineTimer(); // Advances timer by 30 seconds
+        });
+
+        // Add Goal Time Button functionality
+        view.routineTotalTimeButton.setOnClickListener(v -> {
+            var dialogFragment = GoalTimeDialogFragment.newInstance();
+            dialogFragment.show(getParentFragmentManager(), "GoalTimeDialogFragment");
+            var time = activityModel.getGoalTime();
+        });
+
+        activityModel.getGoalTime().observe(time -> {
+            view.routineTotalTime.setText(time); // Updates UI dynamically
         });
 
         // End Routine Button functionality

@@ -193,7 +193,7 @@ public class MainViewModel extends ViewModel {
                 elapsedTime.setValue(timer.getTime());
                 timerHandler.postDelayed(this, TIMER_INTERVAL_MS);
             }
-        }, TIMER_INTERVAL_MS);
+        }, 0);
     }
     public Runnable startTaskTimerUpdates() {
         var runner = new Runnable() {

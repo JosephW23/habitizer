@@ -30,7 +30,10 @@ public class MainViewModel extends ViewModel {
     private final ElapsedTimer taskTimer; // ElapsedTimer instance to track task elapsed time
     private final Subject<String> taskElapsedTime; // Subject to store and update task elapsed time dynamically (Lab 5)
 
+    // Subject to store and update goal time
+    private final Subject<String> goalTime;
     private final Handler timerHandler = new Handler(Looper.getMainLooper()); // Handler for periodic timer updates (Lab 4 )
+  
     private static final long TIMER_INTERVAL_MS = 1000; // Updates every second
 
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -53,10 +56,12 @@ public class MainViewModel extends ViewModel {
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskElapsedTime = new Subject<>();  // Initialize elapsed time tracking
+        this.goalTime = new Subject<>();
 
         // Set initial values
         this.currentTaskId = 0; // Initialize the first task id as 0.
         this.routineName = "Morning";
+        goalTime.setValue("60");
 
         taskList.setValue(routineRepository.getTaskList(this.routineName));
         isRoutineDone.setValue(false);
@@ -189,6 +194,15 @@ public class MainViewModel extends ViewModel {
     // Helper function to update elapsed time for UI
     private void updateElapsedTime() {
         elapsedTime.setValue(timer.getTime());
+    }
+
+    public void updateGoalTime(String time) {
+        System.out.println("Time received: " + time);
+        goalTime.setValue(time);
+    }
+
+    public Subject<String> getGoalTime() {
+        return goalTime;
     }
 
     // stop two timers when finishing routine

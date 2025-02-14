@@ -58,7 +58,8 @@ public class MainViewModel extends ViewModel {
         this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskElapsedTime = new Subject<>();  // Initialize elapsed time tracking
-        this.goalTime = new Subject<>();
+        this.goalTime = new Subject<>(); // Initialize goal time tracking
+
 
         // Set initial values
         this.currentTaskId = 0; // Initialize the first task id as 0.

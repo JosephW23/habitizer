@@ -21,6 +21,8 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutineListBinding;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.EditTaskNameDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.GoalTimeDialogFragment;
 
 public class EditListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -64,7 +66,7 @@ public class EditListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentRoutineEditListBinding.inflate(inflater, container, false);
         view.routineList.setAdapter(adapter);
-        return view.getRoot();
 
+        return view.getRoot();
     }
 }

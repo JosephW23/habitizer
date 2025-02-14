@@ -15,14 +15,14 @@ public class InMemoryDataSource {
     // Todo: make this default routine have two routines (Morning and Evening)
     public void initializeDefaultRoutine() {
         RegularTimer timer = new RegularTimer();
-        Routine DEFAULT_MORNING_ROUTINE = new Routine("Morning",
+        Routine DEFAULT_MORNING_ROUTINE = new Routine(0, "Morning",
                 List.of(
                         new RoutineTask(0, "Wake Up", 1, false),
                         new RoutineTask(1,"Eat Breakfast", 2, false),
                         new RoutineTask(2, "Brush Teeth", 3, false)
                 ));
 
-        Routine DEFAULT_EVENING_ROUTINE = new Routine("Evening",
+        Routine DEFAULT_EVENING_ROUTINE = new Routine(0, "Evening",
                 List.of(
                         new RoutineTask(0, "Eat Dinner", 1, false),
                         new RoutineTask(1,"Brush Teeth", 2, false),

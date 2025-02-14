@@ -62,7 +62,6 @@ public class RoutineListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentRoutineListBinding.inflate(inflater, container, false);
         view.routineList.setAdapter(adapter);
-
         return view.getRoot();
 
     }

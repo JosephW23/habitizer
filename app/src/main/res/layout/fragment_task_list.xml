@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,12 +8,13 @@
     tools:ignore="VisualLintButtonSize,VisualLintBounds">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ConstraintLayout"
+        android:id="@+id/ConstraintLayout1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
         android:background="#B2D6ED"
-        app:layout_constraintBottom_toTopOf="@id/task_list"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,54 +22,40 @@
             android:id="@+id/routine_add_30_sec_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/add"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/routine_total_time"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/routine_pause_time_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
             android:text="@string/pause"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/routine_add_30_sec_button"
-            app:layout_constraintTop_toBottomOf="@+id/routine_updating_timer"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/of_text"
             android:layout_width="37dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
             android:gravity="center"
             android:text="@string/of"
             android:textAlignment="center"
             android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/routine_total_time"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextSizeCheck" />
-
-        <TextView
-            android:id="@+id/routine_total_time"
-            android:layout_width="71dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
-            android:gravity="center"
-            android:text="@string/_60"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TextSizeCheck,VisualLintOverlap" />
 
         <Button
             android:id="@+id/routine_total_time_button"
@@ -76,52 +64,67 @@
             android:alpha="0"
             app:layout_constraintBottom_toBottomOf="@+id/routine_total_time"
             app:layout_constraintEnd_toEndOf="@+id/routine_total_time"
+            app:layout_constraintHorizontal_bias="0.629"
             app:layout_constraintStart_toEndOf="@+id/of_text"
-            app:layout_constraintTop_toTopOf="@+id/routine_total_time" />
+            app:layout_constraintTop_toTopOf="@+id/routine_total_time"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/routine_updating_timer"
             android:layout_width="72dp"
             android:layout_height="45dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="12dp"
             android:gravity="center"
             android:text="@string/_45"
             android:textAlignment="center"
             android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/of_text"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TextSizeCheck" />
-
-
-        <TextView
-            android:id="@+id/routine_name"
-            android:layout_width="226dp"
-            android:layout_height="118dp"
-            android:fontFamily="sans-serif-black"
-            android:gravity="center"
-            android:text="@string/example_routine"
-            android:textAlignment="center"
-            android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/routine_updating_timer"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toStartOf="@+id/of_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
             tools:ignore="TextSizeCheck" />
+
+        <TextView
+            android:id="@+id/routine_total_time"
+            android:layout_width="71dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="center"
+            android:text="@string/_60"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/routine_pause_time_button"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextSizeCheck,VisualLintOverlap" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/end_routine_button"
-        android:layout_width="333dp"
+        android:layout_width="270dp"
         android:layout_height="53dp"
+        android:layout_marginStart="32dp"
         android:layout_marginBottom="16dp"
         android:text="@string/end_routine"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="VisualLintButtonSize" />
+
+    <ImageButton
+        android:id="@+id/add_task_button"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/round_corner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/end_routine_button"
+        app:srcCompat="@drawable/ic_add"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
     <ListView
         android:id="@+id/task_list"
@@ -131,8 +134,52 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ConstraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/ConstraintLayout1"
         tools:listitem="@layout/list_item_task">
 
     </ListView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ConstraintLayout0"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/purple_200"
+        app:layout_constraintBottom_toTopOf="@+id/ConstraintLayout1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/routine_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textColorHighlight="@color/white"
+            android:textColorLink="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/back_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_back" />
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

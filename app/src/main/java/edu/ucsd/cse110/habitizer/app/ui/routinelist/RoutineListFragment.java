@@ -66,7 +66,6 @@ public class RoutineListFragment extends Fragment {
                     .replace(R.id.fragment_container, TaskListFragment.newInstance())
                     .commit();
         });
-
         return view.getRoot();
     }
 }

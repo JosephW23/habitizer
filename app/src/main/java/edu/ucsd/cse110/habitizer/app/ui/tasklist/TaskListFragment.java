@@ -133,7 +133,16 @@ public class TaskListFragment extends Fragment {
                     .replace(R.id.fragment_container, RoutineListFragment.newInstance())
                     .commit();
         });
+        activityModel.loadTaskList().observe(tasks -> {
+            if (tasks == null) return;
+
+            adapter.clear();
+            adapter.addAll(new ArrayList<>(tasks));
+            adapter.notifyDataSetChanged();
+        });
+
 
         return view.getRoot();
     }
+
 }

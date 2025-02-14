@@ -105,6 +105,12 @@ public class MainViewModel extends ViewModel {
         return routineName;
     }
 
+    // New Method: Add Task to Routine**
+    public void addTaskToRoutine(String routineName, String taskName) {
+        routineRepository.addTaskToRoutine(routineName, taskName);
+        taskList.setValue(routineRepository.getTaskList(routineName)); // Refresh task list
+    }
+
     // check off a task with id
     public void checkOffTask(int id) {
         // if you try to check off previous tasks or if the routine is already done,

@@ -4,12 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.text.InputType;
+import android.widget.EditText;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutineEditListBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListAdapter;
@@ -64,7 +70,41 @@ public class EditListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentRoutineEditListBinding.inflate(inflater, container, false);
         view.routineList.setAdapter(adapter);
+        // Set up Add Task Button
+        view.addTaskButton.setOnClickListener(v -> showAddTaskDialog());
+        // Back Button functionality to navigate back
+        view.backButton.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, TaskListFragment.newInstance()) // Ensure this is the correct fragment
+                    .addToBackStack(null) // Add this fragment to the back stack
+                    .commit();
+        });
+
+
         return view.getRoot();
 
     }
+    private void showAddTaskDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Add New Task");
+
+        // Set up input field
+        final EditText input = new EditText(requireContext());
+        input.setHint("Enter task name");
+        builder.setView(input);
+
+        // Set up dialog buttons
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String taskName = input.getText().toString().trim();
+            if (!taskName.isEmpty()) {
+                activityModel.addTaskToRoutine(activityModel.getRoutineName(), taskName);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
 }
+

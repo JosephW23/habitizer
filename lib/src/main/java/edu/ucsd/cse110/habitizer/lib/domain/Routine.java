@@ -15,4 +15,14 @@ public record Routine(@NonNull int id, @NonNull String title, @NonNull List<Rout
         this.title = title;
         this.tasks = List.copyOf(tasks);
     }
+    public int id() { return id; }
+    public String title() { return title; }
+    public List<RoutineTask> tasks() { return new ArrayList<>(tasks); } // Return a copy for safety
+
+    // Add a task to the routine
+    public Routine addTask(RoutineTask task) {
+        List<RoutineTask> updatedTasks = new ArrayList<>(tasks);
+        updatedTasks.add(task);
+        return new Routine(this.id, this.title, updatedTasks); // Return a new Routine object
+    }
 }

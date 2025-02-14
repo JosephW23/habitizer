@@ -1,15 +1,14 @@
 package edu.ucsd.cse110.habitizer.lib.data;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import edu.ucsd.cse110.habitizer.lib.domain.RegularTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
 public class InMemoryDataSource {
-    private final Map<String, Routine> routines = new HashMap<>();
+    private List<Routine> routines = new ArrayList<>();
 
     public InMemoryDataSource() {};
 
@@ -30,8 +29,7 @@ public class InMemoryDataSource {
                         new RoutineTask(2, "Go To Bed", 3, false)
                 ));
 
-        routines.put(DEFAULT_MORNING_ROUTINE.title(), DEFAULT_MORNING_ROUTINE);
-        routines.put(DEFAULT_EVENING_ROUTINE.title(), DEFAULT_EVENING_ROUTINE);
+        routines = List.of(DEFAULT_MORNING_ROUTINE, DEFAULT_EVENING_ROUTINE);
     }
 
     public static InMemoryDataSource fromDefault() {
@@ -40,11 +38,22 @@ public class InMemoryDataSource {
         return data;
     }
 
-    public Routine routine(String name) { return routines.get(name); }
+    public Routine getRoutine(String name) {
+        for (var routine : routines) {
+            if (routine.title() == name) {
+                return routine;
+            }
+        }
+        return null;
+    }
 
-    // Todo: make this method be able to return different list of tasks depending on Routine
+    // return List of RoutineTask of Routine object from HashMap (routines).
+    public List<Routine> getRoutineList() {
+        return routines;
+    }
+
     // return List of RoutineTask of Routine object from HashMap (routines).
     public List<RoutineTask> getTaskList(String name) {
-        return routines.get(name).tasks();
+        return getRoutine(name).tasks();
     }
 }

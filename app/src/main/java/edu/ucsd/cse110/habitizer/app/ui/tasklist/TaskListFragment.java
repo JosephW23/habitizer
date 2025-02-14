@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+import edu.ucsd.cse110.habitizer.app.R;
+import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.GoalTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 
@@ -18,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 
 public class TaskListFragment extends Fragment {
@@ -44,8 +46,7 @@ public class TaskListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        this.adapter = new TaskListAdapter(requireContext(), List.of(),
-                activityModel::checkOffTask, activityModel);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
             // when a change is detected by observer
@@ -64,6 +65,8 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
         view.taskList.setAdapter(adapter);
+
+        view.routineText.setText(activityModel.getRoutineName() + " Routine");
 
         // start two timers
         activityModel.startRoutine();
@@ -121,6 +124,14 @@ public class TaskListFragment extends Fragment {
                 view.endRoutineButton.setText("Routine Ended"); // Updates button text
                 view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
             }
+        });
+
+        view.backButton.setOnClickListener(v -> {
+            var modelOwner = requireActivity();
+            modelOwner.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, RoutineListFragment.newInstance())
+                    .commit();
         });
 
         return view.getRoot();

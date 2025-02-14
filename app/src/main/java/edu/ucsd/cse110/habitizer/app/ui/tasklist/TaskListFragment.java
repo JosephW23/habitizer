@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
 
 public class TaskListFragment extends Fragment {

@@ -18,14 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-
-import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutineListBinding;
-import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 
 public class RoutineListFragment extends Fragment {
     private MainViewModel activityModel;
-    private RoutineListAdapter adapter;
+    private RoutineListAdapter adapter; // adapter for ListView
     private FragmentRoutineListBinding view;
 
     public RoutineListFragment() {}

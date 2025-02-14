@@ -4,7 +4,6 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
@@ -90,7 +89,6 @@ public class MainViewModel extends ViewModel {
     public Subject<List<Routine>> loadRoutineList() {
         return routineList;
     }
-
 
     // set routine name
     public void setRoutineName(String name) {

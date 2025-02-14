@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
@@ -20,8 +19,8 @@ import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class RoutineListAdapter extends ArrayAdapter<Routine> {
-    private MainViewModel activityModel;
-    private FragmentActivity modelOwner;
+    private MainViewModel activityModel; // main view model for changing routine name subject
+    private FragmentActivity modelOwner; // model owner for swapping fragment
     public RoutineListAdapter(Context context, List<Routine> tasks, MainViewModel activityModel, FragmentActivity modelOwner) {
         super(context, 0, new ArrayList<>(tasks));
         this.activityModel = activityModel;
@@ -44,7 +43,6 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
 
         // set a title
         binding.routineFrontText.setText(routine.title() + " Routine");
-
 
         // swap fragment when click the element
         binding.routineButton.setOnClickListener(v -> {

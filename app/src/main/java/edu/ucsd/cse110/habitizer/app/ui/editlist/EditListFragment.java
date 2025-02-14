@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 
 public class EditListFragment extends Fragment {
     private MainViewModel activityModel;

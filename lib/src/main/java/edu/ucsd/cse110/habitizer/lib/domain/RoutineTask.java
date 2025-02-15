@@ -31,6 +31,12 @@ public class RoutineTask {
 
     public int priority() { return priority; }
 
+    // initialize task
+    public void initialize() {
+        this.isChecked = false;
+        this.elapsedTime = "00:00";
+    }
+
     public boolean isChecked() { return isChecked; }
 
     public String getElapsedTime() { return elapsedTime; }

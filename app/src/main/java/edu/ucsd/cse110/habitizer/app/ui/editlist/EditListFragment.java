@@ -66,6 +66,8 @@ public class EditListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentRoutineEditListBinding.inflate(inflater, container, false);
         view.routineList.setAdapter(adapter);
+
+        view.routineText.setText(activityModel.getRoutineName() + " Routine Edit");
       
         // Set up Add Task Button
         view.addTaskButton.setOnClickListener(v -> showAddTaskDialog());

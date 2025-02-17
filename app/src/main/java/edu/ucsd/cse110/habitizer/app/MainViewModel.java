@@ -71,8 +71,8 @@ public class MainViewModel extends ViewModel {
         isRoutineDone.setValue(false);
 
         // Initialize timers.
-        taskElapsedTime.setValue("00:00");
-        elapsedTime.setValue("00:00");
+        taskElapsedTime.setValue("-");
+        elapsedTime.setValue("-");
     }
 
     public void startRoutine() {
@@ -125,7 +125,7 @@ public class MainViewModel extends ViewModel {
 
         // Given id, find corresponding task and check it off
         var task = routineRepository.getTaskWithIdandName(this.routineName, id);
-        task.checkOff(taskTimer.getTime());
+        task.checkOff(taskTimer.getRoundedUpTime());
 
         // Increment current task id by 1.
         int nextTaskId = id + 1;
@@ -197,7 +197,7 @@ public class MainViewModel extends ViewModel {
         timerHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                elapsedTime.setValue(timer.getTime());
+                elapsedTime.setValue(timer.getRoundedDownTime());
                 timerHandler.postDelayed(this, TIMER_INTERVAL_MS);
             }
         }, 0);
@@ -206,7 +206,7 @@ public class MainViewModel extends ViewModel {
         var runner = new Runnable() {
             @Override
             public void run() {
-                taskElapsedTime.setValue(taskTimer.getTime());
+                taskElapsedTime.setValue(taskTimer.getRoundedDownTime());
                 timerHandler.postDelayed(this, TIMER_INTERVAL_MS);
             }
         };
@@ -216,10 +216,10 @@ public class MainViewModel extends ViewModel {
 
     // Helper function to update elapsed time for UI
     private void updateElapsedTime() {
-        elapsedTime.setValue(timer.getTime());
+        elapsedTime.setValue(timer.getRoundedDownTime());
     }
     private void updateTaskElapsedTime() {
-        taskElapsedTime.setValue(taskTimer.getTime());
+        taskElapsedTime.setValue(taskTimer.getRoundedDownTime());
     }
 
     public void updateGoalTime(String time) {

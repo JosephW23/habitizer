@@ -23,7 +23,7 @@ public class RoutineTask {
         this.title = title;
         this.priority = priority;
         this.isChecked = isChecked;
-        this.elapsedTime = "00:00";
+        this.elapsedTime = "-";
     }
 
     public @Nullable Integer id() { return id; }
@@ -34,7 +34,7 @@ public class RoutineTask {
     // initialize task
     public void initialize() {
         this.isChecked = false;
-        this.elapsedTime = "00:00";
+        this.elapsedTime = "-";
     }
 
     public boolean isChecked() { return isChecked; }

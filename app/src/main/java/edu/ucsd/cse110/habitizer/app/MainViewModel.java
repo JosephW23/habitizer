@@ -246,6 +246,17 @@ public class MainViewModel extends ViewModel {
         stopTaskTimer();
     }
 
+    // initialize all tasks
+    public void initializeTasks(String routineName) {
+        var taskList = routineRepository.getTaskList(routineName);
+        for (var task : taskList) {
+            task.initialize();
+        }
+        this.taskList.setValue(taskList);
+        isRoutineDone.setValue(false);
+        currentTaskId = 0;
+    }
+
     // Start routine timer and begin elapsed time tracking
     public void startRoutineTimer() {
         timer.startTimer();

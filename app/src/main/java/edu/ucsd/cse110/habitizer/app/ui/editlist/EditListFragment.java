@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
 
 public class EditListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -66,6 +66,8 @@ public class EditListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentRoutineEditListBinding.inflate(inflater, container, false);
         view.routineList.setAdapter(adapter);
+
+        view.routineText.setText(activityModel.getRoutineName() + " Routine Edit");
       
         // Set up Add Task Button
         view.addTaskButton.setOnClickListener(v -> showAddTaskDialog());
@@ -73,7 +75,7 @@ public class EditListFragment extends Fragment {
         view.backButton.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, TaskListFragment.newInstance()) // Ensure this is the correct fragment
+                    .replace(R.id.fragment_container, RoutineListFragment.newInstance()) // Ensure this is the correct fragment
                     .addToBackStack(null) // Add this fragment to the back stack
                     .commit();
         });

@@ -7,15 +7,17 @@
 
     <TextView
         android:id="@+id/routine_front_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
         android:text="@string/card_front_text"
         android:textAlignment="textStart"
         android:textSize="34sp"
         android:textStyle="bold"
         app:flow_verticalAlign="top"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/edit_routine_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextSizeCheck,VisualLintOverlap" />
@@ -35,10 +37,10 @@
         android:id="@+id/edit_routine_button"
         android:layout_width="53dp"
         android:layout_height="53dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/round_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/routine_front_text"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_add"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />

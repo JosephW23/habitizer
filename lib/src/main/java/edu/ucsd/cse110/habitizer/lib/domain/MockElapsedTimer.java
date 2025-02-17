@@ -90,6 +90,33 @@ public class MockElapsedTimer implements ElapsedTimer {
     }
 
     @Override
+    public String getRoundedUpTime() {
+        Duration currentDuration = duration;
+        if (isRunning && start != null) {
+            currentDuration = currentDuration.plus(Duration.between((LocalTime) start, LocalTime.now()));
+        }
+
+        long totalSeconds = currentDuration.getSeconds();
+        int minutes = (int)((totalSeconds % 3600) / 60);
+        return String.format(Locale.getDefault(), "%01d", minutes + 1);
+    }
+
+    @Override
+    public String getRoundedDownTime() {
+        Duration currentDuration = duration;
+        if (isRunning && start != null) {
+            currentDuration = currentDuration.plus(Duration.between((LocalTime) start, LocalTime.now()));
+        }
+
+        long totalSeconds = currentDuration.getSeconds();
+        int minutes = (int)((totalSeconds % 3600) / 60);
+
+        if (minutes == 0) { return "-"; }
+
+        return String.format(Locale.getDefault(), "%01d", minutes);
+    }
+
+    @Override
     public void resetTimer() {
         this.duration = Duration.ZERO; // Start with zero elapsed time
         this.isRunning = false;

@@ -11,6 +11,12 @@ public interface ElapsedTimer {
     // Gets the current time of the timer
     public String getTime();
 
+    // Always returns the rounded up time
+    public String getRoundedUpTime();
+
+    // Always returns the rounded down time
+    public String getRoundedDownTime();
+
     // Allows pausing the timer
     void pauseTimer();
 

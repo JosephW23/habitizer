@@ -104,7 +104,7 @@ public class RegularTimer implements ElapsedTimer {
         int minutes;
         int seconds;
 
-        if (isRunning == false) {
+        if (!isRunning) {
             minutes = (secondsFinal % 3600) / 60;
             seconds = secondsFinal % 60;
         } else {
@@ -114,5 +114,37 @@ public class RegularTimer implements ElapsedTimer {
 
         // Using Locale to test whether or not this is better than just a formatted string
         return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+    }
+
+    @Override
+    public String getRoundedUpTime() {
+
+        int minutes;
+
+        if (!isRunning) {
+            minutes = (secondsFinal % 3600) / 60;
+        } else {
+            minutes = (secondsElapsed % 3600) / 60;
+        }
+
+        // Using Locale to test whether or not this is better than just a formatted string
+        return String.format(Locale.getDefault(), "%01d", minutes + 1);
+    }
+
+    @Override
+    public String getRoundedDownTime() {
+
+        int minutes;
+
+        if (!isRunning) {
+            minutes = (secondsFinal % 3600) / 60;
+        } else {
+            minutes = (secondsElapsed % 3600) / 60;
+        }
+
+        if (minutes == 0) { return "-"; }
+
+        // Using Locale to test whether or not this is better than just a formatted string
+        return String.format(Locale.getDefault(), "%01d", minutes);
     }
 }

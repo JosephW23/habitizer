@@ -30,6 +30,8 @@ public class Routine {
 
     public int id() { return id; }
     public String title() { return title; }
+
+    public int sortOrder() { return sortOrder; }
     public List<RoutineTask> tasks() { return new ArrayList<>(tasks); } // Return a copy for safety
 
     // Add a task to the routine

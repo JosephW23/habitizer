@@ -17,18 +17,19 @@ public class RoutineEntity {
     public String title;
 
     @ColumnInfo(name = "sortOrder")
-    public String sortOrder;
+    public int sortOrder;
 
-    RoutineEntity(@NonNull String title){
+    RoutineEntity(@NonNull String title, @NonNull int sortOrder){
         this.title = title;
+        this.sortOrder = sortOrder;
     }
 
     public static RoutineEntity fromRoutine(@NonNull Routine routine){
-        var routineentity = new RoutineEntity(routine.title());
-        return routineentity;
+        var routineEntity = new RoutineEntity(routine.title(), routine.sortOrder());
+        return routineEntity;
     }
 
     public @NonNull Routine toRoutine(){
-        return new Routine(id, title, 0);
+        return new Routine(id, title, sortOrder);
     }
 }

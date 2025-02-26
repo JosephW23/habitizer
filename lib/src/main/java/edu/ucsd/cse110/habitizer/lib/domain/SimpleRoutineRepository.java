@@ -23,13 +23,23 @@ public class SimpleRoutineRepository implements RoutineRepository {
 
     // return a List of RoutineTask
     @Override
-    public Subject<List<RoutineTask>> getTaskList(int routineId) {
+    public Subject<List<RoutineTask>> getRoutineWithId(int routineId) {
         return dataSource.getTaskListSubjects(routineId);
+    }
+
+    @Override
+    public Subject<Routine> getInProgressRoutine() {
+        return dataSource.getInProgressRoutineSubject();
     }
 
     @Override
     public Subject<RoutineTask> getTaskWithId(int id, int routineId) {
         return dataSource.getTaskWithIdSubject(id, routineId);
+    }
+
+    @Override
+    public Subject<List<RoutineTask>> getTaskList(int routineId) {
+        return dataSource.getTaskListSubjects(routineId);
     }
 
     // Add a new task to a routine

@@ -57,7 +57,7 @@ public class InMemoryDataSource {
         return subject;
     }
 
-    public Routine getRoutine(int routineId) {
+    public Routine getRoutineWithId(int routineId) {
         for (var routine : routines) {
             if (routine.id() == routineId) {
                 return routine;
@@ -66,14 +66,14 @@ public class InMemoryDataSource {
         return null;
     }
 
-    public Subject<Routine>  getRoutineSubjects(int routineId) {
+    public Subject<Routine>  getRoutineWithIdSubjects(int routineId) {
         var subject = new SimpleSubject<Routine>();
-        subject.setValue(getRoutine(routineId));
+        subject.setValue(getRoutineWithId(routineId));
         return subject;
     }
 
     public List<RoutineTask> getTaskList(int routineId) {
-        return getRoutine(routineId).tasks();
+        return getRoutineWithId(routineId).tasks();
     }
 
     public Subject<List<RoutineTask>> getTaskListSubjects(int routineId) {
@@ -83,7 +83,7 @@ public class InMemoryDataSource {
     }
 
     public RoutineTask getTaskWithId(int id, int routineId) {
-        for (var task: getRoutine(routineId).tasks()) {
+        for (var task: getRoutineWithId(routineId).tasks()) {
             if (task.id() == id) {
                 return task;
             }
@@ -97,9 +97,24 @@ public class InMemoryDataSource {
         return subject;
     }
 
+    public Routine getInProgressRoutine() {
+        for (var routine: getRoutineList()) {
+            if (routine.isInProgress()) {
+                return routine;
+            }
+        }
+        return null;
+    }
+
+    public Subject<Routine> getInProgressRoutineSubject() {
+        var subject = new SimpleSubject<Routine>();
+        subject.setValue(getInProgressRoutine());
+        return subject;
+    }
+
     // Made updateRoutine()
     public void addTaskToRoutine(RoutineTask task) {
-        Routine routine = getRoutine(task.routineId());
+        Routine routine = getRoutineWithId(task.routineId());
         if (routine != null) {
             // Generate a new task ID (increment from the last task)
             int newTaskId = routine.tasks().isEmpty() ? 0 : routine.tasks().size();

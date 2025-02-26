@@ -80,14 +80,14 @@ public class TaskListFragment extends Fragment {
         // For Resume and Pause I know you have to use R and add it to string xml but couldn't get it to work
         view.routinePauseTimeButton.setOnClickListener(v -> {
             if (activityModel.getRoutineTimer() instanceof MockElapsedTimer) {
-                MockElapsedTimer timer = (MockElapsedTimer) activityModel.getRoutineTimer();
+                MockElapsedTimer routineTimer = (MockElapsedTimer) activityModel.getRoutineTimer();
                 MockElapsedTimer taskTimer = (MockElapsedTimer) activityModel.getTaskTimer();
-                if (timer.isRunning()) {
-                    timer.pauseTimer();
+                if (routineTimer.isRunning()) {
+                    routineTimer.pauseTimer();
                     taskTimer.pauseTimer();
                     view.routinePauseTimeButton.setText("Resume");
                 } else {
-                    timer.resumeTimer();
+                    routineTimer.resumeTimer();
                     taskTimer.resumeTimer();
                     view.routinePauseTimeButton.setText("Pause");
                 }
@@ -128,6 +128,7 @@ public class TaskListFragment extends Fragment {
 
         view.backButton.setOnClickListener(v -> {
             var modelOwner = requireActivity();
+            activityModel.endRoutine();
             modelOwner.getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, RoutineListFragment.newInstance())

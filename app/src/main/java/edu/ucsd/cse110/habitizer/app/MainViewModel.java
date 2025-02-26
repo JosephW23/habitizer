@@ -202,7 +202,6 @@ public class MainViewModel extends ViewModel {
         stopRoutineTimer();
         stopTaskTimer();
         routineRepository.updateInProgressRoutine(currentRoutine.id(), false);
-
     }
 
     // Periodically update elapsed time every second

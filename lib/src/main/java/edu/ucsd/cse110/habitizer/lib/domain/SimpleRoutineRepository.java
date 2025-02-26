@@ -43,8 +43,8 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
-    public void updateInProgressRoutine(int currentRoutineId, int newRoutineId) {
-        dataSource.updateInProgressRoutine(currentRoutineId, newRoutineId);
+    public void updateInProgressRoutine(int newRoutineId, boolean newInProgress) {
+        dataSource.updateInProgressRoutine(newRoutineId, newInProgress);
     }
 
     @Override

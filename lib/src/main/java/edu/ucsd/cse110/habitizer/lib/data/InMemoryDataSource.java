@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -10,12 +11,13 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
 public class InMemoryDataSource {
     private List<Routine> routines;
+    private MutableSubject<List<Routine>> routineSubjects = new SimpleSubject<>();
     public InMemoryDataSource() {
     }
 
     public void initializeDefaultRoutine() {
         Routine DEFAULT_MORNING_ROUTINE = new Routine(0, "Morning", 0,
-                true, false, "-", "-", "60");
+                false, false, "-", "-", "60");
         DEFAULT_MORNING_ROUTINE.setTasks(List.of(
                 new RoutineTask(0, 0, "Wake Up", false, 0),
                 new RoutineTask(1, 0, "Eat Breakfast", false, 1),
@@ -31,6 +33,7 @@ public class InMemoryDataSource {
         ));
         // Use ArrayList instead of `List.of()`, which is immutable.
        routines = List.of(DEFAULT_MORNING_ROUTINE, DEFAULT_EVENING_ROUTINE);
+       routineSubjects.setValue(routines);
     }
     public static InMemoryDataSource fromDefault() {
         var data = new InMemoryDataSource();
@@ -43,13 +46,11 @@ public class InMemoryDataSource {
     }
 
     public Subject<List<Routine>> getRoutineListSubjects() {
-        var subject = new SimpleSubject<List<Routine>>();
-        subject.setValue(getRoutineList());
-        return subject;
+        return routineSubjects;
     }
 
     public Routine getRoutineWithId(int routineId) {
-        for (var routine : routines) {
+        for (var routine : getRoutineList()) {
             if (routine.id() == routineId) {
                 return routine;
             }
@@ -69,7 +70,7 @@ public class InMemoryDataSource {
 
     public Subject<List<RoutineTask>> getTaskListSubjects(int routineId) {
         var subject = new SimpleSubject<List<RoutineTask>>();
-//        subject.setValue(getTaskList(routineId));
+        subject.setValue(getTaskList(routineId));
         return subject;
     }
 
@@ -99,12 +100,17 @@ public class InMemoryDataSource {
 
     public Subject<Routine> getInProgressRoutineSubject() {
         var subject = new SimpleSubject<Routine>();
-        subject.setValue(getInProgressRoutine());
-        return subject;
+        var routine = getInProgressRoutine();
+        if (routine == null) {
+            return null;
+        } else {
+            subject.setValue(routine);
+            return subject;
+        }
     }
 
     public void putRoutine(Routine newRoutine) {
-        List<Routine> newRoutines = List.of();
+        List<Routine> newRoutines = new ArrayList<>();
         for (var routine: routines) {
             if (routine.id() == newRoutine.id()) {
                 newRoutines.add(newRoutine);
@@ -113,10 +119,11 @@ public class InMemoryDataSource {
             }
         }
         routines = List.copyOf(newRoutines);
+        routineSubjects.setValue(routines);
     }
 
     public void putTask(Routine newRoutine, RoutineTask newTask) {
-        List<RoutineTask> newTasks = List.of();
+        List<RoutineTask> newTasks = new ArrayList<>();
         for (var task: newRoutine.tasks()) {
             if (task.id() == newTask.id()) {
                 newTasks.add(newTask);
@@ -128,13 +135,9 @@ public class InMemoryDataSource {
         putRoutine(newRoutine);
     }
 
-    public void updateInProgressRoutine(int currentRoutineId, int newRoutineId) {
-        Routine currentRoutine = getRoutineWithId(currentRoutineId);
+    public void updateInProgressRoutine(int newRoutineId, boolean newInProgress) {
         Routine newRoutine = getRoutineWithId(newRoutineId);
-
-        currentRoutine.setInProgress(false);
-        newRoutine.setInProgress(true);
-        putRoutine(currentRoutine);
+        newRoutine.setInProgress(newInProgress);
         putRoutine(newRoutine);
     }
 

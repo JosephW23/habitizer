@@ -19,7 +19,7 @@ public interface RoutineRepository {
 
     Subject<RoutineTask> getTaskWithId(int id, int routineId);
 
-    void updateInProgressRoutine(int currentRoutineId, int newRoutineId);
+    void updateInProgressRoutine(int newRoutineId, boolean newInProgress);
 
     void addTaskToRoutine(int routineId, RoutineTask task);
 

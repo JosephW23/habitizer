@@ -4,6 +4,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
@@ -67,31 +68,25 @@ public class MainViewModel extends ViewModel {
         this.routineTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
 
-        // when the inProgressRoutine changes, update routineId, routine/task time, and goal time
-        routineRepository.getInProgressRoutine().observe(routine -> {
-            if (routine == null) return;
-            currentRoutine = routine;
-            routineId.setValue(routine.id());
-            routineElapsedTime.setValue(routine.routineElapsedTime());
-            taskElapsedTime.setValue(routine.taskElapsedTime());
-            goalTime.setValue(routine.goalTime());
-            isRoutineDone.setValue(routine.isDone());
-        });
-
         routineRepository.getRoutineList().observe(routines -> {
             if (routines == null) return;
             routineList.setValue(routines);
-        });
-
-        // when one of tasks is modified, update taskList.
-        routineRepository.getTaskList(currentRoutine.id()).observe(tasks -> {
-            if (tasks == null) return;
-            taskList.setValue(tasks);
+            var routine = routineRepository.getInProgressRoutine();
+            if (routine == null) {
+                routineId.setValue(-1);
+            } else {
+                routineId.setValue(routineRepository.getInProgressRoutine().getValue().id());
+            }
         });
 
         // when routineId changes, update taskList.
         routineId.observe(id -> {
-            if (id == null) return;
+            if (id == null || id == -1) return;
+            currentRoutine = routineRepository.getRoutineWithId(id).getValue();
+            routineElapsedTime.setValue(currentRoutine.routineElapsedTime());
+            taskElapsedTime.setValue(currentRoutine.taskElapsedTime());
+            goalTime.setValue(currentRoutine.goalTime());
+            isRoutineDone.setValue(currentRoutine.isDone());
             taskList.setValue(routineRepository.getTaskList(id).getValue());
         });
     }
@@ -156,8 +151,8 @@ public class MainViewModel extends ViewModel {
         return isRoutineDone;
     }
 
-    public void updateInProgressRoutine(int newRoutineId) {
-        routineRepository.updateInProgressRoutine(currentRoutine.id(), newRoutineId);
+    public void updateInProgressRoutine(int newRoutineId, boolean newInProgress) {
+        routineRepository.updateInProgressRoutine(newRoutineId, newInProgress);
     }
     private void updateTime() {
         routineRepository.updateTime(currentRoutine.id(),
@@ -206,6 +201,8 @@ public class MainViewModel extends ViewModel {
     public void endRoutine() {
         stopRoutineTimer();
         stopTaskTimer();
+        routineRepository.updateInProgressRoutine(currentRoutine.id(), false);
+
     }
 
     // Periodically update elapsed time every second

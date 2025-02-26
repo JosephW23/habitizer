@@ -50,9 +50,11 @@ public class Routine {
     public List<RoutineTask> tasks() { return List.copyOf(tasks); }
 
     public void setTasks(List<RoutineTask> tasks) {
+        var newTasks = new ArrayList<RoutineTask>();
         for (var task: tasks) {
-            this.tasks.add(task);
+            newTasks.add(task);
         }
+        this.tasks = List.copyOf(newTasks);
     }
 
     public void addTask(RoutineTask task) {

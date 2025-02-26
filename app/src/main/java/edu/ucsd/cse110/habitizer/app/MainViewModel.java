@@ -15,24 +15,26 @@ import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
+import edu.ucsd.cse110.habitizer.lib.util.MutableSubject;
+import edu.ucsd.cse110.habitizer.lib.util.SimpleSubject;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
 public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
-    private final Subject<List<RoutineTask>> taskList;
-    private final Subject<List<Routine>> routineList;
+    private final MutableSubject<List<RoutineTask>> taskList;
+    private final MutableSubject<List<Routine>> routineList;
     private int currentTaskId; // track the current task id (task the time is working)
-    private final Subject<Boolean> isRoutineDone; // track if the routine is done.
+    private final MutableSubject<Boolean> isRoutineDone; // track if the routine is done.
     private Runnable currentRunner; // track runner for timer so that it can be stopped when checkoff.
     private String routineName;
 
     private final ElapsedTimer timer; // ElapsedTimer instance to track routine elapsed time
-    private final Subject<String> elapsedTime;  // Subject to store and update elapsed time dynamically (Lab 5)
+    private final MutableSubject<String> elapsedTime;  // Subject to store and update elapsed time dynamically (Lab 5)
     private final ElapsedTimer taskTimer; // ElapsedTimer instance to track task elapsed time
-    private final Subject<String> taskElapsedTime; // Subject to store and update task elapsed time dynamically (Lab 5)
+    private final MutableSubject<String> taskElapsedTime; // Subject to store and update task elapsed time dynamically (Lab 5)
 
     // Subject to store and update goal time
-    private final Subject<String> goalTime;
+    private final MutableSubject<String> goalTime;
     private final Handler timerHandler = new Handler(Looper.getMainLooper()); // Handler for periodic timer updates (Lab 4 )
   
     private static final long TIMER_INTERVAL_MS = 1000; // Updates every second
@@ -49,16 +51,16 @@ public class MainViewModel extends ViewModel {
     // Initialize elapsed time tracking and timer in constructor
     public MainViewModel(RoutineRepository routineRepository) {
         this.routineRepository = routineRepository;
-        this.taskList = new Subject<>();
-        this.routineList = new Subject<>();
+        this.taskList = new SimpleSubject<>();
+        this.routineList = new SimpleSubject<>();
 
-        this.isRoutineDone = new Subject<>(); // Initialize subject for checking the status for routine.
+        this.isRoutineDone = new SimpleSubject<>(); // Initialize subject for checking the status for routine.
 
         this.timer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
-        this.elapsedTime = new Subject<>();  // Initialize elapsed time tracking
+        this.elapsedTime = new SimpleSubject<>();  // Initialize elapsed time tracking
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
-        this.taskElapsedTime = new Subject<>();  // Initialize elapsed time tracking
-        this.goalTime = new Subject<>(); // Initialize goal time tracking
+        this.taskElapsedTime = new SimpleSubject<>();  // Initialize elapsed time tracking
+        this.goalTime = new SimpleSubject<>(); // Initialize goal time tracking
 
 
         // Set initial values
@@ -152,7 +154,7 @@ public class MainViewModel extends ViewModel {
     }
 
     // get if a routine is already done.
-    public Subject<Boolean> getIsRoutineDone() {
+    public MutableSubject<Boolean> getIsRoutineDone() {
         return isRoutineDone;
     }
 

@@ -69,4 +69,20 @@ public class RoutineTest {
         assertEquals(expected, routine.id());
     }
 
+    @Test
+    public void checkSortOrder() {
+        int expectedSortOrder;
+
+        Routine routine;
+
+        routine = new Routine(0, "Test Routine", 0);
+        expectedSortOrder = 0;
+        assertEquals(expectedSortOrder, routine.sortOrder());
+
+        routine = new Routine(0, "Test Routine", 3);
+        expectedSortOrder = 3;
+        assertEquals(expectedSortOrder, routine.sortOrder());
+
+    }
+
 }

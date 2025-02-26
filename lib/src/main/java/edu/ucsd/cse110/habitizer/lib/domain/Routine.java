@@ -12,7 +12,7 @@ public class Routine {
     private int sortOrder;
     private List<RoutineTask> tasks;
 
-    public Routine(@Nullable int id, @NonNull String title, @NonNull int sortOrder) {
+    public Routine(@Nullable int id, @NonNull String title, int sortOrder) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("Routine title cannot be blank");
         }

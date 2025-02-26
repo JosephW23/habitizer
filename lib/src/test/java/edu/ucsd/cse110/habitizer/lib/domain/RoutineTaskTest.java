@@ -104,4 +104,20 @@ public class RoutineTaskTest {
         // THEN Brush Teeth is(still)Checked
         assertTrue(task.isChecked());
     }
+
+    @Test
+    public void checkSortOrder() {
+        int expectedSortOrder;
+
+        RoutineTask task;
+
+        task = new RoutineTask(0, "Brush Teeth", 1, false, 0);
+        expectedSortOrder = 0;
+        assertEquals(expectedSortOrder, task.sortOrder());
+
+        task = new RoutineTask(0, "Brush Teeth", 1, false, 3);
+        expectedSortOrder = 3;
+        assertEquals(expectedSortOrder, task.sortOrder());
+
+    }
 }

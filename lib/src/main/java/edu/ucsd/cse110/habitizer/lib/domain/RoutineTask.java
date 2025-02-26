@@ -30,7 +30,7 @@ public class RoutineTask {
     public @Nullable Integer id() { return id; }
     public @NonNull String title() { return title; }
 
-    public @NonNull Integer sortOrder() { return sortOrder; }
+    public int sortOrder() { return sortOrder; }
 
     public int priority() { return priority; }
 

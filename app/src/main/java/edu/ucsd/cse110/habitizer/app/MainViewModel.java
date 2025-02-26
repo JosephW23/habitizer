@@ -25,15 +25,13 @@ public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
     private final MutableSubject<List<RoutineTask>> taskList;
     private final MutableSubject<List<Routine>> routineList;
-    private int currentTaskId; // track the current task id (task the time is working)
-    private final MutableSubject<Boolean> isRoutineDone; // track if the routine is done.
-    private Runnable currentRunner; // track runner for timer so that it can be stopped when checkoff.
-    private MutableSubject<Integer> currentRoutineId;
 
+    private Subject<Routine> currentRoutine;
+
+    private int currentTaskId; // track the current task id (task the time is working)
+    private Runnable currentRunner; // track runner for timer so that it can be stopped when checkoff.
     private final ElapsedTimer timer; // ElapsedTimer instance to track routine elapsed time
-    private final MutableSubject<String> elapsedTime;  // Subject to store and update elapsed time dynamically (Lab 5)
     private final ElapsedTimer taskTimer; // ElapsedTimer instance to track task elapsed time
-    private final MutableSubject<String> taskElapsedTime; // Subject to store and update task elapsed time dynamically (Lab 5)
 
     // Subject to store and update goal time
     private final MutableSubject<String> goalTime;
@@ -151,7 +149,7 @@ public class MainViewModel extends ViewModel {
         timerHandler.removeCallbacks(currentRunner);
 
         // Given id, find corresponding task and check it off
-        var task = routineRepository.getTaskWithIdandName(this.routineName, id);
+        var task = routineRepository.getTaskWithId(this.routineName, id);
         task.checkOff(taskTimer.getRoundedUpTime());
 
         // Increment current task id by 1.

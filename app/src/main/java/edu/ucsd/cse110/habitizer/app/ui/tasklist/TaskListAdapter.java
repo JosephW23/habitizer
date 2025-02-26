@@ -62,7 +62,7 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
             } else {
                 // sync with elapsed time field inside RoutineTask object
                 // if it is already done or not yet started.
-                binding.taskTime.setText(task.getElapsedTime());
+                binding.taskTime.setText(task.elapsedTime());
             }
         });
 

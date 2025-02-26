@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import java.util.Objects;
 public class RoutineTask {
     private final @Nullable Integer id;
+    private @Nullable Integer routineId;
     private @NonNull String title;
     private boolean isChecked;
     private String elapsedTime;
@@ -28,15 +29,25 @@ public class RoutineTask {
 
     public int sortOrder() { return sortOrder; }
 
+    public Integer routineId() { return this.routineId; }
+
     // initialize task
     public void initialize() {
         this.isChecked = false;
         this.elapsedTime = "-";
     }
 
+    public void setRoutineId(Integer routineId) {
+        this.routineId = routineId;
+    }
+
     public boolean isChecked() { return isChecked; }
 
-    public String getElapsedTime() { return elapsedTime; }
+    public String elapsedTime() { return elapsedTime; }
+
+    public void setElapsedTime(String elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
 
     public void checkOff(String elapsedTime) {
         this.isChecked = true;

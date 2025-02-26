@@ -18,13 +18,14 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
 public class InMemoryDataSource {
     private List<Routine> routines;
+    private MutableSubject<List<Routine>> routineSubjects;
 
     public InMemoryDataSource() {
     }
 
     public void initializeDefaultRoutine() {
         Routine DEFAULT_MORNING_ROUTINE = new Routine(0, "Morning", 0,
-                true, false, "-", "-");
+                true, false, "-", "-", "60");
         DEFAULT_MORNING_ROUTINE.setTasks(List.of(
                 new RoutineTask(0, 0, "Wake Up", false, 0),
                 new RoutineTask(1, 0, "Eat Breakfast", false, 1),
@@ -32,7 +33,7 @@ public class InMemoryDataSource {
         ));
 
         Routine DEFAULT_EVENING_ROUTINE = new Routine(1, "Evening", 0,
-                false, false, "-", "-");
+                false, false, "-", "-", "60");
         DEFAULT_EVENING_ROUTINE.setTasks(List.of(
                 new RoutineTask(0, 1, "Eat Dinner", false, 0),
                 new RoutineTask(1, 1, "Brush Teeth", false, 1),
@@ -40,6 +41,7 @@ public class InMemoryDataSource {
         ));
         // Use ArrayList instead of `List.of()`, which is immutable.
        routines = List.of(DEFAULT_MORNING_ROUTINE, DEFAULT_EVENING_ROUTINE);
+       routineSubjects.setValue(routines);
     }
     public static InMemoryDataSource fromDefault() {
         var data = new InMemoryDataSource();
@@ -66,7 +68,7 @@ public class InMemoryDataSource {
         return null;
     }
 
-    public Subject<Routine>  getRoutineWithIdSubjects(int routineId) {
+    public Subject<Routine> getRoutineWithIdSubject(int routineId) {
         var subject = new SimpleSubject<Routine>();
         subject.setValue(getRoutineWithId(routineId));
         return subject;
@@ -112,20 +114,54 @@ public class InMemoryDataSource {
         return subject;
     }
 
+    public void putRoutine(Routine newRoutine) {
+        List<Routine> newRoutines = List.of();
+        for (var routine: routines) {
+            if (routine.id() == newRoutine.id()) {
+                newRoutines.add(newRoutine);
+            } else {
+                newRoutines.add(routine);
+            }
+        }
+        routines = List.copyOf(newRoutines);
+        routineSubjects.setValue(routines);
+    }
+
+    public void putTask(Routine newRoutine, RoutineTask newTask) {
+        List<RoutineTask> newTasks = List.of();
+        for (var task: newRoutine.tasks()) {
+            if (task.id() == newTask.id()) {
+                newTasks.add(newTask);
+            } else {
+                newTasks.add(task);
+            }
+        }
+        newRoutine.setTasks(newTasks);
+        putRoutine(newRoutine);
+    }
+
     // Made updateRoutine()
     public void addTaskToRoutine(RoutineTask task) {
-        Routine routine = getRoutineWithId(task.routineId());
+        Routine newRoutine = getRoutineWithId(task.routineId());
         if (routine != null) {
             // Generate a new task ID (increment from the last task)
-            int newTaskId = routine.tasks().isEmpty() ? 0 : routine.tasks().size();
+            int newTaskId = newRoutine.tasks().isEmpty() ? 0 : newRoutine.tasks().size();
             task.setId(newTaskId);
 
             // temporarily set sortOrder same as id.
             int sortOrder = newTaskId;
             task.setSortOrder(sortOrder);
 
-            routine.addTask(task);
+            newRoutine.addTask(task);
+            putRoutine(newRoutine);
         }
+    }
+
+    public void checkOffTask(int id, int routineId) {
+        Routine routine = getRoutineWithId(routineId);
+        RoutineTask task = getTaskWithId(id, routineId);
+        task.checkOff(routine.taskElapsedTime());
+        putTask(routine, task);
     }
 }
 

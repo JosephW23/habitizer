@@ -23,8 +23,8 @@ public class SimpleRoutineRepository implements RoutineRepository {
 
     // return a List of RoutineTask
     @Override
-    public Subject<List<RoutineTask>> getRoutineWithId(int routineId) {
-        return dataSource.getTaskListSubjects(routineId);
+    public Subject<Routine> getRoutineWithId(int routineId) {
+        return dataSource.getRoutineWithIdSubject(routineId);
     }
 
     @Override
@@ -46,6 +46,11 @@ public class SimpleRoutineRepository implements RoutineRepository {
     @Override
     public void addTaskToRoutine(RoutineTask task) {
         dataSource.addTaskToRoutine(task);
+    }
+
+    @Override
+    public void checkOffTask(int id, int routineId) {
+        dataSource.checkOffTask(id, routineId);
     }
 }
 

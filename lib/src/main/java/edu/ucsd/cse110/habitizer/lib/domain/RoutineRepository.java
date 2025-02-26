@@ -9,7 +9,7 @@ public interface RoutineRepository {
     Subject<List<Routine>> getRoutineList();
 
     // return a Routine with id
-    Subject<List<RoutineTask>> getRoutineWithId(int routineId);
+    Subject<Routine> getRoutineWithId(int routineId);
 
     // return the in-progess Routine
     Subject<Routine> getInProgressRoutine();
@@ -21,5 +21,7 @@ public interface RoutineRepository {
 
     // Add a new task to a routine
     void addTaskToRoutine(RoutineTask task);
+
+    void checkOffTask(int id, int routineId);
 
 }

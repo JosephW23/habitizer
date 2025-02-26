@@ -3,6 +3,7 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
+import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
 public class SimpleRoutineRepository implements RoutineRepository {
     private final InMemoryDataSource dataSource;
@@ -13,31 +14,25 @@ public class SimpleRoutineRepository implements RoutineRepository {
 
     // return a List of Routine
     @Override
-    public List<Routine> getRoutineList() {
-        return dataSource.getRoutineList();
+    public Subject<List<Routine>> getRoutineList() {
+        return dataSource.getRoutineListSubjects();
     }
 
     // return a List of RoutineTask
     @Override
-    public List<RoutineTask> getTaskList(String name) {
-        return dataSource.getTaskList(name);
+    public Subject<List<RoutineTask>> getTaskList(int routineId) {
+        return dataSource.getTaskListSubjects(routineId);
     }
 
     @Override
-    public RoutineTask getTaskWithIdandName(String name, int id) {
-        for (var task : this.getTaskList(name)) {
-            if (task.id() == id) {
-                return task;
-            }
-
-        }
-        return null;
+    public Subject<RoutineTask> getTaskWithId(int id, int routineId) {
+        return dataSource.getTaskWithIdSubject(id, routineId);
     }
 
     // Add a new task to a routine
     @Override
-    public void addTaskToRoutine(String routineName, String taskName) {
-        Routine routine = dataSource.getRoutine(routineName);
+    public void addTaskToRoutine(RoutineTask task) {
+        Routine routine = dataSource.getRoutine(task.routineId());
         if (routine != null) {
             // Generate a new task ID (increment from the last task)
             int newTaskId = routine.tasks().isEmpty() ? 0 : routine.tasks().get(routine.tasks().size() - 1).id() + 1;

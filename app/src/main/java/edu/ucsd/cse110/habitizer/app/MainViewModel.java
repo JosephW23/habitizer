@@ -8,7 +8,9 @@ import android.os.Looper;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.ElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
@@ -68,8 +70,26 @@ public class MainViewModel extends ViewModel {
         this.routineName = "Morning";
         goalTime.setValue("60");
 
-        taskList.setValue(routineRepository.getTaskList(this.routineName));
-        routineList.setValue(routineRepository.getRoutineList());
+        routineRepository.getRoutineList().observe(routines -> {
+            if (routines == null) return;
+
+            var newOrderedRoutines = routines.stream()
+                    .sorted(Comparator.comparingInt(Routine::sortOrder))
+                    .collect(Collectors.toList());
+
+            routineList.setValue(newOrderedRoutines);
+        });
+
+        routineRepository.getTaskList(this.routineName).observe(tasks -> {
+            if (tasks == null) return;
+
+            var newOrderedTasks = tasks.stream()
+                    .sorted(Comparator.comparingInt(RoutineTask::sortOrder))
+                    .collect(Collectors.toList());
+
+            taskList.setValue(newOrderedTasks);
+        });
+        
         isRoutineDone.setValue(false);
 
         // Initialize timers.

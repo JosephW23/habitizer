@@ -96,7 +96,7 @@ public class EditListFragment extends Fragment {
         builder.setPositiveButton("Add", (dialog, which) -> {
             String taskName = input.getText().toString().trim();
             if (!taskName.isEmpty()) {
-                activityModel.addTaskToRoutine(activityModel.getRoutineName(), taskName);
+                activityModel.addTaskToRoutine(taskName);
             }
         });
 

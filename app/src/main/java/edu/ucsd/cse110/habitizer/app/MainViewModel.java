@@ -28,7 +28,7 @@ public class MainViewModel extends ViewModel {
     private int currentTaskId; // track the current task id (task the time is working)
     private final MutableSubject<Boolean> isRoutineDone; // track if the routine is done.
     private Runnable currentRunner; // track runner for timer so that it can be stopped when checkoff.
-    private String routineName;
+    private MutableSubject<Integer> currentRoutineId;
 
     private final ElapsedTimer timer; // ElapsedTimer instance to track routine elapsed time
     private final MutableSubject<String> elapsedTime;  // Subject to store and update elapsed time dynamically (Lab 5)
@@ -67,7 +67,7 @@ public class MainViewModel extends ViewModel {
 
         // Set initial values
         this.currentTaskId = 0; // Initialize the first task id as 0.
-        this.routineName = "Morning";
+        this.currentRoutineId = new SimpleSubject<>();
         goalTime.setValue("60");
 
         routineRepository.getRoutineList().observe(routines -> {
@@ -80,7 +80,11 @@ public class MainViewModel extends ViewModel {
             routineList.setValue(newOrderedRoutines);
         });
 
-        routineRepository.getTaskList(this.routineName).observe(tasks -> {
+        routineRepository.getCurrentRoutineId().observe(currentRoutineId -> {
+            this.currentRoutineId.setValue(currentRoutineId);
+        });
+
+        routineRepository.getTaskList(routineId.getValue()).observe(tasks -> {
             if (tasks == null) return;
 
             var newOrderedTasks = tasks.stream()
@@ -89,7 +93,7 @@ public class MainViewModel extends ViewModel {
 
             taskList.setValue(newOrderedTasks);
         });
-        
+
         isRoutineDone.setValue(false);
 
         // Initialize timers.
@@ -119,9 +123,9 @@ public class MainViewModel extends ViewModel {
     }
 
     // set routine name
-    public void setRoutineName(String name) {
-        this.routineName = name;
-        taskList.setValue(routineRepository.getTaskList(routineName));
+    public void setRoutineId(int routineId) {
+        this.routineId = routineId;
+        taskList = routineRepository.getTaskList(routineId);
     }
 
     public String getRoutineName() {
@@ -129,9 +133,10 @@ public class MainViewModel extends ViewModel {
     }
 
     // New Method: Add Task to Routine**
-    public void addTaskToRoutine(String routineName, String taskName) {
-        routineRepository.addTaskToRoutine(routineName, taskName);
-        taskList.setValue(routineRepository.getTaskList(routineName)); // Refresh task list
+    public void addTaskToRoutine(String taskName) {
+        var task = new RoutineTask(null, currentRoutineId, taskName, false, -1);
+        routineRepository.addTaskToRoutine(task);
+        taskList.setValue(routineRepository.getTaskList(currentTaskId)); // Refresh task list
     }
 
     // check off a task with id

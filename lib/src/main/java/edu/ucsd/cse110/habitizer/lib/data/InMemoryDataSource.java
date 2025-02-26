@@ -1,5 +1,8 @@
 package edu.ucsd.cse110.habitizer.lib.data;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,18 +23,20 @@ public class InMemoryDataSource {
     }
 
     public void initializeDefaultRoutine() {
-        Routine DEFAULT_MORNING_ROUTINE = new Routine(0, "Morning", 0);
+        Routine DEFAULT_MORNING_ROUTINE = new Routine(0, "Morning", 0,
+                true, false, "-", "-");
         DEFAULT_MORNING_ROUTINE.setTasks(List.of(
-                new RoutineTask(0, "Wake Up", false, 0),
-                new RoutineTask(1, "Eat Breakfast", false, 1),
-                new RoutineTask(2, "Brush Teeth", false, 2)
+                new RoutineTask(0, 0, "Wake Up", false, 0),
+                new RoutineTask(1, 0, "Eat Breakfast", false, 1),
+                new RoutineTask(2, 0, "Brush Teeth", false, 2)
         ));
 
-        Routine DEFAULT_EVENING_ROUTINE = new Routine(0, "Evening", 0);
+        Routine DEFAULT_EVENING_ROUTINE = new Routine(1, "Evening", 0,
+                false, false, "-", "-");
         DEFAULT_EVENING_ROUTINE.setTasks(List.of(
-                new RoutineTask(0, "Eat Dinner", false, 0),
-                new RoutineTask(1, "Brush Teeth", false, 1),
-                new RoutineTask(2, "Go To Bed", false, 2)
+                new RoutineTask(0, 1, "Eat Dinner", false, 0),
+                new RoutineTask(1, 1, "Brush Teeth", false, 1),
+                new RoutineTask(2, 1, "Go To Bed", false, 2)
         ));
         // Use ArrayList instead of `List.of()`, which is immutable.
        routines = List.of(DEFAULT_MORNING_ROUTINE, DEFAULT_EVENING_ROUTINE);
@@ -98,25 +103,13 @@ public class InMemoryDataSource {
         if (routine != null) {
             // Generate a new task ID (increment from the last task)
             int newTaskId = routine.tasks().isEmpty() ? 0 : routine.tasks().size();
+            task.setId(newTaskId);
 
             // temporarily set sortOrder same as id.
             int sortOrder = newTaskId;
-            RoutineTask newTask = new RoutineTask(newTaskId, , false, sortOrder);
+            task.setSortOrder(sortOrder);
 
-                // Create a new updated Routine instance
-                routine.addTask(newTask);
-
-                // Save the updated routine
-                dataSource.updateRoutine(routine);
-            }
-        }
-        for (int i = 0; i < routines.size(); i++) {
-            if (routines.get(i).title().equals(updatedRoutine.title())) {
-                List<Routine> updatedRoutines = new ArrayList<>(routines);
-                updatedRoutines.set(i, updatedRoutine);
-                routines = updatedRoutines; // Ensure the reference is updated
-                return;
-            }
+            routine.addTask(task);
         }
     }
 }

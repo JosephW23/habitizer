@@ -39,7 +39,6 @@ public class Routine {
 
     public void setTasks(List<RoutineTask> tasks) {
         for (var task: tasks) {
-            task.setRoutineId(id);
             this.tasks.add(task);
         }
     }

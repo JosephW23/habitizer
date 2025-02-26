@@ -1,5 +1,8 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
@@ -35,14 +38,12 @@ public class SimpleRoutineRepository implements RoutineRepository {
         Routine routine = dataSource.getRoutine(task.routineId());
         if (routine != null) {
             // Generate a new task ID (increment from the last task)
-            int newTaskId = routine.tasks().isEmpty() ? 0 : routine.tasks().get(routine.tasks().size() - 1).id() + 1;
+            int newTaskId = routine.tasks().isEmpty() ? 0 : routine.tasks().size();
 
             // temporarily set sortOrder same as id.
             int sortOrder = newTaskId;
-            RoutineTask newTask = new RoutineTask(newTaskId, taskName, false, sortOrder);
-
             // Create a new updated Routine instance
-            routine.addTask(newTask);
+            routine.addTask(task);
 
             // Save the updated routine
             dataSource.updateRoutine(routine);

@@ -93,7 +93,23 @@ public class InMemoryDataSource {
     }
 
     // Made updateRoutine()
-    public void updateRoutine(Routine updatedRoutine) {
+    public void addTaskToRoutine(RoutineTask task) {
+        Routine routine = getRoutine(task.routineId());
+        if (routine != null) {
+            // Generate a new task ID (increment from the last task)
+            int newTaskId = routine.tasks().isEmpty() ? 0 : routine.tasks().size();
+
+            // temporarily set sortOrder same as id.
+            int sortOrder = newTaskId;
+            RoutineTask newTask = new RoutineTask(newTaskId, , false, sortOrder);
+
+                // Create a new updated Routine instance
+                routine.addTask(newTask);
+
+                // Save the updated routine
+                dataSource.updateRoutine(routine);
+            }
+        }
         for (int i = 0; i < routines.size(); i++) {
             if (routines.get(i).title().equals(updatedRoutine.title())) {
                 List<Routine> updatedRoutines = new ArrayList<>(routines);

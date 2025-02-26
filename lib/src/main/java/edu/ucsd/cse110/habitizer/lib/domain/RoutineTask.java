@@ -5,19 +5,20 @@ import androidx.annotation.Nullable;
 
 import java.util.Objects;
 public class RoutineTask {
-    private final @Nullable Integer id;
-    private @Nullable Integer routineId;
+    private @Nullable Integer id;
+    private Integer routineId;
     private @NonNull String title;
     private boolean isChecked;
     private String elapsedTime;
     private int sortOrder;
 
-    public RoutineTask(@Nullable Integer id, @NonNull String title, boolean isChecked, int sortOrder) {
+    public RoutineTask(@Nullable Integer id, Integer routineId, @NonNull String title, boolean isChecked, int sortOrder) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("RoutineTask title cannot be blank");
         }
 
         this.id = id;
+        this.routineId = routineId;
         this.title = title;
         this.isChecked = isChecked;
         this.elapsedTime = "-";
@@ -25,11 +26,11 @@ public class RoutineTask {
     }
 
     public @Nullable Integer id() { return id; }
-    public @NonNull String title() { return title; }
-
+    public String title() { return title; }
     public int sortOrder() { return sortOrder; }
-
     public Integer routineId() { return this.routineId; }
+    public boolean isChecked() { return isChecked; }
+    public String elapsedTime() { return elapsedTime; }
 
     // initialize task
     public void initialize() {
@@ -37,14 +38,13 @@ public class RoutineTask {
         this.elapsedTime = "-";
     }
 
-    public void setRoutineId(Integer routineId) {
-        this.routineId = routineId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public boolean isChecked() { return isChecked; }
-
-    public String elapsedTime() { return elapsedTime; }
-
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
+    }
     public void setElapsedTime(String elapsedTime) {
         this.elapsedTime = elapsedTime;
     }

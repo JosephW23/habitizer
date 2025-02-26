@@ -1,51 +1,16 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
 import java.util.List;
-import java.util.ArrayList;
 
-import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
-
-public class RoutineRepository {
-    private final InMemoryDataSource dataSource;
-
-    public RoutineRepository(InMemoryDataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
+public interface RoutineRepository {
     // return a List of Routine
-    public List<Routine> getRoutineList() {
-        return dataSource.getRoutineList();
-    }
+    List<Routine> getRoutineList();
 
     // return a List of RoutineTask
-    public List<RoutineTask> getTaskList(String name) {
-        return dataSource.getTaskList(name);
-    }
+    List<RoutineTask> getTaskList(String name);
 
-    public RoutineTask getTaskWithIdandName(String name, int id) {
-        for (var task : this.getTaskList(name)) {
-            if (task.id() == id) {
-                return task;
-            }
-
-        }
-        return null;
-    }
+    RoutineTask getTaskWithIdandName(String name, int id);
 
     // Add a new task to a routine
-    public void addTaskToRoutine(String routineName, String taskName) {
-        Routine routine = dataSource.getRoutine(routineName);
-        if (routine != null) {
-            // Generate a new task ID (increment from the last task)
-            int newTaskId = routine.tasks().isEmpty() ? 0 : routine.tasks().get(routine.tasks().size() - 1).id() + 1;
-            RoutineTask newTask = new RoutineTask(newTaskId, taskName, 1, false);
-
-            // Create a new updated Routine instance
-            Routine updatedRoutine = routine.addTask(newTask);
-
-            // Save the updated routine
-            dataSource.updateRoutine(updatedRoutine);
-        }
-    }
+    void addTaskToRoutine(String routineName, String taskName);
 }
-

@@ -20,16 +20,16 @@ public class InMemoryDataSource {
         RegularTimer timer = new RegularTimer();
         Routine DEFAULT_MORNING_ROUTINE = new Routine(0, "Morning", 0);
         DEFAULT_MORNING_ROUTINE.setTasks(List.of(
-                new RoutineTask(0, "Wake Up", 1, false, 0),
-                new RoutineTask(1, "Eat Breakfast", 2, false, 1),
-                new RoutineTask(2, "Brush Teeth", 3, false, 2)
+                new RoutineTask(0, "Wake Up", false, 0),
+                new RoutineTask(1, "Eat Breakfast", false, 1),
+                new RoutineTask(2, "Brush Teeth", false, 2)
         ));
 
         Routine DEFAULT_EVENING_ROUTINE = new Routine(0, "Evening", 0);
         DEFAULT_EVENING_ROUTINE.setTasks(List.of(
-                new RoutineTask(0, "Eat Dinner", 1, false, 0),
-                new RoutineTask(1, "Brush Teeth", 2, false, 1),
-                new RoutineTask(2, "Go To Bed", 3, false, 2)
+                new RoutineTask(0, "Eat Dinner", false, 0),
+                new RoutineTask(1, "Brush Teeth", false, 1),
+                new RoutineTask(2, "Go To Bed", false, 2)
         ));
         // Use ArrayList instead of `List.of()`, which is immutable.
         routines = new ArrayList<>();

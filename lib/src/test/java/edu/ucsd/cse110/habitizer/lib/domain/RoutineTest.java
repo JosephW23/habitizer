@@ -13,8 +13,8 @@ public class RoutineTest {
     public void tasksGetter() {
         // GIVEN a list of tasks
         var expected = List.of(
-                new RoutineTask(0, "Brush Teeth", 1, false, 0),
-                new RoutineTask(1, "Shower", 2, false, 1)
+                new RoutineTask(0, "Brush Teeth", false, 0),
+                new RoutineTask(1, "Shower", false, 1)
         );
 
         // WHEN I construct a Routine with those tasks
@@ -46,7 +46,7 @@ public class RoutineTest {
         // GIVEN the title is "Test Routine"
         Routine routine = new Routine(0, "Test Routine", 0);
         routine.setTasks(List.of(
-                new RoutineTask(1, "Brush Teeth", 1, false, 0)
+                new RoutineTask(1, "Brush Teeth", false, 0)
         ));
 
         var expected = "Test Routine";
@@ -60,7 +60,7 @@ public class RoutineTest {
         // GIVEN the title is "Test Routine"
         Routine routine = new Routine(0, "Test Routine", 0);
         routine.setTasks(List.of(
-                new RoutineTask(1, "Brush Teeth", 1, false, 0)
+                new RoutineTask(1, "Brush Teeth", false, 0)
         ));
 
         var expected = 0;

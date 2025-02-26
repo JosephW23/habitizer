@@ -7,21 +7,17 @@ import java.util.Objects;
 public class RoutineTask {
     private final @Nullable Integer id;
     private @NonNull String title;
-    private final int priority;
     private boolean isChecked;
     private String elapsedTime;
     private int sortOrder;
 
-    public RoutineTask(@Nullable Integer id, @NonNull String title, int priority, boolean isChecked, int sortOrder) {
+    public RoutineTask(@Nullable Integer id, @NonNull String title, boolean isChecked, int sortOrder) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("RoutineTask title cannot be blank");
         }
-        if (priority <= 0) {
-            throw new IllegalArgumentException("RoutineTask priority must be an integer greater than 0");
-        }
+
         this.id = id;
         this.title = title;
-        this.priority = priority;
         this.isChecked = isChecked;
         this.elapsedTime = "-";
         this.sortOrder = sortOrder;
@@ -31,8 +27,6 @@ public class RoutineTask {
     public @NonNull String title() { return title; }
 
     public int sortOrder() { return sortOrder; }
-
-    public int priority() { return priority; }
 
     // initialize task
     public void initialize() {
@@ -61,12 +55,11 @@ public class RoutineTask {
 
         RoutineTask compare = (RoutineTask) o;
         return title.equals(compare.title()) &&
-                priority == compare.priority() &&
                 isChecked == compare.isChecked();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, priority, isChecked);
+        return Objects.hash(title, isChecked);
     }
 }

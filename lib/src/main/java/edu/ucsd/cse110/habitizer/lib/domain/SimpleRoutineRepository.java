@@ -44,7 +44,7 @@ public class SimpleRoutineRepository implements RoutineRepository {
 
             // temporarily set sortOrder same as id.
             int sortOrder = newTaskId;
-            RoutineTask newTask = new RoutineTask(newTaskId, taskName, 1, false, sortOrder);
+            RoutineTask newTask = new RoutineTask(newTaskId, taskName, false, sortOrder);
 
             // Create a new updated Routine instance
             Routine updatedRoutine = routine.addTask(newTask);

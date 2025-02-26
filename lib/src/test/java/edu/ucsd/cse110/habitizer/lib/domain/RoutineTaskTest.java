@@ -8,12 +8,12 @@ public class RoutineTaskTest {
 
     @Test
     public void title() {
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, 0);
+        var task = new RoutineTask(0, "Brush Teeth", false, 0);
         assertEquals("Brush Teeth", task.title());
 
         // Try-Catch for blank title
         try {
-            new RoutineTask(0, " ", 1, false, 0);
+            new RoutineTask(0, " ", false, 0);
             fail("Expected: IllegalArgumentException, blank title");
         } catch (IllegalArgumentException e) {
             assertEquals("RoutineTask title cannot be blank", e.getMessage());
@@ -22,35 +22,13 @@ public class RoutineTaskTest {
     }
 
     @Test
-    public void priority() {
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, 0);
-        assertEquals(1, task.priority());
-
-        // Try-Catch for negative priority
-        try {
-            new RoutineTask(0, "Brush Teeth", -1, false, 0);
-            fail("Expected: IllegalArgumentException, negative priority");
-        } catch (IllegalArgumentException e) {
-            assertEquals("RoutineTask priority must be an integer greater than 0", e.getMessage());
-        }
-
-        // Try-Catch for zero priority
-        try {
-            new RoutineTask(0,"Brush Teeth", 0, false, 0);
-            fail("Expected: IllegalArgumentException, zero priority");
-        } catch (IllegalArgumentException e) {
-            assertEquals("RoutineTask priority must be an integer greater than 0", e.getMessage());
-        }
-    }
-
-    @Test
     public void isChecked() {
         // Check: Initializing isChecked == False
-        var falseIsCheckedTask = new RoutineTask(0, "Brush Teeth", 1, false, 0);
+        var falseIsCheckedTask = new RoutineTask(0, "Brush Teeth", false, 0);
         assertFalse(falseIsCheckedTask.isChecked());
 
         // Check: Initializing isChecked == True
-        var trueIsCheckedTask = new RoutineTask(0, "Brush Teeth", 1, true, 0);
+        var trueIsCheckedTask = new RoutineTask(0, "Brush Teeth", true, 0);
         assertTrue(trueIsCheckedTask.isChecked());
     }
 
@@ -58,19 +36,19 @@ public class RoutineTaskTest {
     public void id() {
         Integer expectedId;
 
-        var taskWithZeroId = new RoutineTask(0, "Brush Teeth", 1, false, 0);
+        var taskWithZeroId = new RoutineTask(0, "Brush Teeth", false, 0);
         expectedId = 0;
         assertEquals(expectedId, taskWithZeroId.id());
 
-        var taskWithNonZeroId = new RoutineTask(3, "Brush Teeth", 1, false, 0);
+        var taskWithNonZeroId = new RoutineTask(3, "Brush Teeth", false, 0);
         expectedId = 3;
         assertEquals(expectedId, taskWithNonZeroId.id());
 
-        var taskWithNegativeId = new RoutineTask(-2, "Brush Teeth", 1, false, 0);
+        var taskWithNegativeId = new RoutineTask(-2, "Brush Teeth", false, 0);
         expectedId = -2;
         assertEquals(expectedId, taskWithNegativeId.id());
 
-        var taskWithNullId = new RoutineTask(null, "Brush Teeth", 1, false, 0);
+        var taskWithNullId = new RoutineTask(null, "Brush Teeth", false, 0);
         expectedId = null;
         assertEquals(expectedId, taskWithNullId.id());
     }
@@ -80,7 +58,7 @@ public class RoutineTaskTest {
         Integer expectedId;
 
         RegularTimer timer = new RegularTimer();
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, 0);
+        var task = new RoutineTask(0, "Brush Teeth", false, 0);
 
         assertFalse(task.isChecked());
         task.checkOff(timer.getTime());
@@ -94,7 +72,7 @@ public class RoutineTaskTest {
 
         RegularTimer timer = new RegularTimer();
 
-        var task = new RoutineTask(0, "Brush Teeth", 1, false, 0);
+        var task = new RoutineTask(0, "Brush Teeth", false, 0);
         // WHEN I check off Brush Teeth
         task.checkOff(timer.getTime());
         // THEN Brush Teeth isChecked
@@ -111,11 +89,11 @@ public class RoutineTaskTest {
 
         RoutineTask task;
 
-        task = new RoutineTask(0, "Brush Teeth", 1, false, 0);
+        task = new RoutineTask(0, "Brush Teeth", false, 0);
         expectedSortOrder = 0;
         assertEquals(expectedSortOrder, task.sortOrder());
 
-        task = new RoutineTask(0, "Brush Teeth", 1, false, 3);
+        task = new RoutineTask(0, "Brush Teeth", false, 3);
         expectedSortOrder = 3;
         assertEquals(expectedSortOrder, task.sortOrder());
 

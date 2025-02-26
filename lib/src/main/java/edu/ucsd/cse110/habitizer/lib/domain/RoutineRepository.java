@@ -33,6 +33,6 @@ public interface RoutineRepository {
 
     void updateIsDone(int routineId, boolean newIsDone);
 
-    void initializeTasks(int routineId);
+    void initializeStates(int routineId);
 
 }

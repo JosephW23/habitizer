@@ -123,12 +123,16 @@ public class TaskListFragment extends Fragment {
                 activityModel.endRoutine(); // Ends routine and stop timers
                 view.endRoutineButton.setText("Routine Ended"); // Updates button text
                 view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
+                view.routinePauseTimeButton.setEnabled(false);
+                view.routineAdd30SecButton.setEnabled(false);
             }
         });
 
         view.backButton.setOnClickListener(v -> {
             var modelOwner = requireActivity();
-            activityModel.endRoutine();
+            if (activityModel.getIsRoutineDone().getValue()) {
+                this.activityModel.initializeStates();
+            }
             modelOwner.getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, RoutineListFragment.newInstance())

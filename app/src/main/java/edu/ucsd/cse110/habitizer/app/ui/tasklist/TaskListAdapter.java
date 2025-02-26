@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,12 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
         binding.taskButton.setOnClickListener(v -> {
             var id = task.id();
             activityModel.checkOffTask(id);
+        });
+
+        activityModel.getIsRoutineDone().observe(isTaskDone -> {
+            if (isTaskDone) {
+                binding.taskButton.setEnabled(false);
+            }
         });
 
         // When the elapsed time changes for task, update task_view text view.

@@ -42,7 +42,7 @@ public class MainViewModel extends ViewModel {
     // Subject to store and update goal time
     private final Handler timerHandler = new Handler(Looper.getMainLooper()); // Handler for periodic timer updates (Lab 4 )
   
-    private static final long TIMER_INTERVAL_MS = 1000; // Updates every second
+    private static final long TIMER_INTERVAL_MS = 5000; // Updates every 5 seconds
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -168,9 +168,9 @@ public class MainViewModel extends ViewModel {
         routineRepository.updateTaskTitle(id, currentRoutine.id(), newTitle);
     }
 
-    // initialize all tasks
-    public void initializeTasks() {
-        routineRepository.initializeTasks(currentRoutine.id());
+    // initialize all tasks and routine state
+    public void initializeStates() {
+        routineRepository.initializeStates(currentRoutine.id());
     }
 
     public void updateIsDone(boolean newIsDone) {
@@ -180,11 +180,9 @@ public class MainViewModel extends ViewModel {
     // Stop timer
     public void stopRoutineTimer() {
         routineTimer.stopTimer();
-        updateTime();
     }
     public void stopTaskTimer() {
         taskTimer.stopTimer();
-        updateTime();
     }
 
     // Manually advance routine timer by 30 seconds (For US3c)
@@ -201,7 +199,6 @@ public class MainViewModel extends ViewModel {
     public void endRoutine() {
         stopRoutineTimer();
         stopTaskTimer();
-        routineRepository.updateInProgressRoutine(currentRoutine.id(), false);
     }
 
     // Periodically update elapsed time every second

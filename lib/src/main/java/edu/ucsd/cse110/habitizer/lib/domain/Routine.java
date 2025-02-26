@@ -77,4 +77,13 @@ public class Routine {
     public void setInProgress(boolean newInProgress) {
         isInProgress = newInProgress;
     }
+
+    public void initialize() {
+        isDone = false;
+        isInProgress = false;
+        tasks = new ArrayList<>();
+
+        this.routineElapsedTime = "-";
+        this.taskElapsedTime = "-";
+    }
 }

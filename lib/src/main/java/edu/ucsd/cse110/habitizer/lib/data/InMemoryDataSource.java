@@ -12,6 +12,7 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class InMemoryDataSource {
     private List<Routine> routines;
     private MutableSubject<List<Routine>> routineSubjects = new SimpleSubject<>();
+
     public InMemoryDataSource() {
     }
 
@@ -157,10 +158,23 @@ public class InMemoryDataSource {
         }
     }
 
+    public void checkRoutineDone(int routineId) {
+        Routine routine = getRoutineWithId(routineId);
+        boolean isDone = true;
+        for (var task :routine.tasks()) {
+            isDone = isDone && task.isChecked();
+        }
+        if (isDone) {
+            updateIsDone(routineId, true);
+        }
+    }
+
     public void checkOffTask(int id, int routineId) {
         Routine routine = getRoutineWithId(routineId);
         RoutineTask task = getTaskWithId(id, routineId);
         task.checkOff(routine.taskElapsedTime());
+
+        checkRoutineDone(routineId);
         putTask(routine, task);
     }
 
@@ -191,12 +205,13 @@ public class InMemoryDataSource {
         putRoutine(routine);
     }
 
-    public void initializeTasks(int routineId) {
+    public void initializeStates(int routineId) {
         Routine routine = getRoutineWithId(routineId);
         var tasks = getTaskList(routineId);
         for (var task : tasks) {
             task.initialize();
         }
+        routine.initialize();
         routine.setTasks(tasks);
         putRoutine(routine);
     }

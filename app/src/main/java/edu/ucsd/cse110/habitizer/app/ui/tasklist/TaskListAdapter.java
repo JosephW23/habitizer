@@ -56,14 +56,7 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
 
         // When the elapsed time changes for task, update task_view text view.
         activityModel.getTaskElapsedTime().observe(time -> {
-            if (task.id() == activityModel.getCurrentTaskId()) {
-                // sync with timer if task id is matched with current id.
-                binding.taskTime.setText(time);
-            } else {
-                // sync with elapsed time field inside RoutineTask object
-                // if it is already done or not yet started.
-                binding.taskTime.setText(task.elapsedTime());
-            }
+            binding.taskTime.setText(task.elapsedTime());
         });
 
         return binding.getRoot();

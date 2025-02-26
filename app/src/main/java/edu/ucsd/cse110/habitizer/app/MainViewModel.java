@@ -31,11 +31,11 @@ public class MainViewModel extends ViewModel {
     private MutableSubject<String> routineElapsedTime;
     private MutableSubject<String> taskElapsedTime;
     private MutableSubject<String> goalTime;
+    private MutableSubject<Boolean> isRoutineDone;
 
     private Routine currentRoutine;
     private final ElapsedTimer routineTimer;
     private final ElapsedTimer taskTimer;
-
 
 
     // Subject to store and update goal time
@@ -62,20 +62,10 @@ public class MainViewModel extends ViewModel {
         routineElapsedTime = new SimpleSubject<>();
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
+        isRoutineDone = new SimpleSubject<>();
 
         this.routineTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
-
-        routineRepository.getRoutineList().observe(routines -> {
-            if (routines == null) return;
-            routineList.setValue(routines);
-        });
-
-        // when one of tasks is modified, update taskList.
-        routineRepository.getTaskList(routineId.getValue()).observe(tasks -> {
-            if (tasks == null) return;
-            taskList.setValue(tasks);
-        });
 
         // when the inProgressRoutine changes, update routineId, routine/task time, and goal time
         routineRepository.getInProgressRoutine().observe(routine -> {
@@ -85,6 +75,18 @@ public class MainViewModel extends ViewModel {
             routineElapsedTime.setValue(routine.routineElapsedTime());
             taskElapsedTime.setValue(routine.taskElapsedTime());
             goalTime.setValue(routine.goalTime());
+            isRoutineDone.setValue(routine.isDone());
+        });
+
+        routineRepository.getRoutineList().observe(routines -> {
+            if (routines == null) return;
+            routineList.setValue(routines);
+        });
+
+        // when one of tasks is modified, update taskList.
+        routineRepository.getTaskList(currentRoutine.id()).observe(tasks -> {
+            if (tasks == null) return;
+            taskList.setValue(tasks);
         });
 
         // when routineId changes, update taskList.
@@ -136,6 +138,10 @@ public class MainViewModel extends ViewModel {
         return taskTimer;
     }
 
+    public String getRoutineName() {
+        return currentRoutine.title();
+    }
+
     // Expose elapsed time for UI updates
     public Subject<String> getRoutineElapsedTime() {
         return routineElapsedTime;
@@ -146,7 +152,35 @@ public class MainViewModel extends ViewModel {
     public Subject<String> getGoalTime() {
         return goalTime;
     }
+    public Subject<Boolean> getIsRoutineDone() {
+        return isRoutineDone;
+    }
 
+    public void updateInProgressRoutine(int newRoutineId) {
+        routineRepository.updateInProgressRoutine(currentRoutine.id(), newRoutineId);
+    }
+    private void updateTime() {
+        routineRepository.updateTime(currentRoutine.id(),
+                routineTimer.getRoundedDownTime(), taskTimer.getRoundedDownTime());
+    }
+
+    public void updateGoalTime(String newTime) {
+        routineRepository.updateGoalTime(currentRoutine.id(), newTime);
+    }
+
+    // Updates task name when in edit task dialog
+    public void updateTaskName(int id, String newTitle) {
+        routineRepository.updateTaskTitle(id, currentRoutine.id(), newTitle);
+    }
+
+    // initialize all tasks
+    public void initializeTasks() {
+        routineRepository.initializeTasks(currentRoutine.id());
+    }
+
+    public void updateIsDone(boolean newIsDone) {
+        routineRepository.updateIsDone(currentRoutine.id(), newIsDone);
+    }
 
     // Stop timer
     public void stopRoutineTimer() {
@@ -183,24 +217,5 @@ public class MainViewModel extends ViewModel {
                 timerHandler.postDelayed(this, TIMER_INTERVAL_MS);
             }
         }, 0);
-    }
-
-    private void updateTime() {
-        routineRepository.updateTime(currentRoutine.id(),
-                routineTimer.getRoundedDownTime(), taskTimer.getRoundedDownTime());
-    }
-
-    public void updateGoalTime(String newTime) {
-        routineRepository.updateGoalTime(currentRoutine.id(), newTime);
-    }
-
-    // Updates task name when in edit task dialog
-    public void updateTaskName(String newTitle, int id) {
-        routineRepository.updateTaskTitle(id, currentRoutine.id(), newTitle);
-    }
-
-    // initialize all tasks
-    public void initializeTasks() {
-        routineRepository.initializeTasks(currentRoutine.id());
     }
 }

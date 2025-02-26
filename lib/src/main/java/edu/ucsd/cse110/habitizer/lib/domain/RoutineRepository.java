@@ -19,7 +19,8 @@ public interface RoutineRepository {
 
     Subject<RoutineTask> getTaskWithId(int id, int routineId);
 
-    // Add a new task to a routine
+    void updateInProgressRoutine(int currentRoutineId, int newRoutineId);
+
     void addTaskToRoutine(int routineId, RoutineTask task);
 
     void checkOffTask(int id, int routineId);
@@ -30,5 +31,8 @@ public interface RoutineRepository {
 
     void updateGoalTime(int routineId, String newTime);
 
+    void updateIsDone(int routineId, boolean newIsDone);
+
     void initializeTasks(int routineId);
+
 }

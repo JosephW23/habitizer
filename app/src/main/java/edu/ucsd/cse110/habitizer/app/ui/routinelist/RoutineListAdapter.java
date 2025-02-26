@@ -47,8 +47,8 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
 
         // swap fragment when click the element
         binding.routineButton.setOnClickListener(v -> {
-            this.activityModel.setRoutineName(routine.title());
-            this.activityModel.initializeTasks(routine.title());
+            this.activityModel.updateInProgressRoutine(routine.id());
+            this.activityModel.initializeTasks();
             this.modelOwner.getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, TaskListFragment.newInstance())
@@ -57,8 +57,8 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
 
         //swaping to editing fragment when clicking the edit button
         binding.editRoutineButton.setOnClickListener(v -> {
-            this.activityModel.setRoutineName(routine.title());
-            this.activityModel.initializeTasks(routine.title());
+            this.activityModel.updateInProgressRoutine(routine.id());
+            this.activityModel.initializeTasks();
             this.modelOwner.getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, EditListFragment.newInstance())

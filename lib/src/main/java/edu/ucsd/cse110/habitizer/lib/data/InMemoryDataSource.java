@@ -10,8 +10,6 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
 public class InMemoryDataSource {
     private List<Routine> routines;
-    private MutableSubject<List<Routine>> routineSubjects;
-
     public InMemoryDataSource() {
     }
 
@@ -33,7 +31,6 @@ public class InMemoryDataSource {
         ));
         // Use ArrayList instead of `List.of()`, which is immutable.
        routines = List.of(DEFAULT_MORNING_ROUTINE, DEFAULT_EVENING_ROUTINE);
-       routineSubjects.setValue(routines);
     }
     public static InMemoryDataSource fromDefault() {
         var data = new InMemoryDataSource();
@@ -72,7 +69,7 @@ public class InMemoryDataSource {
 
     public Subject<List<RoutineTask>> getTaskListSubjects(int routineId) {
         var subject = new SimpleSubject<List<RoutineTask>>();
-        subject.setValue(getTaskList(routineId));
+//        subject.setValue(getTaskList(routineId));
         return subject;
     }
 
@@ -116,7 +113,6 @@ public class InMemoryDataSource {
             }
         }
         routines = List.copyOf(newRoutines);
-        routineSubjects.setValue(routines);
     }
 
     public void putTask(Routine newRoutine, RoutineTask newTask) {
@@ -132,7 +128,16 @@ public class InMemoryDataSource {
         putRoutine(newRoutine);
     }
 
-    // Made updateRoutine()
+    public void updateInProgressRoutine(int currentRoutineId, int newRoutineId) {
+        Routine currentRoutine = getRoutineWithId(currentRoutineId);
+        Routine newRoutine = getRoutineWithId(newRoutineId);
+
+        currentRoutine.setInProgress(false);
+        newRoutine.setInProgress(true);
+        putRoutine(currentRoutine);
+        putRoutine(newRoutine);
+    }
+
     public void addTaskToRoutine(int routineId, RoutineTask task) {
         Routine newRoutine = getRoutineWithId(routineId);
         if (newRoutine != null) {
@@ -174,6 +179,12 @@ public class InMemoryDataSource {
     public void updateGoalTime(int routineId, String newTime) {
         Routine routine = getRoutineWithId(routineId);
         routine.setGoalTime(newTime);
+        putRoutine(routine);
+    }
+
+    public void updateIsDone(int routineId, boolean newIsDone) {
+        Routine routine = getRoutineWithId(routineId);
+        routine.setIsDone(newIsDone);
         putRoutine(routine);
     }
 

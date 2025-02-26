@@ -72,15 +72,15 @@ public class TaskListFragment extends Fragment {
         activityModel.startRoutine();
 
         // Bind routine_updating_timer to elapsed time from MainViewModel
-        activityModel.getElapsedTime().observe(time -> {
+        activityModel.getRoutineElapsedTime().observe(time -> {
             view.routineUpdatingTimer.setText(time); // Updates UI dynamically
         });
 
         // Pause Button functionality
         // For Resume and Pause I know you have to use R and add it to string xml but couldn't get it to work
         view.routinePauseTimeButton.setOnClickListener(v -> {
-            if (activityModel.getTimer() instanceof MockElapsedTimer) {
-                MockElapsedTimer timer = (MockElapsedTimer) activityModel.getTimer();
+            if (activityModel.getRoutineTimer() instanceof MockElapsedTimer) {
+                MockElapsedTimer timer = (MockElapsedTimer) activityModel.getRoutineTimer();
                 MockElapsedTimer taskTimer = (MockElapsedTimer) activityModel.getTaskTimer();
                 if (timer.isRunning()) {
                     timer.pauseTimer();
@@ -114,7 +114,7 @@ public class TaskListFragment extends Fragment {
 
         // End Routine Button functionality
         view.endRoutineButton.setOnClickListener(v -> {
-            activityModel.getIsRoutineDone().setValue(true); // Mark a routine as done
+            activityModel.updateIsDone(true); // Mark a routine as done
         });
 
         // When routine is marked as done, disable button.
@@ -132,6 +132,7 @@ public class TaskListFragment extends Fragment {
                     .beginTransaction()
                     .replace(R.id.fragment_container, RoutineListFragment.newInstance())
                     .commit();
+
         });
         activityModel.loadTaskList().observe(tasks -> {
             if (tasks == null) return;

@@ -42,7 +42,11 @@ public class SimpleRoutineRepository implements RoutineRepository {
         return dataSource.getTaskListSubjects(routineId);
     }
 
-    // Add a new task to a routine
+    @Override
+    public void updateInProgressRoutine(int currentRoutineId, int newRoutineId) {
+        dataSource.updateInProgressRoutine(currentRoutineId, newRoutineId);
+    }
+
     @Override
     public void addTaskToRoutine(int routineId, RoutineTask task) {
         dataSource.addTaskToRoutine(routineId, task);
@@ -66,6 +70,11 @@ public class SimpleRoutineRepository implements RoutineRepository {
     @Override
     public void updateGoalTime(int routineId, String newTime) {
         dataSource.updateGoalTime(routineId, newTime);
+    }
+
+    @Override
+    public void updateIsDone(int routineId, boolean newIsDone) {
+        dataSource.updateIsDone(routineId, newIsDone);
     }
 
     @Override

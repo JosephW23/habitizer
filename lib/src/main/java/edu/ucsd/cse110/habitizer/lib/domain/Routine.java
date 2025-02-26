@@ -21,7 +21,7 @@ public class Routine {
     private String taskElapsedTime;
     private String goalTime;
 
-    public Routine(@Nullable int id, @NonNull String title, int sortOrder, boolean isInProgress, boolean isdone,
+    public Routine(@NonNull int id, @NonNull String title, int sortOrder, boolean isInProgress, boolean isdone,
                    String routineElapsedTime, String taskElapsedTime, String goalTime) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("Routine title cannot be blank");
@@ -39,16 +39,6 @@ public class Routine {
         this.tasks = new ArrayList<>();
     }
 
-    public void setTasks(List<RoutineTask> tasks) {
-        for (var task: tasks) {
-            this.tasks.add(task);
-        }
-    }
-
-    public void setGoalTime(String goalTime) {
-        this.goalTime = goalTime;
-    }
-
     public int id() { return id; }
     public String title() { return title; }
     public int sortOrder() { return sortOrder; }
@@ -59,6 +49,12 @@ public class Routine {
     public String goalTime() { return goalTime; }
     public List<RoutineTask> tasks() { return List.copyOf(tasks); }
 
+    public void setTasks(List<RoutineTask> tasks) {
+        for (var task: tasks) {
+            this.tasks.add(task);
+        }
+    }
+
     public void addTask(RoutineTask task) {
         tasks.add(task);
     }
@@ -66,5 +62,17 @@ public class Routine {
     public void setElapsedTime(String routineElapsedTime, String taskElapsedTime) {
         this.routineElapsedTime = routineElapsedTime;
         this.taskElapsedTime = taskElapsedTime;
+    }
+
+    public void setGoalTime(String newTime) {
+        this.goalTime = newTime;
+    }
+
+    public void setIsDone(boolean newIsDone) {
+        isDone = newIsDone;
+    }
+
+    public void setInProgress(boolean newInProgress) {
+        isInProgress = newInProgress;
     }
 }

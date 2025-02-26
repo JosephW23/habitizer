@@ -45,10 +45,6 @@ public class RoutineTask {
     public void setSortOrder(int sortOrder) {
         this.sortOrder = sortOrder;
     }
-    public void setElapsedTime(String elapsedTime) {
-        this.elapsedTime = elapsedTime;
-    }
-
     public void checkOff(String elapsedTime) {
         this.isChecked = true;
         this.elapsedTime = elapsedTime; // set elapsed time when task is done

@@ -28,4 +28,7 @@ public interface RoutineRepository {
 
     void updateTime(int routineId, String routineElapsedTime, String taskElapsedTIme);
 
+    void updateGoalTime(int routineId, String newTime);
+
+    void initializeTasks(int routineId);
 }

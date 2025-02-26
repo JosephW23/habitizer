@@ -135,7 +135,7 @@ public class InMemoryDataSource {
     // Made updateRoutine()
     public void addTaskToRoutine(int routineId, RoutineTask task) {
         Routine newRoutine = getRoutineWithId(routineId);
-        if (routine != null) {
+        if (newRoutine != null) {
             // Generate a new task ID (increment from the last task)
             int newTaskId = newRoutine.tasks().isEmpty() ? 0 : newRoutine.tasks().size();
             task.setId(newTaskId);
@@ -168,6 +168,22 @@ public class InMemoryDataSource {
     public void updateTime(int routineId, String routineElapsedTime, String taskElapsedTime) {
         Routine routine = getRoutineWithId(routineId);
         routine.setElapsedTime(routineElapsedTime, taskElapsedTime);
+        putRoutine(routine);
+    }
+
+    public void updateGoalTime(int routineId, String newTime) {
+        Routine routine = getRoutineWithId(routineId);
+        routine.setGoalTime(newTime);
+        putRoutine(routine);
+    }
+
+    public void initializeTasks(int routineId) {
+        Routine routine = getRoutineWithId(routineId);
+        var tasks = getTaskList(routineId);
+        for (var task : tasks) {
+            task.initialize();
+        }
+        routine.setTasks(tasks);
         putRoutine(routine);
     }
 }

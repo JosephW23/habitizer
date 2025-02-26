@@ -30,6 +30,7 @@ public class MainViewModel extends ViewModel {
 
     private MutableSubject<String> routineElapsedTime;
     private MutableSubject<String> taskElapsedTime;
+    private MutableSubject<String> goalTime;
 
     private Routine currentRoutine;
     private final ElapsedTimer routineTimer;
@@ -60,6 +61,7 @@ public class MainViewModel extends ViewModel {
         routineList = new SimpleSubject<>();
         routineElapsedTime = new SimpleSubject<>();
         taskElapsedTime = new SimpleSubject<>();
+        goalTime = new SimpleSubject<>();
 
         this.routineTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
@@ -75,13 +77,14 @@ public class MainViewModel extends ViewModel {
             taskList.setValue(tasks);
         });
 
-        // when the inProgressRoutine changes, update routineId and time
+        // when the inProgressRoutine changes, update routineId, routine/task time, and goal time
         routineRepository.getInProgressRoutine().observe(routine -> {
             if (routine == null) return;
             currentRoutine = routine;
             routineId.setValue(routine.id());
             routineElapsedTime.setValue(routine.routineElapsedTime());
             taskElapsedTime.setValue(routine.taskElapsedTime());
+            goalTime.setValue(routine.goalTime());
         });
 
         // when routineId changes, update taskList.
@@ -113,7 +116,7 @@ public class MainViewModel extends ViewModel {
     // New Method: Add Task to Routine**
     public void addTaskToRoutine(String taskName) {
         var task = new RoutineTask(null, currentRoutine.id(), taskName, false, -1);
-        routineRepository.addTaskToRoutine(task);
+        routineRepository.addTaskToRoutine(currentRoutine.id(), task);
     }
 
     // check off a task with id
@@ -140,6 +143,10 @@ public class MainViewModel extends ViewModel {
     public Subject<String> getTaskElapsedTime() {
         return taskElapsedTime;
     }
+    public Subject<String> getGoalTime() {
+        return goalTime;
+    }
+
 
     // Stop timer
     public void stopRoutineTimer() {
@@ -183,13 +190,8 @@ public class MainViewModel extends ViewModel {
                 routineTimer.getRoundedDownTime(), taskTimer.getRoundedDownTime());
     }
 
-    public void updateGoalTime(String time) {
-        System.out.println("Time received: " + time);
-        goalTime.setValue(time);
-    }
-
-    public Subject<String> getGoalTime() {
-        return goalTime;
+    public void updateGoalTime(String newTime) {
+        routineRepository.updateGoalTime(currentRoutine.id(), newTime);
     }
 
     // Updates task name when in edit task dialog
@@ -198,13 +200,7 @@ public class MainViewModel extends ViewModel {
     }
 
     // initialize all tasks
-    public void initializeTasks(String routineName) {
-        var taskList = routineRepository.getTaskList(routineName);
-        for (var task : taskList) {
-            task.initialize();
-        }
-        this.taskList.setValue(taskList);
-        isRoutineDone.setValue(false);
-        currentTaskId = 0;
+    public void initializeTasks() {
+        routineRepository.initializeTasks(currentRoutine.id());
     }
 }

@@ -62,4 +62,9 @@ public class Routine {
     public void addTask(RoutineTask task) {
         tasks.add(task);
     }
+
+    public void setElapsedTime(String routineElapsedTime, String taskElapsedTime) {
+        this.routineElapsedTime = routineElapsedTime;
+        this.taskElapsedTime = taskElapsedTime;
+    }
 }

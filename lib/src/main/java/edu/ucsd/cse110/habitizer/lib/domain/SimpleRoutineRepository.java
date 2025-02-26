@@ -44,13 +44,23 @@ public class SimpleRoutineRepository implements RoutineRepository {
 
     // Add a new task to a routine
     @Override
-    public void addTaskToRoutine(RoutineTask task) {
-        dataSource.addTaskToRoutine(task);
+    public void addTaskToRoutine(int routineId, RoutineTask task) {
+        dataSource.addTaskToRoutine(routineId, task);
     }
 
     @Override
     public void checkOffTask(int id, int routineId) {
         dataSource.checkOffTask(id, routineId);
+    }
+
+    @Override
+    public void updateTaskTitle(int id, int routineId, String newTitle) {
+        dataSource.updateTaskTitle(id, routineId, newTitle);
+    }
+
+    @Override
+    public void updateTime(int routineId, String routineElapsedTime, String taskElapsedTIme) {
+        dataSource.updateTime(routineId, routineElapsedTime, taskElapsedTIme);
     }
 }
 

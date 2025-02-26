@@ -20,8 +20,12 @@ public interface RoutineRepository {
     Subject<RoutineTask> getTaskWithId(int id, int routineId);
 
     // Add a new task to a routine
-    void addTaskToRoutine(RoutineTask task);
+    void addTaskToRoutine(int routineId, RoutineTask task);
 
     void checkOffTask(int id, int routineId);
+
+    void updateTaskTitle(int id, int routineId, String newTitle);
+
+    void updateTime(int routineId, String routineElapsedTime, String taskElapsedTIme);
 
 }

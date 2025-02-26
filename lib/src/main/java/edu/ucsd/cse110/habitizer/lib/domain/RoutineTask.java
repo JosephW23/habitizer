@@ -55,7 +55,7 @@ public class RoutineTask {
     }
 
     // Updates task name when in edit task dialog
-    public void updateTitle(String newTitle) {
+    public void setTitle(String newTitle) {
         this.title = newTitle;
     }
 

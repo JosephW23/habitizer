@@ -1,15 +1,7 @@
 package edu.ucsd.cse110.habitizer.lib.data;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import edu.ucsd.cse110.habitizer.lib.domain.RegularTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 import edu.ucsd.cse110.habitizer.lib.util.MutableSubject;
@@ -141,8 +133,8 @@ public class InMemoryDataSource {
     }
 
     // Made updateRoutine()
-    public void addTaskToRoutine(RoutineTask task) {
-        Routine newRoutine = getRoutineWithId(task.routineId());
+    public void addTaskToRoutine(int routineId, RoutineTask task) {
+        Routine newRoutine = getRoutineWithId(routineId);
         if (routine != null) {
             // Generate a new task ID (increment from the last task)
             int newTaskId = newRoutine.tasks().isEmpty() ? 0 : newRoutine.tasks().size();
@@ -162,6 +154,21 @@ public class InMemoryDataSource {
         RoutineTask task = getTaskWithId(id, routineId);
         task.checkOff(routine.taskElapsedTime());
         putTask(routine, task);
+    }
+
+    public void updateTaskTitle(int id, int routineId, String newTitle) {
+        Routine routine = getRoutineWithId(routineId);
+        RoutineTask task = getTaskWithId(id, routineId);
+        if (task != null){
+            task.setTitle(newTitle);
+            putTask(routine, task);
+        }
+    }
+
+    public void updateTime(int routineId, String routineElapsedTime, String taskElapsedTime) {
+        Routine routine = getRoutineWithId(routineId);
+        routine.setElapsedTime(routineElapsedTime, taskElapsedTime);
+        putRoutine(routine);
     }
 }
 

@@ -6,19 +6,34 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ucsd.cse110.habitizer.lib.util.SimpleSubject;
+
 public class Routine {
     private final @Nullable Integer id;
     private @NonNull String title;
     private int sortOrder;
     private List<RoutineTask> tasks;
 
-    public Routine(@Nullable int id, @NonNull String title, int sortOrder) {
+    private boolean isInProgress;
+    private boolean isDone;
+
+    private String routineElapsedTime;
+    private String taskElapsedTime;
+
+    public Routine(@Nullable int id, @NonNull String title, int sortOrder, boolean isInProgress, boolean isdone,
+                   String routineElapsedTime, String taskElapsedTime) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("Routine title cannot be blank");
         }
         this.id = id;
         this.title = title;
         this.sortOrder = sortOrder;
+        this.isInProgress = isInProgress;
+        this.isDone = isdone;
+
+        this.routineElapsedTime = routineElapsedTime;
+        this.taskElapsedTime = taskElapsedTime;
+
         this.tasks = new ArrayList<>();
     }
 
@@ -31,16 +46,14 @@ public class Routine {
 
     public int id() { return id; }
     public String title() { return title; }
-
     public int sortOrder() { return sortOrder; }
-    public List<RoutineTask> tasks() { return new ArrayList<>(tasks); } // Return a copy for safety
+    public boolean isInProgress() { return isInProgress; }
+    public boolean isDone() { return isDone; }
+    public String routineElapsedTime() { return routineElapsedTime; }
+    public String taskElapsedTime() { return taskElapsedTime; }
+    public List<RoutineTask> tasks() { return List.copyOf(tasks); }
 
-    // Add a task to the routine
-    public Routine addTask(RoutineTask task) {
-        var routine = new Routine(this.id, this.title, 0);
-        List<RoutineTask> updatedTasks = new ArrayList<>(tasks);
-        updatedTasks.add(task);
-        routine.setTasks(updatedTasks);
-        return routine; // Return a new Routine object
+    public void addTask(RoutineTask task) {
+        tasks.add(task);
     }
 }

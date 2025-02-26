@@ -91,6 +91,18 @@ public class InMemoryDataSource {
         subject.setValue(getTaskWithId(id, routineId));
         return subject;
     }
+
+    // Made updateRoutine()
+    public void updateRoutine(Routine updatedRoutine) {
+        for (int i = 0; i < routines.size(); i++) {
+            if (routines.get(i).title().equals(updatedRoutine.title())) {
+                List<Routine> updatedRoutines = new ArrayList<>(routines);
+                updatedRoutines.set(i, updatedRoutine);
+                routines = updatedRoutines; // Ensure the reference is updated
+                return;
+            }
+        }
+    }
 }
 
 

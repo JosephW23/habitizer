@@ -42,10 +42,10 @@ public class SimpleRoutineRepository implements RoutineRepository {
             RoutineTask newTask = new RoutineTask(newTaskId, taskName, false, sortOrder);
 
             // Create a new updated Routine instance
-            Routine updatedRoutine = routine.addTask(newTask);
+            routine.addTask(newTask);
 
             // Save the updated routine
-            dataSource.updateRoutine(updatedRoutine);
+            dataSource.updateRoutine(routine);
         }
     }
 }

@@ -13,12 +13,13 @@ public class RoutineTest {
     public void tasksGetter() {
         // GIVEN a list of tasks
         var expected = List.of(
-                new RoutineTask(0, "Brush Teeth", 1, false),
-                new RoutineTask(1, "Shower", 2, false)
+                new RoutineTask(0, "Brush Teeth", 1, false, 0),
+                new RoutineTask(1, "Shower", 2, false, 1)
         );
 
         // WHEN I construct a Routine with those tasks
-        Routine routine = new Routine(0, "My Routine", expected);
+        Routine routine = new Routine(0, "My Routine", 0);
+        routine.setTasks(expected);
 
         // THEN .tasks() returns the same tasks I created it with
         var actual = routine.tasks();
@@ -30,9 +31,7 @@ public class RoutineTest {
         // GIVEN ...
         // WHEN I try to create a Routine with a blank title.
         try {
-            new Routine(0, " ", List.of(
-                    new RoutineTask(0, "Brush Teeth", 1, false)
-            ));
+            new Routine(0, " ", 0);
             fail("Expected: IllegalArgumentException, blank title");
         }
         // THEN an IllegalArgumentException is thrown.
@@ -45,8 +44,9 @@ public class RoutineTest {
     @Test
     public void titleIsCorrect() {
         // GIVEN the title is "Test Routine"
-        Routine routine = new Routine(0, "Test Routine", List.of(
-                new RoutineTask(1, "Brush Teeth", 1, false)
+        Routine routine = new Routine(0, "Test Routine", 0);
+        routine.setTasks(List.of(
+                new RoutineTask(1, "Brush Teeth", 1, false, 0)
         ));
 
         var expected = "Test Routine";
@@ -58,8 +58,9 @@ public class RoutineTest {
     @Test
     public void checkId() {
         // GIVEN the title is "Test Routine"
-        Routine routine = new Routine(0, "Test Routine", List.of(
-                new RoutineTask(1, "Brush Teeth", 1, false)
+        Routine routine = new Routine(0, "Test Routine", 0);
+        routine.setTasks(List.of(
+                new RoutineTask(1, "Brush Teeth", 1, false, 0)
         ));
 
         var expected = 0;

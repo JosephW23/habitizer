@@ -9,10 +9,10 @@ public class RoutineTask {
     private @NonNull String title;
     private final int priority;
     private boolean isChecked;
-
     private String elapsedTime;
+    private int sortOrder;
 
-    public RoutineTask(@Nullable Integer id, @NonNull String title, int priority, boolean isChecked) {
+    public RoutineTask(@Nullable Integer id, @NonNull String title, int priority, boolean isChecked, int sortOrder) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("RoutineTask title cannot be blank");
         }
@@ -24,10 +24,13 @@ public class RoutineTask {
         this.priority = priority;
         this.isChecked = isChecked;
         this.elapsedTime = "-";
+        this.sortOrder = sortOrder;
     }
 
     public @Nullable Integer id() { return id; }
     public @NonNull String title() { return title; }
+
+    public @NonNull Integer sortOrder() { return sortOrder; }
 
     public int priority() { return priority; }
 

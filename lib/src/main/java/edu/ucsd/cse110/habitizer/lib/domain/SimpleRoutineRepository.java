@@ -41,7 +41,10 @@ public class SimpleRoutineRepository implements RoutineRepository {
         if (routine != null) {
             // Generate a new task ID (increment from the last task)
             int newTaskId = routine.tasks().isEmpty() ? 0 : routine.tasks().get(routine.tasks().size() - 1).id() + 1;
-            RoutineTask newTask = new RoutineTask(newTaskId, taskName, 1, false);
+
+            // temporarily set sortOrder same as id.
+            int sortOrder = newTaskId;
+            RoutineTask newTask = new RoutineTask(newTaskId, taskName, 1, false, sortOrder);
 
             // Create a new updated Routine instance
             Routine updatedRoutine = routine.addTask(newTask);

@@ -57,8 +57,13 @@ public class Routine {
         this.tasks = List.copyOf(newTasks);
     }
 
-    public void addTask(RoutineTask task) {
-        tasks.add(task);
+    public void addTask(RoutineTask newTask) {
+        var newTasks = new ArrayList<RoutineTask>();
+        for (var task : tasks) {
+            newTasks.add(task);
+        }
+        newTasks.add(newTask);
+        setTasks(newTasks);
     }
 
     public void setElapsedTime(String routineElapsedTime, String taskElapsedTime) {

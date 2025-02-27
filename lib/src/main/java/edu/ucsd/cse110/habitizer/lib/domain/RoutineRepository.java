@@ -34,6 +34,6 @@ public interface RoutineRepository {
 
     void updateIsDone(int routineId, boolean newIsDone);
 
-    void initializeStates(int routineId);
+    void initializeRoutineState(int routineId);
 
 }

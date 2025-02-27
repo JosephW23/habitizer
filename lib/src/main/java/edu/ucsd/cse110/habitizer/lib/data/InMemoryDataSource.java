@@ -210,7 +210,7 @@ public class InMemoryDataSource {
         putRoutine(routine);
     }
 
-    public void initializeStates(int routineId) {
+    public void initializeRoutineState(int routineId) {
         Routine routine = getRoutineWithId(routineId);
         var tasks = getTaskList(routineId);
         for (var task : tasks) {

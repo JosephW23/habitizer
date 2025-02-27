@@ -129,7 +129,7 @@ public class TaskListFragment extends Fragment {
 
         view.backButton.setOnClickListener(v -> {
             var modelOwner = requireActivity();
-            this.activityModel.initializeStates();
+            this.activityModel.initializeRoutineState();
             modelOwner.getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, RoutineListFragment.newInstance())

@@ -168,8 +168,8 @@ public class MainViewModel extends ViewModel {
     }
 
     // initialize all tasks and routine state
-    public void initializeStates() {
-        routineRepository.initializeStates(currentRoutine.id());
+    public void initializeRoutineState() {
+        routineRepository.initializeRoutineState(currentRoutine.id());
     }
 
     public void updateIsDone(boolean newIsDone) {

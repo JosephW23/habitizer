@@ -83,8 +83,8 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
-    public void initializeStates(int routineId) {
-        dataSource.initializeStates(routineId);
+    public void initializeRoutineState(int routineId) {
+        dataSource.initializeRoutineState(routineId);
     }
 }
 

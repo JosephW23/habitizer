@@ -47,7 +47,11 @@ public class RoutineTask {
     }
     public void checkOff(String elapsedTime) {
         this.isChecked = true;
-        this.elapsedTime = elapsedTime; // set elapsed time when task is done
+        setElapsedTime(elapsedTime); // set elapsed time when task is done
+    }
+
+    public void setElapsedTime(String elapsedTime) {
+        this.elapsedTime = elapsedTime;
     }
 
     // Updates task name when in edit task dialog

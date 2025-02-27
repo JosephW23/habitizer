@@ -1,6 +1,9 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -55,7 +58,7 @@ public class RoutineEntity {
         return routineEntity;
     }
 
-    public @NonNull Routine toRoutine(){
+    public Routine toRoutine(){
         return new Routine(id, title, sortOrder, isInProgress, isDone,
                 routineElapsedTime, taskElapsedTime, goalTime);
     }

@@ -1,8 +1,5 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
@@ -50,6 +47,11 @@ public class SimpleRoutineRepository implements RoutineRepository {
     @Override
     public void addTaskToRoutine(int routineId, RoutineTask task) {
         dataSource.addTaskToRoutine(routineId, task);
+    }
+
+    @Override
+    public void addRoutineList(List<Routine> routines) {
+        dataSource.addRoutineList(routines);
     }
 
     @Override

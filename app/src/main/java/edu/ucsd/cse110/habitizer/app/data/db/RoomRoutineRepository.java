@@ -1,7 +1,10 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
+import android.util.Log;
+
 import androidx.lifecycle.Transformations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,8 +46,12 @@ public class RoomRoutineRepository implements RoutineRepository {
     // return the in-progess Routine
     public Subject<Routine> getInProgressRoutine() {
         var entityLiveData = routineDao.findInProgressRoutine();
+        if (entityLiveData.getValue() == null) {
+            return null;
+        } else {
         var routineLiveData = Transformations.map(entityLiveData, RoutineEntity::toRoutine);
         return new LiveDataSubjectAdapter<>(routineLiveData);
+        }
     }
 
     // return a List of RoutineTask
@@ -71,6 +78,14 @@ public class RoomRoutineRepository implements RoutineRepository {
 
     public void addTaskToRoutine(int routineId, RoutineTask task) {
         routineTaskDao.addTaskToRoutine(RoutineTaskEntity.fromRoutineTask(task));
+    }
+
+    public void addRoutineList(List<Routine> routines) {
+        var newRoutines = new ArrayList<RoutineEntity>();
+        for (var routine : routines) {
+            newRoutines.add(RoutineEntity.fromRoutine(routine));
+        }
+        routineDao.insert(List.copyOf(newRoutines));
     }
 
     public void checkRoutineDone(int routineId) {
@@ -120,7 +135,7 @@ public class RoomRoutineRepository implements RoutineRepository {
         }
         routine.initialize();
         routine.setTasks(tasks);
-        routineDao.addRoutine(RoutineEntity.fromRoutine(routine));
+        routineDao.insert(RoutineEntity.fromRoutine(routine));
     }
 
 }

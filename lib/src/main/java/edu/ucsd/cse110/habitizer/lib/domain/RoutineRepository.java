@@ -23,6 +23,8 @@ public interface RoutineRepository {
 
     void addTaskToRoutine(int routineId, RoutineTask task);
 
+    void addRoutineList(List<Routine> routines);
+
     void checkOffTask(int id, int routineId);
     boolean getIsTaskChecked(int id, int routineId);
 

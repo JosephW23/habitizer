@@ -43,8 +43,7 @@ public interface RoutineDao {
     @Query("UPDATE routines SET is_done = :newIsDone WHERE id = :routineId")
     void updateIsDone(int routineId, boolean newIsDone);
 
-    @Transaction
-    default int addRoutine(RoutineEntity routine) {
-        return Math.toIntExact(insert(routine));
-    }
+    @Query("SELECT COUNT(*) FROM routines")
+    int count();
+
 }

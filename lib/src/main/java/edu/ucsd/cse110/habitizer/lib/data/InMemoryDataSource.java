@@ -16,6 +16,7 @@ public class InMemoryDataSource {
     public InMemoryDataSource() {
     }
 
+
     public void initializeDefaultRoutine() {
         Routine DEFAULT_MORNING_ROUTINE = new Routine(0, "Morning", 0,
                 false, false, "-", "-", "60");
@@ -156,6 +157,13 @@ public class InMemoryDataSource {
             newRoutine.addTask(task);
             putRoutine(newRoutine);
         }
+    }
+
+    public void addRoutineList(List<Routine> routines) {
+        for (var routine : routines) {
+            this.routines.add(routine);
+        }
+        routineSubjects.setValue(this.routines);
     }
 
     public void checkRoutineDone(int routineId) {

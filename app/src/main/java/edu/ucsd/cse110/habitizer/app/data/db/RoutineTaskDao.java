@@ -35,6 +35,9 @@ public interface RoutineTaskDao {
     @Query("UPDATE tasks SET title = :newTitle WHERE id = :id AND routine_id = :routineId")
     void updateInTaskTitle(int id, int routineId, String newTitle);
 
+    @Query("SELECT COUNT(*) FROM tasks")
+    int count();
+
 
 
 }

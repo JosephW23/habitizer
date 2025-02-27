@@ -4,6 +4,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
@@ -65,6 +66,7 @@ public class MainViewModel extends ViewModel {
         this.routineTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
 
+        Log.d("Initialize Task", String.valueOf( routineRepository.getRoutineList().getValue()));
         routineRepository.getRoutineList().observe(routines -> {
             if (routines == null) return;
             routineList.setValue(routines);
@@ -74,6 +76,7 @@ public class MainViewModel extends ViewModel {
             } else {
                 routineId.setValue(routineRepository.getInProgressRoutine().getValue().id());
             }
+
         });
 
         // when routineId changes, update taskList.

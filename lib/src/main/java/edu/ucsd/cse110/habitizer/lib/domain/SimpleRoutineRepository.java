@@ -58,6 +58,11 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
+    public boolean getIsTaskChecked(int id, int routineId) {
+        return dataSource.getIsTaskChecked(id, routineId);
+    }
+
+    @Override
     public void updateTaskTitle(int id, int routineId, String newTitle) {
         dataSource.updateTaskTitle(id, routineId, newTitle);
     }

@@ -24,6 +24,7 @@ public interface RoutineRepository {
     void addTaskToRoutine(int routineId, RoutineTask task);
 
     void checkOffTask(int id, int routineId);
+    boolean getIsTaskChecked(int id, int routineId);
 
     void updateTaskTitle(int id, int routineId, String newTitle);
 

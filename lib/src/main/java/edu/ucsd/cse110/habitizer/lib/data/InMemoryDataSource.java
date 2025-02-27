@@ -169,6 +169,11 @@ public class InMemoryDataSource {
         }
     }
 
+    public boolean getIsTaskChecked(int id, int routineId) {
+        RoutineTask task = getTaskWithId(id, routineId);
+        return task.isChecked();
+    }
+
     public void checkOffTask(int id, int routineId) {
         Routine routine = getRoutineWithId(routineId);
         RoutineTask task = getTaskWithId(id, routineId);

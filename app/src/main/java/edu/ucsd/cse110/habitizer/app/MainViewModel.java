@@ -118,11 +118,13 @@ public class MainViewModel extends ViewModel {
 
     // check off a task with id
     public void checkOffTask(int id) {
-        routineRepository.checkOffTask(id, currentRoutine.id());
+        if (!routineRepository.getIsTaskChecked(id, currentRoutine.id())) {
+            routineRepository.checkOffTask(id, currentRoutine.id());
 
-        taskTimer.resetTimer();
-        taskTimer.startTimer();
-        startTimerUpdates();
+            taskTimer.resetTimer();
+            taskTimer.startTimer();
+            startTimerUpdates();
+        }
     }
 
     // Get Timer object

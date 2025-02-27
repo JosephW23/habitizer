@@ -9,8 +9,10 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.ElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -62,32 +64,36 @@ public class MainViewModel extends ViewModel {
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
         isRoutineDone = new SimpleSubject<>();
+        currentRoutine = null;
 
         this.routineTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
 
-        Log.d("Initialize Task", String.valueOf( routineRepository.getRoutineList().getValue()));
-        routineRepository.getRoutineList().observe(routines -> {
-            if (routines == null) return;
-            routineList.setValue(routines);
-            var routine = routineRepository.getInProgressRoutine();
+        routineRepository.getInProgressRoutine().observe(routine -> {
             if (routine == null) {
                 routineId.setValue(-1);
             } else {
-                routineId.setValue(routineRepository.getInProgressRoutine().getValue().id());
+                currentRoutine = routine;
+                routineId.setValue(routine.id());
             }
+        });
 
+        routineRepository.getRoutineList().observe(routines -> {
+            if (routines == null) {
+                routineList.setValue(new ArrayList<>());
+            } else {
+                routineList.setValue(routines);
+            }
         });
 
         // when routineId changes, update taskList.
         routineId.observe(id -> {
             if (id == null || id == -1) return;
-            currentRoutine = routineRepository.getRoutineWithId(id).getValue();
             routineElapsedTime.setValue(currentRoutine.routineElapsedTime());
             taskElapsedTime.setValue(currentRoutine.taskElapsedTime());
             goalTime.setValue(currentRoutine.goalTime());
             isRoutineDone.setValue(currentRoutine.isDone());
-            taskList.setValue(routineRepository.getTaskList(id).getValue());
+            taskList.setValue(currentRoutine.tasks());
         });
     }
 

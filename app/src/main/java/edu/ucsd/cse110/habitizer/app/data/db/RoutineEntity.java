@@ -1,9 +1,6 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

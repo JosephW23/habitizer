@@ -24,16 +24,25 @@ public interface RoutineTaskDao {
     }
 
     @Query("SELECT * FROM tasks WHERE routine_id = :routineId")
-    LiveData<List<RoutineTaskEntity>> findTaskList(int routineId);
+    LiveData<List<RoutineTaskEntity>> getTaskList(int routineId);
 
     @Query("SELECT * FROM tasks WHERE id = :id AND routine_id = :routineId")
-    LiveData<RoutineTaskEntity> findTaskWithId(int id, int routineId);
+    LiveData<RoutineTaskEntity> getTaskWithId(int id, int routineId);
 
     @Query("SELECT is_checked FROM tasks WHERE id = :id AND routine_id = :routineId")
     boolean getIsTaskChecked(int id, int routineId);
 
     @Query("UPDATE tasks SET title = :newTitle WHERE id = :id AND routine_id = :routineId")
     void updateInTaskTitle(int id, int routineId, String newTitle);
+
+    @Query("UPDATE tasks SET is_checked = false, elapsed_time = '-' WHERE routine_id = :routineId")
+    void initializeTask(int routineId);
+
+    @Query("UPDATE tasks SET is_checked = true, elapsed_time = :elapsedTime WHERE id = :id AND routine_id = :routineId")
+    void checkOffTask(int id, int routineId, String elapsedTime);
+
+    @Query("SELECT is_checked FROM tasks WHERE routine_id = :routineId")
+    List<Boolean> checkIsRoutineDone(int routineId);
 
     @Query("SELECT COUNT(*) FROM tasks")
     int count();

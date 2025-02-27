@@ -12,6 +12,7 @@ import edu.ucsd.cse110.habitizer.app.util.LiveDataSubjectAdapter;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
+import edu.ucsd.cse110.habitizer.lib.util.SimpleSubject;
 import edu.ucsd.cse110.habitizer.lib.util.Subject;
 
 
@@ -26,18 +27,22 @@ public class RoomRoutineRepository implements RoutineRepository {
 
     @Override
     public Subject<List<Routine>> getRoutineList() {
-        var entitiesLiveData = routineDao.findRoutineList();
-        var routineLiveData = Transformations.map(entitiesLiveData, entities -> {
-            return entities.stream()
-                    .map(RoutineEntity::toRoutine)
-                    .collect(Collectors.toList());
-        });
-        return new LiveDataSubjectAdapter<>(routineLiveData);
+        if (routineDao.getRoutineCount() != 0) {
+            var entitiesLiveData = routineDao.getRoutineList();
+            var routineLiveData = Transformations.map(entitiesLiveData, entities -> {
+                return entities.stream()
+                        .map(RoutineEntity::toRoutine)
+                        .collect(Collectors.toList());
+            });
+            return new LiveDataSubjectAdapter<>(routineLiveData);
+        } else {
+            return new SimpleSubject<List<Routine>>();
+        }
     }
 
     // return a Routine with id
     public Subject<Routine> getRoutineWithId(int routineId) {
-        var entityLiveData = routineDao.findRoutineWithId(routineId);
+        var entityLiveData = routineDao.getRoutineWithId(routineId);
         var routineLiveData = Transformations.map(entityLiveData, RoutineEntity::toRoutine);
         return new LiveDataSubjectAdapter<>(routineLiveData);
 
@@ -45,18 +50,19 @@ public class RoomRoutineRepository implements RoutineRepository {
 
     // return the in-progess Routine
     public Subject<Routine> getInProgressRoutine() {
-        var entityLiveData = routineDao.findInProgressRoutine();
-        if (entityLiveData.getValue() == null) {
-            return null;
+        Log.d("getInProgressCount", String.valueOf(routineDao.getInProgressCount()));
+        if (routineDao.getInProgressCount() != 0) {
+            var entityLiveData = routineDao.getInProgressRoutine();
+            var routineLiveData = Transformations.map(entityLiveData, RoutineEntity::toRoutine);
+            return new LiveDataSubjectAdapter<>(routineLiveData);
         } else {
-        var routineLiveData = Transformations.map(entityLiveData, RoutineEntity::toRoutine);
-        return new LiveDataSubjectAdapter<>(routineLiveData);
+            return new SimpleSubject<Routine>();
         }
     }
 
     // return a List of RoutineTask
     public Subject<List<RoutineTask>> getTaskList(int routineId) {
-        var entitiesLiveData = routineTaskDao.findTaskList(routineId);
+        var entitiesLiveData = routineTaskDao.getTaskList(routineId);
         var routineLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(RoutineTaskEntity::toRoutineTask)
@@ -66,7 +72,7 @@ public class RoomRoutineRepository implements RoutineRepository {
     }
 
     public Subject<RoutineTask> getTaskWithId(int id, int routineId) {
-        var entityLiveData = routineTaskDao.findTaskWithId(id, routineId);
+        var entityLiveData = routineTaskDao.getTaskWithId(id, routineId);
         var routineLiveData = Transformations.map(entityLiveData, RoutineTaskEntity::toRoutineTask);
         return new LiveDataSubjectAdapter<>(routineLiveData);
 
@@ -89,10 +95,9 @@ public class RoomRoutineRepository implements RoutineRepository {
     }
 
     public void checkRoutineDone(int routineId) {
-        Routine routine = getRoutineWithId(routineId).getValue();
         boolean isDone = true;
-        for (var task :routine.tasks()) {
-            isDone = isDone && task.isChecked();
+        for (var isChecked : routineTaskDao.checkIsRoutineDone(routineId)) {
+            isDone = isDone && isChecked;
         }
         if (isDone) {
             updateIsDone(routineId, true);
@@ -101,10 +106,7 @@ public class RoomRoutineRepository implements RoutineRepository {
 
     public void checkOffTask(int id, int routineId) {
         String taskElapsedTime = routineDao.getTaskElapsedTime(routineId);
-        RoutineTask task = getTaskWithId(id, routineId).getValue();
-        task.checkOff(taskElapsedTime);
-
-        addTaskToRoutine(routineId, task);
+        routineTaskDao.checkOffTask(id, routineId, taskElapsedTime);
         checkRoutineDone(routineId);
     }
     public boolean getIsTaskChecked(int id, int routineId) {
@@ -128,14 +130,8 @@ public class RoomRoutineRepository implements RoutineRepository {
     }
 
     public void initializeRoutineState(int routineId) {
-        Routine routine = getRoutineWithId(routineId).getValue();
-        var tasks = getTaskList(routineId).getValue();
-        for (var task : tasks) {
-            task.initialize();
-        }
-        routine.initialize();
-        routine.setTasks(tasks);
-        routineDao.insert(RoutineEntity.fromRoutine(routine));
+        routineDao.initializeRoutine(routineId);
+        routineTaskDao.initializeTask(routineId);
     }
 
 }

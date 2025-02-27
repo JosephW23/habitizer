@@ -27,21 +27,19 @@ public class HabitizerApplication extends Application {
                 .build();
 
         this.dataSource = InMemoryDataSource.fromDefault();
-
         this.routineRepository = new RoomRoutineRepository(
                 database.routineDao(), database.routineTaskDao());
 
         var sharedPreferences = getSharedPreferences("habitizer", MODE_PRIVATE);
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
 
-        if (isFirstRun && database.routineDao().count() == 0 &&
+        if (isFirstRun && database.routineDao().getRoutineCount() == 0 &&
                 database.routineTaskDao().count() == 0) {
             var routines = dataSource.getRoutineList();
+
             routineRepository.addRoutineList(routines);
 
-            sharedPreferences.edit()
-                    .putBoolean("isFirstRun", false)
-                    .apply();
+            sharedPreferences.edit().putBoolean("isFirstRun", false).apply();
         }
     }
 

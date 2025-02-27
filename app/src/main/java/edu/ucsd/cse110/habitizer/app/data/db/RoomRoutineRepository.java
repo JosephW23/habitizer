@@ -65,38 +65,62 @@ public class RoomRoutineRepository implements RoutineRepository {
 
     }
 
-    public void updateInProgressRoutine(int newRoutineId, boolean newInProgress) {
+    public void updateInProgressRoutine(int routineId, boolean newInProgress) {
+        routineDao.updateInProgressRoutine(routineId, newInProgress);
     }
 
     public void addTaskToRoutine(int routineId, RoutineTask task) {
-        routineTaskDao.insert(RoutineTaskEntity.fromRoutineTask(task));
+        routineTaskDao.addTaskToRoutine(RoutineTaskEntity.fromRoutineTask(task));
+    }
+
+    public void checkRoutineDone(int routineId) {
+        Routine routine = getRoutineWithId(routineId).getValue();
+        boolean isDone = true;
+        for (var task :routine.tasks()) {
+            isDone = isDone && task.isChecked();
+        }
+        if (isDone) {
+            updateIsDone(routineId, true);
+        }
     }
 
     public void checkOffTask(int id, int routineId) {
+        String taskElapsedTime = routineDao.getTaskElapsedTime(routineId);
+        RoutineTask task = getTaskWithId(id, routineId).getValue();
+        task.checkOff(taskElapsedTime);
 
+        addTaskToRoutine(routineId, task);
+        checkRoutineDone(routineId);
     }
     public boolean getIsTaskChecked(int id, int routineId) {
-        return false;
+        return routineTaskDao.getIsTaskChecked(id, routineId);
     }
 
     public void updateTaskTitle(int id, int routineId, String newTitle) {
-
+        routineTaskDao.updateInTaskTitle(id, routineId, newTitle);
     }
 
-    public void updateTime(int routineId, String routineElapsedTime, String taskElapsedTIme) {
-
+    public void updateTime(int routineId, String routineElapsedTime, String taskElapsedTime) {
+        routineDao.updateTime(routineId, routineElapsedTime, taskElapsedTime);
     }
 
     public void updateGoalTime(int routineId, String newTime) {
-
+        routineDao.updateGoalTime(routineId, newTime);
     }
 
     public void updateIsDone(int routineId, boolean newIsDone) {
-
+        routineDao.updateIsDone(routineId, newIsDone);
     }
 
-    public void initializeStates(int routineId) {
-
+    public void initializeRoutineState(int routineId) {
+        Routine routine = getRoutineWithId(routineId).getValue();
+        var tasks = getTaskList(routineId).getValue();
+        for (var task : tasks) {
+            task.initialize();
+        }
+        routine.initialize();
+        routine.setTasks(tasks);
+        routineDao.addRoutine(RoutineEntity.fromRoutine(routine));
     }
 
 }

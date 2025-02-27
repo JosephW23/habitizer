@@ -43,8 +43,8 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
-    public void updateInProgressRoutine(int newRoutineId, boolean newInProgress) {
-        dataSource.updateInProgressRoutine(newRoutineId, newInProgress);
+    public void updateInProgressRoutine(int routineId, boolean newInProgress) {
+        dataSource.updateInProgressRoutine(routineId, newInProgress);
     }
 
     @Override
@@ -68,8 +68,8 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
-    public void updateTime(int routineId, String routineElapsedTime, String taskElapsedTIme) {
-        dataSource.updateTime(routineId, routineElapsedTime, taskElapsedTIme);
+    public void updateTime(int routineId, String routineElapsedTime, String taskElapsedTime) {
+        dataSource.updateTime(routineId, routineElapsedTime, taskElapsedTime);
     }
 
     @Override

@@ -23,10 +23,17 @@ public interface RoutineTaskDao {
         return Math.toIntExact(insert(task));
     }
 
-    @Query("SELECT * FROM tasks ORDER BY sort_order WHERE routine_id = :routineId")
+    @Query("SELECT * FROM tasks WHERE routine_id = :routineId")
     LiveData<List<RoutineTaskEntity>> findTaskList(int routineId);
+
     @Query("SELECT * FROM tasks WHERE id = :id AND routine_id = :routineId")
     LiveData<RoutineTaskEntity> findTaskWithId(int id, int routineId);
+
+    @Query("SELECT is_checked FROM tasks WHERE id = :id AND routine_id = :routineId")
+    boolean getIsTaskChecked(int id, int routineId);
+
+    @Query("UPDATE tasks SET title = :newTitle WHERE id = :id AND routine_id = :routineId")
+    void updateInTaskTitle(int id, int routineId, String newTitle);
 
 
 

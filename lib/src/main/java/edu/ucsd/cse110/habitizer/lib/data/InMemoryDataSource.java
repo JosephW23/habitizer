@@ -136,10 +136,10 @@ public class InMemoryDataSource {
         putRoutine(newRoutine);
     }
 
-    public void updateInProgressRoutine(int newRoutineId, boolean newInProgress) {
-        Routine newRoutine = getRoutineWithId(newRoutineId);
-        newRoutine.setInProgress(newInProgress);
-        putRoutine(newRoutine);
+    public void updateInProgressRoutine(int routineId, boolean newInProgress) {
+        Routine routine = getRoutineWithId(routineId);
+        routine.setInProgress(newInProgress);
+        putRoutine(routine);
     }
 
     public void addTaskToRoutine(int routineId, RoutineTask task) {

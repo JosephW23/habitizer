@@ -19,7 +19,7 @@ public interface RoutineRepository {
 
     Subject<RoutineTask> getTaskWithId(int id, int routineId);
 
-    void updateInProgressRoutine(int newRoutineId, boolean newInProgress);
+    void updateInProgressRoutine(int routineId, boolean newInProgress);
 
     void addTaskToRoutine(int routineId, RoutineTask task);
 
@@ -28,7 +28,7 @@ public interface RoutineRepository {
 
     void updateTaskTitle(int id, int routineId, String newTitle);
 
-    void updateTime(int routineId, String routineElapsedTime, String taskElapsedTIme);
+    void updateTime(int routineId, String routineElapsedTime, String taskElapsedTime);
 
     void updateGoalTime(int routineId, String newTime);
 

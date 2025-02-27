@@ -17,13 +17,11 @@ public interface RoutineDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(List<RoutineEntity> routines);
 
-    @Transaction
-    default int add(RoutineEntity routine) {
-        var maxSortOrder = getMaxSortOrder();
-        var newRoutine = new RoutineEntity(routine.title, maxSortOrder + 1);
-        return Math.toIntExact(insert(newRoutine));
-    }
+    @Query("UPDATE routines SET is_in_progress = :newInProgress WHERE id = :routineId")
+    void updateInProgressRoutine(int routineId, boolean newInProgress);
 
+    @Query("SELECT task_elapsed_time FROM routines WHERE id = :routineId")
+    String getTaskElapsedTime(int routineId);
 
     @Query("SELECT * FROM routines ORDER BY sort_order")
     LiveData<List<RoutineEntity>> findRoutineList();
@@ -31,16 +29,22 @@ public interface RoutineDao {
     @Query("SELECT * FROM routines WHERE id = :id")
     LiveData<RoutineEntity> findRoutineWithId(int id);
 
-
     @Query("SELECT * FROM routines WHERE is_in_progress = true")
     LiveData<RoutineEntity> findInProgressRoutine();
 
-    @Query("SELECT COUNT(*) FROM routines")
-    int count();
+    @Query("UPDATE routines " +
+            "SET routine_elapsed_time = :routineElapsedTime, " +
+            "task_elapsed_time = :taskElapsedTime WHERE id = :routineId")
+    void updateTime(int routineId, String routineElapsedTime, String taskElapsedTime);
 
-    @Query("SELECT MAX(sort_order) FROM routines")
-    int getMaxSortOrder();
+    @Query("UPDATE routines SET goal_time = :newTime WHERE id = :routineId")
+    void updateGoalTime(int routineId, String newTime);
 
-    @Query("DELETE FROM routines WHERE id = :id")
-    void delete(int id);
+    @Query("UPDATE routines SET is_done = :newIsDone WHERE id = :routineId")
+    void updateIsDone(int routineId, boolean newIsDone);
+
+    @Transaction
+    default int addRoutine(RoutineEntity routine) {
+        return Math.toIntExact(insert(routine));
+    }
 }

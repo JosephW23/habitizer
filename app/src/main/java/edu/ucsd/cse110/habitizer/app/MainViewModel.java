@@ -31,7 +31,6 @@ public class MainViewModel extends ViewModel {
     private MutableSubject<String> taskElapsedTime;
     private MutableSubject<String> goalTime;
     private MutableSubject<Boolean> isRoutineDone;
-    private MutableSubject<String> currentFragment;
 
     private int routineId;
     private final ElapsedTimer routineTimer;
@@ -61,24 +60,23 @@ public class MainViewModel extends ViewModel {
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
         isRoutineDone = new SimpleSubject<>();
-        currentFragment = new SimpleSubject<>();
+
+        routineId = -1;
 
         this.routineTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
 
-//        routineRepository.getRoutineList().observe(routines -> {
-//            if (routines == null) return;
-//            for (var routine : routines){
-//                if (routine.isInProgress()) {
-//                    isRoutineDone.setValue(routine.isDone());
-//                    currentRoutine.setValue(routine);
-//                }
-//            }
-//        });
+        routineRepository.getRoutineList().observe(routines -> {
+            if (routines == null) return;
+            for (var routine : routines){
+                if (routine.isInProgress()) {
+                    currentRoutine.setValue(routine);
+                }
+            }
+        });
 
         // when routineId changes, update taskList.
         currentRoutine.observe(routine -> {
-            Log.d("Observer", "observed");
             if (routine == null) return;
             routineId = routine.id();
             routineElapsedTime.setValue(routine.routineElapsedTime());
@@ -109,6 +107,10 @@ public class MainViewModel extends ViewModel {
 
     public MutableSubject<Routine> getCurrentRoutine() {
         return currentRoutine;
+    }
+
+    public int getRoutineId() {
+        return routineId;
     }
 
     // New Method: Add Task to Routine**
@@ -175,6 +177,7 @@ public class MainViewModel extends ViewModel {
     // initialize all tasks and routine state
     public void initializeRoutineState() {
         routineRepository.initializeRoutineState(routineId);
+        routineId = -1;
     }
 
     public void updateIsDone(boolean newIsDone) {

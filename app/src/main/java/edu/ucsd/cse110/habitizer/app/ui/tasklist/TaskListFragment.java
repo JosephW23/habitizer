@@ -132,6 +132,7 @@ public class TaskListFragment extends Fragment {
         });
 
         view.backButton.setOnClickListener(v -> {
+            Log.d("Load Task", String.valueOf(activityModel.getIsRoutineDone().getValue()));
             if (activityModel.getIsRoutineDone().getValue()) {
                 activityModel.initializeRoutineState();
             }

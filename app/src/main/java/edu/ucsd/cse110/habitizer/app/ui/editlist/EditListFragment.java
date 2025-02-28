@@ -50,6 +50,7 @@ public class EditListFragment extends Fragment {
         this.adapter = new EditListAdapter(requireContext(), List.of(), activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
+            Log.d("Load Task", String.valueOf(tasks.size()));
             // when a change is detected by observer
             // this will clear all contents in the adapter
             // and then get repopulate with new data
@@ -69,7 +70,7 @@ public class EditListFragment extends Fragment {
 
         activityModel.getCurrentRoutine().observe(routine -> {
             if (routine == null) return;
-            view.routineText.setText(routine.title() + " Routine");
+            view.routineText.setText(routine.title() + " Routine Edit");
         });
       
         // Set up Add Task Button

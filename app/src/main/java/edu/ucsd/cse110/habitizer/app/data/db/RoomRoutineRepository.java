@@ -95,7 +95,7 @@ public class RoomRoutineRepository implements RoutineRepository {
         routineTaskDao.deleteTask(id, routineId);
     }
     public void clearTaskTable() {
-        routineDao.clearRoutineTable();
+        routineTaskDao.clearTaskTable();
     }
 
     public void addRoutine(Routine routine) {

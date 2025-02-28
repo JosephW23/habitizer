@@ -50,7 +50,7 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
         binding.routineButton.setOnClickListener(v -> {
             Log.d("Swapping Transition", "Before Update InProgress");
             this.activityModel.updateInProgressRoutine(routine.id(), true);
-            Log.d("Swapping Transition", "After Update InProgress");
+            this.activityModel.getCurrentRoutine().setValue(routine);
             this.modelOwner.getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, TaskListFragment.newInstance())

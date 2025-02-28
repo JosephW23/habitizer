@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.habitizer.app;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.room.Room;
 
@@ -9,7 +8,6 @@ import edu.ucsd.cse110.habitizer.app.data.db.HabitizerDatabase;
 import edu.ucsd.cse110.habitizer.app.data.db.RoomRoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
-import edu.ucsd.cse110.habitizer.lib.domain.SimpleRoutineRepository;
 
 public class HabitizerApplication extends Application {
     private InMemoryDataSource dataSource;
@@ -33,15 +31,14 @@ public class HabitizerApplication extends Application {
         var sharedPreferences = getSharedPreferences("habitizer", MODE_PRIVATE);
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
 
-//        if (isFirstRun && database.routineDao().getRoutineCount() == 0 &&
-//                database.routineTaskDao().count() == 0) {
-            routineRepository.clearRoutineTable();
+        if (isFirstRun && database.routineDao().getRoutineCount() == 0 &&
+                database.routineTaskDao().count() == 0) {
             var routines = dataSource.getRoutineList();
 
             routineRepository.addRoutineList(routines);
 
             sharedPreferences.edit().putBoolean("isFirstRun", false).apply();
-//        }
+        }
     }
 
     public RoutineRepository getRoutineRepository() {

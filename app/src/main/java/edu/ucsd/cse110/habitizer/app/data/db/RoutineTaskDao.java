@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;

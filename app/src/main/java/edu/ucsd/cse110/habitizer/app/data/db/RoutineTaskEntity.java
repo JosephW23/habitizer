@@ -1,12 +1,10 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
 @Entity(tableName = "tasks")

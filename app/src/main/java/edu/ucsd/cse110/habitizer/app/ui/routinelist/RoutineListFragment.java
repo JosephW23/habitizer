@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.habitizer.app.ui.routinelist;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import edu.ucsd.cse110.habitizer.app.R;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentTaskListBinding;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListAdapter;
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +27,6 @@ public class RoutineListFragment extends Fragment {
         RoutineListFragment fragment = new RoutineListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        Log.d("Going Back", "Going back");
         return fragment;
     }
 

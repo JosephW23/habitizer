@@ -1,7 +1,5 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
-import android.util.Log;
-
 import androidx.lifecycle.Transformations;
 
 import java.util.ArrayList;

@@ -108,7 +108,6 @@ public class TaskListFragment extends Fragment {
         view.routineTotalTimeButton.setOnClickListener(v -> {
             var dialogFragment = GoalTimeDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "GoalTimeDialogFragment");
-            var time = activityModel.getGoalTime();
         });
 
         activityModel.getGoalTime().observe(time -> {
@@ -118,9 +117,10 @@ public class TaskListFragment extends Fragment {
         // End Routine Button functionality
         view.endRoutineButton.setOnClickListener(v -> {
             activityModel.updateIsDone(true); // Mark a routine as done
+            activityModel.getIsRoutineDone().setValue(true);
         });
 
-//         When routine is marked as done, disable button.
+        //When routine is marked as done, disable button.
         activityModel.getIsRoutineDone().observe(isTaskDone -> {
             if (isTaskDone) {
                 activityModel.endRoutine(); // Ends routine and stop timers
@@ -140,6 +140,7 @@ public class TaskListFragment extends Fragment {
                     .commit();
 
         });
+
         activityModel.loadTaskList().observe(tasks -> {
             if (tasks == null) return;
 

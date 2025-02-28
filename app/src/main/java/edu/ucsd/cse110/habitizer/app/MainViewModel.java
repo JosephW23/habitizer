@@ -9,10 +9,8 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.ElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -82,7 +80,16 @@ public class MainViewModel extends ViewModel {
             goalTime.setValue(routine.goalTime());
             isRoutineDone.setValue(routine.isDone());
             taskList.setValue(routine.tasks());
+
+            if (routineRepository.checkRoutineDone(routineId)) {
+                updateInProgressRoutine(routineId, true);
+                isRoutineDone.setValue(true);
+            }
         });
+
+//        routineRepository.getInProgressRoutine().observe(routine -> {
+//            Log.d("Routine Null", String.valueOf(routine == null));
+//        });
     }
 
     public void startRoutine() {
@@ -118,6 +125,10 @@ public class MainViewModel extends ViewModel {
     public void checkOffTask(int id) {
         if (!routineRepository.getIsTaskChecked(id, routineId)) {
             routineRepository.checkOffTask(id, routineId);
+            if (routineRepository.checkRoutineDone(routineId)) {
+                routineRepository.updateIsDone(routineId, true);
+                isRoutineDone.setValue(true);
+            }
 
             taskTimer.resetTimer();
             taskTimer.startTimer();
@@ -143,7 +154,7 @@ public class MainViewModel extends ViewModel {
     public Subject<String> getGoalTime() {
         return goalTime;
     }
-    public Subject<Boolean> getIsRoutineDone() {
+    public MutableSubject<Boolean> getIsRoutineDone() {
         return isRoutineDone;
     }
 

@@ -93,20 +93,17 @@ public class RoomRoutineRepository implements RoutineRepository {
         routineDao.insert(List.copyOf(newRoutines));
     }
 
-    public void checkRoutineDone(int routineId) {
+    public boolean checkRoutineDone(int routineId) {
         boolean isDone = true;
         for (var isChecked : routineTaskDao.checkIsRoutineDone(routineId)) {
             isDone = isDone && isChecked;
         }
-        if (isDone) {
-            updateIsDone(routineId, true);
-        }
+        return isDone;
     }
 
     public void checkOffTask(int id, int routineId) {
         String taskElapsedTime = routineDao.getTaskElapsedTime(routineId);
         routineTaskDao.checkOffTask(id, routineId, taskElapsedTime);
-        checkRoutineDone(routineId);
     }
     public boolean getIsTaskChecked(int id, int routineId) {
         return routineTaskDao.getIsTaskChecked(id, routineId);

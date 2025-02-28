@@ -94,5 +94,10 @@ public class SimpleRoutineRepository implements RoutineRepository {
 
     @Override
     public void clearRoutineTable() {}
+
+    @Override
+    public boolean checkRoutineDone(int routineId) {
+        return false;
+    }
 }
 

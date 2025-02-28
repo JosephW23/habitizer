@@ -41,4 +41,6 @@ public interface RoutineRepository {
     void deleteRoutine(int routineId);
 
     void clearRoutineTable();
+
+    boolean checkRoutineDone(int routineId);
 }

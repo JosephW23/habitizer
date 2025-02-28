@@ -88,5 +88,11 @@ public class SimpleRoutineRepository implements RoutineRepository {
     public void initializeRoutineState(int routineId) {
         dataSource.initializeRoutineState(routineId);
     }
+
+    @Override
+    public void deleteRoutine(int routineId) {}
+
+    @Override
+    public void clearRoutineTable() {}
 }
 

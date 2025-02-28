@@ -33,6 +33,7 @@ public class RoutineListFragment extends Fragment {
         RoutineListFragment fragment = new RoutineListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        Log.d("Going Back", "Going back");
         return fragment;
     }
 
@@ -48,6 +49,7 @@ public class RoutineListFragment extends Fragment {
         this.adapter = new RoutineListAdapter(requireContext(), List.of(), activityModel, modelOwner);
 
         activityModel.loadRoutineList().observe(routines -> {
+            Log.d("Routine Size", String.valueOf(routines));
             // when a change is detected by observer
             // this will clear all contents in the adapter
             // and then get repopulate with new data

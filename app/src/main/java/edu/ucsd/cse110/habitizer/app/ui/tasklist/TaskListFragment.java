@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,10 @@ public class TaskListFragment extends Fragment {
         this.view = FragmentTaskListBinding.inflate(inflater, container, false);
         view.taskList.setAdapter(adapter);
 
-        view.routineText.setText(activityModel.getRoutineName() + " Routine");
+        activityModel.getCurrentRoutine().observe(routine -> {
+            if (routine == null) return;
+            view.routineText.setText(routine.title() + " Routine");
+        });
 
         // start two timers
         activityModel.startRoutine();
@@ -116,7 +120,7 @@ public class TaskListFragment extends Fragment {
             activityModel.updateIsDone(true); // Mark a routine as done
         });
 
-        // When routine is marked as done, disable button.
+//         When routine is marked as done, disable button.
         activityModel.getIsRoutineDone().observe(isTaskDone -> {
             if (isTaskDone) {
                 activityModel.endRoutine(); // Ends routine and stop timers

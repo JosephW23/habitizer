@@ -44,7 +44,7 @@ public interface RoutineDao {
     @Query("UPDATE routines SET is_done = :newIsDone WHERE id = :routineId")
     void updateIsDone(int routineId, boolean newIsDone);
 
-    @Query("UPDATE routines SET is_done = false, is_in_progress = false," +
+    @Query("UPDATE routines SET is_done = false, is_in_progress = false, is_done = false, " +
             "routine_elapsed_time = '-', task_elapsed_time = '-' WHERE id = :routineId")
     void initializeRoutine(int routineId);
 
@@ -53,5 +53,11 @@ public interface RoutineDao {
 
     @Query("SELECT COUNT(*) FROM routines WHERE is_in_progress = true")
     int getInProgressCount();
+
+    @Query("DELETE FROM routines WHERE id = :routineId")
+    void deleteRoutine(int routineId);
+
+    @Query("DELETE FROM routines")
+    void clearRoutineTable();
 
 }

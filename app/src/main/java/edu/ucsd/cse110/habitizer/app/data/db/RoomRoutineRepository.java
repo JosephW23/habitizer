@@ -50,7 +50,6 @@ public class RoomRoutineRepository implements RoutineRepository {
 
     // return the in-progess Routine
     public Subject<Routine> getInProgressRoutine() {
-        Log.d("getInProgressCount", String.valueOf(routineDao.getInProgressCount()));
         if (routineDao.getInProgressCount() != 0) {
             var entityLiveData = routineDao.getInProgressRoutine();
             var routineLiveData = Transformations.map(entityLiveData, RoutineEntity::toRoutine);
@@ -132,6 +131,14 @@ public class RoomRoutineRepository implements RoutineRepository {
     public void initializeRoutineState(int routineId) {
         routineDao.initializeRoutine(routineId);
         routineTaskDao.initializeTask(routineId);
+    }
+
+    public void deleteRoutine(int routineId) {
+        routineDao.deleteRoutine(routineId);
+    }
+
+    public void clearRoutineTable() {
+        routineDao.clearRoutineTable();
     }
 
 }

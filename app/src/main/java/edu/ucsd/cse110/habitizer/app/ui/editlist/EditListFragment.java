@@ -65,7 +65,10 @@ public class EditListFragment extends Fragment {
         this.view = FragmentRoutineEditListBinding.inflate(inflater, container, false);
         view.routineList.setAdapter(adapter);
 
-        view.routineText.setText(activityModel.getRoutineName() + " Routine Edit");
+        activityModel.getCurrentRoutine().observe(routine -> {
+            if (routine == null) return;
+            view.routineText.setText(routine.title() + " Routine");
+        });
       
         // Set up Add Task Button
         view.addTaskButton.setOnClickListener(v -> showAddTaskDialog());

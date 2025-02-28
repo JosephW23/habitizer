@@ -38,4 +38,7 @@ public interface RoutineRepository {
 
     void initializeRoutineState(int routineId);
 
+    void deleteRoutine(int routineId);
+
+    void clearRoutineTable();
 }

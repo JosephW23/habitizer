@@ -48,11 +48,14 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
 
         // swap fragment when click the element
         binding.routineButton.setOnClickListener(v -> {
+            Log.d("Swapping Transition", "Before Update InProgress");
             this.activityModel.updateInProgressRoutine(routine.id(), true);
+            Log.d("Swapping Transition", "After Update InProgress");
             this.modelOwner.getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, TaskListFragment.newInstance())
                     .commit();
+            Log.d("Swapping Transition", "After Swapping");
         });
 
         //swaping to editing fragment when clicking the edit button

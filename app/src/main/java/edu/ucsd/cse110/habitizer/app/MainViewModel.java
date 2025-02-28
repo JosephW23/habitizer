@@ -27,14 +27,13 @@ public class MainViewModel extends ViewModel {
 
     private MutableSubject<List<RoutineTask>> taskList;
     private MutableSubject<List<Routine>> routineList;
-    private MutableSubject<Integer> routineId;
+    private MutableSubject<Routine> currentRoutine;
 
     private MutableSubject<String> routineElapsedTime;
     private MutableSubject<String> taskElapsedTime;
     private MutableSubject<String> goalTime;
     private MutableSubject<Boolean> isRoutineDone;
 
-    private Routine currentRoutine;
     private final ElapsedTimer routineTimer;
     private final ElapsedTimer taskTimer;
 
@@ -57,43 +56,39 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(RoutineRepository routineRepository) {
         this.routineRepository = routineRepository;
 
-        routineId = new SimpleSubject<>();
+        currentRoutine = new SimpleSubject<>();
         taskList = new SimpleSubject<>();
         routineList = new SimpleSubject<>();
         routineElapsedTime = new SimpleSubject<>();
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
         isRoutineDone = new SimpleSubject<>();
-        currentRoutine = null;
 
         this.routineTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
 
-        routineRepository.getInProgressRoutine().observe(routine -> {
-            if (routine == null) {
-                routineId.setValue(-1);
-            } else {
-                currentRoutine = routine;
-                routineId.setValue(routine.id());
-            }
+        routineRepository.getRoutineList().observe(routines -> {
+            if (routines == null) return;;
+            routineList.setValue(routines);
         });
 
-        routineRepository.getRoutineList().observe(routines -> {
-            if (routines == null) {
-                routineList.setValue(new ArrayList<>());
-            } else {
-                routineList.setValue(routines);
-            }
+        routineRepository.getInProgressRoutine().observe(routine -> {
+            if (routine == null) return;
+            Log.d("Swapping Transition", "Before Update CurrentRoutine");
+            currentRoutine.setValue(routine);
+            Log.d("Swapping Transition", "After Update CurrentRoutine");
         });
 
         // when routineId changes, update taskList.
-        routineId.observe(id -> {
-            if (id == null || id == -1) return;
-            routineElapsedTime.setValue(currentRoutine.routineElapsedTime());
-            taskElapsedTime.setValue(currentRoutine.taskElapsedTime());
-            goalTime.setValue(currentRoutine.goalTime());
-            isRoutineDone.setValue(currentRoutine.isDone());
-            taskList.setValue(currentRoutine.tasks());
+        currentRoutine.observe(routine -> {
+            Log.d("Swapping Transition", "Start of Observer of CurrentRoutine");
+            if (routine == null) return;
+            routineElapsedTime.setValue(routine.routineElapsedTime());
+            taskElapsedTime.setValue(routine.taskElapsedTime());
+            goalTime.setValue(routine.goalTime());
+            isRoutineDone.setValue(routine.isDone());
+            taskList.setValue(routine.tasks());
+            Log.d("Swapping Transition", "End of Observer of CurrentRoutine");
         });
     }
 
@@ -116,16 +111,22 @@ public class MainViewModel extends ViewModel {
         return routineList;
     }
 
+    public int getCurrentRoutineId() {
+        return currentRoutine.getValue().id();
+    }
+
     // New Method: Add Task to Routine**
     public void addTaskToRoutine(String taskName) {
-        var task = new RoutineTask(null, currentRoutine.id(), taskName, false, -1);
-        routineRepository.addTaskToRoutine(currentRoutine.id(), task);
+        int routineId = getCurrentRoutineId();
+        var task = new RoutineTask(null, routineId, taskName, false, -1);
+        routineRepository.addTaskToRoutine(routineId, task);
     }
 
     // check off a task with id
     public void checkOffTask(int id) {
-        if (!routineRepository.getIsTaskChecked(id, currentRoutine.id())) {
-            routineRepository.checkOffTask(id, currentRoutine.id());
+        int routineId = getCurrentRoutineId();
+        if (!routineRepository.getIsTaskChecked(id, routineId)) {
+            routineRepository.checkOffTask(id, routineId);
 
             taskTimer.resetTimer();
             taskTimer.startTimer();
@@ -141,8 +142,8 @@ public class MainViewModel extends ViewModel {
         return taskTimer;
     }
 
-    public String getRoutineName() {
-        return currentRoutine.title();
+    public Subject<Routine> getCurrentRoutine() {
+        return currentRoutine;
     }
 
     // Expose elapsed time for UI updates
@@ -163,26 +164,32 @@ public class MainViewModel extends ViewModel {
         routineRepository.updateInProgressRoutine(newRoutineId, newInProgress);
     }
     private void updateTime() {
-        routineRepository.updateTime(currentRoutine.id(),
+        int routineId = getCurrentRoutineId();
+        routineRepository.updateTime(routineId,
                 routineTimer.getRoundedDownTime(), taskTimer.getRoundedDownTime());
     }
 
     public void updateGoalTime(String newTime) {
-        routineRepository.updateGoalTime(currentRoutine.id(), newTime);
+        int routineId = getCurrentRoutineId();
+        routineRepository.updateGoalTime(routineId, newTime);
     }
 
     // Updates task name when in edit task dialog
     public void updateTaskName(int id, String newTitle) {
-        routineRepository.updateTaskTitle(id, currentRoutine.id(), newTitle);
+        int routineId = getCurrentRoutineId();
+        routineRepository.updateTaskTitle(id, routineId, newTitle);
     }
 
     // initialize all tasks and routine state
     public void initializeRoutineState() {
-        routineRepository.initializeRoutineState(currentRoutine.id());
+        int routineId = getCurrentRoutineId();
+        Log.d("Routine Id", String.valueOf(routineId));
+        routineRepository.initializeRoutineState(routineId);
     }
 
     public void updateIsDone(boolean newIsDone) {
-        routineRepository.updateIsDone(currentRoutine.id(), newIsDone);
+        int routineId = getCurrentRoutineId();
+        routineRepository.updateIsDone(routineId, newIsDone);
     }
 
     // Stop timer

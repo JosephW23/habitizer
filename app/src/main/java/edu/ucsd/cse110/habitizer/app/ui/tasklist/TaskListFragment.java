@@ -118,7 +118,6 @@ public class TaskListFragment extends Fragment {
         // End Routine Button functionality
         view.endRoutineButton.setOnClickListener(v -> {
             activityModel.updateIsDone(true); // Mark a routine as done
-            activityModel.getIsRoutineDone().setValue(true);
         });
 
         //When routine is marked as done, disable button.

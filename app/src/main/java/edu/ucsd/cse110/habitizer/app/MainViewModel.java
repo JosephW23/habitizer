@@ -41,7 +41,7 @@ public class MainViewModel extends ViewModel {
     // Subject to store and update goal time
     private final Handler timerHandler = new Handler(Looper.getMainLooper()); // Handler for periodic timer updates (Lab 4 )
   
-    private static final long TIMER_INTERVAL_MS = 5000; // Updates every 5 seconds
+    private static final long TIMER_INTERVAL_MS = 1000; // Updates every 5 seconds
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -66,15 +66,15 @@ public class MainViewModel extends ViewModel {
         this.routineTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
 
-        routineRepository.getRoutineList().observe(routines -> {
-            if (routines == null) return;
-            for (var routine : routines){
-                if (routine.isInProgress()) {
-                    isRoutineDone.setValue(routine.isDone());
-                    currentRoutine.setValue(routine);
-                }
-            }
-        });
+//        routineRepository.getRoutineList().observe(routines -> {
+//            if (routines == null) return;
+//            for (var routine : routines){
+//                if (routine.isInProgress()) {
+//                    isRoutineDone.setValue(routine.isDone());
+//                    currentRoutine.setValue(routine);
+//                }
+//            }
+//        });
 
         // when routineId changes, update taskList.
         currentRoutine.observe(routine -> {
@@ -123,6 +123,7 @@ public class MainViewModel extends ViewModel {
             routineRepository.checkOffTask(id, routineId);
             if (routineRepository.checkRoutineDone(routineId)) {
                 routineRepository.updateIsDone(routineId, true);
+                isRoutineDone.setValue(true);
             }
 
             taskTimer.resetTimer();

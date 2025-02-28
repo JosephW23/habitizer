@@ -44,17 +44,6 @@ public class RoutineListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         this.adapter = new RoutineListAdapter(requireContext(), List.of(), activityModel, modelOwner);
-
-        activityModel.loadRoutineList().observe(routines -> {
-            // when a change is detected by observer
-            // this will clear all contents in the adapter
-            // and then get repopulate with new data
-            if (routines == null) return;
-
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(routines));
-            adapter.notifyDataSetChanged();
-        });
     }
 
     @Nullable
@@ -62,6 +51,15 @@ public class RoutineListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = FragmentRoutineListBinding.inflate(inflater, container, false);
         view.routineList.setAdapter(adapter);
+
+        activityModel.loadRoutineList().observe(routines -> {
+            if (routines == null) return;
+
+            adapter.clear();
+            adapter.addAll(new ArrayList<>(routines));
+            adapter.notifyDataSetChanged();
+        });
+
         return view.getRoot();
 
     }

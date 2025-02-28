@@ -47,18 +47,6 @@ public class TaskListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
-
-        activityModel.loadTaskList().observe(tasks -> {
-            if (tasks == null || tasks.size() == 0) {
-                activityModel.updateIsDone(true);
-                return;
-            }
-
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(tasks));
-            adapter.notifyDataSetChanged();
-        });
-
     }
 
     @Nullable
@@ -141,6 +129,17 @@ public class TaskListFragment extends Fragment {
                     .replace(R.id.fragment_container, RoutineListFragment.newInstance()) // Ensure this is the correct fragment
                     .addToBackStack(null) // Add this fragment to the back stack
                     .commit();
+        });
+
+        activityModel.loadTaskList().observe(tasks -> {
+            if (tasks == null || tasks.size() == 0) {
+                activityModel.updateIsDone(true);
+                return;
+            }
+
+            adapter.clear();
+            adapter.addAll(new ArrayList<>(tasks));
+            adapter.notifyDataSetChanged();
         });
 
         return view.getRoot();

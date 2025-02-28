@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.habitizer.app.ui.editlist;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,18 +47,6 @@ public class EditListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         this.adapter = new EditListAdapter(requireContext(), List.of(), activityModel);
-
-        activityModel.loadTaskList().observe(tasks -> {
-            Log.d("Load Task", String.valueOf(tasks.size()));
-            // when a change is detected by observer
-            // this will clear all contents in the adapter
-            // and then get repopulate with new data
-            if (tasks == null) return;
-
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(tasks));
-            adapter.notifyDataSetChanged();
-        });
     }
 
     @Nullable
@@ -103,6 +90,14 @@ public class EditListFragment extends Fragment {
             if (!taskName.isEmpty()) {
                 activityModel.addTaskToRoutine(taskName);
             }
+        });
+
+        activityModel.loadTaskList().observe(tasks -> {
+            if (tasks == null) return;
+
+            adapter.clear();
+            adapter.addAll(new ArrayList<>(tasks));
+            adapter.notifyDataSetChanged();
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());

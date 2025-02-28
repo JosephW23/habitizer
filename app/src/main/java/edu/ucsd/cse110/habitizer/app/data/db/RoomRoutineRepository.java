@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
+import android.util.Log;
+
 import androidx.lifecycle.Transformations;
 
 import java.util.ArrayList;
@@ -79,16 +81,38 @@ public class RoomRoutineRepository implements RoutineRepository {
         routineDao.updateInProgressRoutine(routineId, newInProgress);
     }
 
-    public void addTaskToRoutine(int routineId, RoutineTask task) {
-        routineTaskDao.addTaskToRoutine(RoutineTaskEntity.fromRoutineTask(task));
+    public void addTask(RoutineTask task) {
+        routineTaskDao.insert(RoutineTaskEntity.fromRoutineTask(task));
+    }
+    public void addTaskList(List<RoutineTask> tasks) {
+        var newTasks = new ArrayList<RoutineTaskEntity>();
+        for (var task : tasks) {
+            newTasks.add(RoutineTaskEntity.fromRoutineTask(task));
+        }
+        routineTaskDao.insert(List.copyOf(newTasks));
+    }
+    public void deleteTask(int id, int routineId) {
+        routineTaskDao.deleteTask(id, routineId);
+    }
+    public void clearTaskTable() {
+        routineDao.clearRoutineTable();
     }
 
+    public void addRoutine(Routine routine) {
+        routineDao.insert(RoutineEntity.fromRoutine(routine));
+    }
     public void addRoutineList(List<Routine> routines) {
         var newRoutines = new ArrayList<RoutineEntity>();
         for (var routine : routines) {
             newRoutines.add(RoutineEntity.fromRoutine(routine));
         }
         routineDao.insert(List.copyOf(newRoutines));
+    }
+    public void deleteRoutine(int routineId) {
+        routineDao.deleteRoutine(routineId);
+    }
+    public void clearRoutineTable() {
+        routineDao.clearRoutineTable();
     }
 
     public boolean checkRoutineDone(int routineId) {
@@ -108,7 +132,11 @@ public class RoomRoutineRepository implements RoutineRepository {
     }
 
     public void updateTaskTitle(int id, int routineId, String newTitle) {
-        routineTaskDao.updateInTaskTitle(id, routineId, newTitle);
+        routineTaskDao.updateTaskTitle(id, routineId, newTitle);
+    }
+
+    public void updateRoutineTitle( int routineId, String newTitle) {
+        routineDao.updateRoutineTitle(routineId, newTitle);
     }
 
     public void updateTime(int routineId, String routineElapsedTime, String taskElapsedTime) {
@@ -126,14 +154,6 @@ public class RoomRoutineRepository implements RoutineRepository {
     public void initializeRoutineState(int routineId) {
         routineDao.initializeRoutine(routineId);
         routineTaskDao.initializeTask(routineId);
-    }
-
-    public void deleteRoutine(int routineId) {
-        routineDao.deleteRoutine(routineId);
-    }
-
-    public void clearRoutineTable() {
-        routineDao.clearRoutineTable();
     }
 
 }

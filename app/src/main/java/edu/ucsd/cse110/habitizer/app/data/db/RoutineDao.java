@@ -42,6 +42,9 @@ public interface RoutineDao {
     @Query("UPDATE routines SET is_done = :newIsDone WHERE id = :routineId")
     void updateIsDone(int routineId, boolean newIsDone);
 
+    @Query("UPDATE routines SET title = :newTitle WHERE id = :routineId")
+    void updateRoutineTitle(int routineId, String newTitle);
+
     @Query("UPDATE routines SET is_done = false, is_in_progress = false, is_done = false, " +
             "routine_elapsed_time = '-', task_elapsed_time = '-' WHERE id = :routineId")
     void initializeRoutine(int routineId);

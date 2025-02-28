@@ -4,12 +4,15 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.List;
 
+import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.ElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -28,6 +31,7 @@ public class MainViewModel extends ViewModel {
     private MutableSubject<String> taskElapsedTime;
     private MutableSubject<String> goalTime;
     private MutableSubject<Boolean> isRoutineDone;
+    private MutableSubject<String> currentFragment;
 
     private int routineId;
     private final ElapsedTimer routineTimer;
@@ -57,14 +61,16 @@ public class MainViewModel extends ViewModel {
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
         isRoutineDone = new SimpleSubject<>();
+        currentFragment = new SimpleSubject<>();
 
         this.routineTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
         this.taskTimer = MockElapsedTimer.immediateTimer(); // Initialize MockElapsedTimer for testing
 
         routineRepository.getRoutineList().observe(routines -> {
-            if (routines == null) return;;
+            if (routines == null) return;
             for (var routine : routines){
                 if (routine.isInProgress()) {
+                    isRoutineDone.setValue(routine.isDone());
                     currentRoutine.setValue(routine);
                 }
             }
@@ -72,17 +78,13 @@ public class MainViewModel extends ViewModel {
 
         // when routineId changes, update taskList.
         currentRoutine.observe(routine -> {
+            Log.d("Observer", "observed");
             if (routine == null) return;
             routineId = routine.id();
             routineElapsedTime.setValue(routine.routineElapsedTime());
             taskElapsedTime.setValue(routine.taskElapsedTime());
             goalTime.setValue(routine.goalTime());
             isRoutineDone.setValue(routine.isDone());
-
-            if (routineRepository.checkRoutineDone(routineId)) {
-                updateInProgressRoutine(routineId, true);
-                isRoutineDone.setValue(true);
-            }
         });
     }
 
@@ -112,7 +114,7 @@ public class MainViewModel extends ViewModel {
     // New Method: Add Task to Routine**
     public void addTaskToRoutine(String taskName) {
         var task = new RoutineTask(null, routineId, taskName, false, -1);
-        routineRepository.addTaskToRoutine(routineId, task);
+        routineRepository.addTask(task);
     }
 
     // check off a task with id
@@ -121,7 +123,6 @@ public class MainViewModel extends ViewModel {
             routineRepository.checkOffTask(id, routineId);
             if (routineRepository.checkRoutineDone(routineId)) {
                 routineRepository.updateIsDone(routineId, true);
-                isRoutineDone.setValue(true);
             }
 
             taskTimer.resetTimer();
@@ -177,6 +178,7 @@ public class MainViewModel extends ViewModel {
 
     public void updateIsDone(boolean newIsDone) {
         routineRepository.updateIsDone(routineId, newIsDone);
+        isRoutineDone.setValue(true);
     }
 
     // Stop timer

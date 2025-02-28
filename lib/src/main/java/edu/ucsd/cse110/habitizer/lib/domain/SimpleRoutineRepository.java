@@ -35,6 +35,26 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
+    public void addTaskList(List<RoutineTask> tasks) {
+
+    }
+
+    @Override
+    public void deleteTask(int id, int routineId) {
+
+    }
+
+    @Override
+    public void clearTaskTable() {
+
+    }
+
+    @Override
+    public void addRoutine(Routine routine) {
+
+    }
+
+    @Override
     public Subject<List<RoutineTask>> getTaskList(int routineId) {
         return dataSource.getTaskListSubjects(routineId);
     }
@@ -45,8 +65,8 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
-    public void addTaskToRoutine(int routineId, RoutineTask task) {
-        dataSource.addTaskToRoutine(routineId, task);
+    public void addTask(RoutineTask task) {
+        dataSource.addTaskToRoutine(task.routineId(), task);
     }
 
     @Override
@@ -67,6 +87,11 @@ public class SimpleRoutineRepository implements RoutineRepository {
     @Override
     public void updateTaskTitle(int id, int routineId, String newTitle) {
         dataSource.updateTaskTitle(id, routineId, newTitle);
+    }
+
+    @Override
+    public void updateRoutineTitle(int routineId, String newTitle) {
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.ui.routinelist;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
+import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutineListBinding;
+import edu.ucsd.cse110.habitizer.app.ui.editlist.EditListFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 
 public class RoutineListFragment extends Fragment {
     private MainViewModel activityModel;

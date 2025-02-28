@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,15 +49,16 @@ public class TaskListFragment extends Fragment {
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
-            // when a change is detected by observer
-            // this will clear all contents in the adapter
-            // and then get repopulate with new data
-            if (tasks == null) return;
+            if (tasks == null || tasks.size() == 0) {
+                activityModel.updateIsDone(true);
+                return;
+            }
 
             adapter.clear();
             adapter.addAll(new ArrayList<>(tasks));
             adapter.notifyDataSetChanged();
         });
+
     }
 
     @Nullable
@@ -131,23 +133,15 @@ public class TaskListFragment extends Fragment {
         });
 
         view.backButton.setOnClickListener(v -> {
-            var modelOwner = requireActivity();
-            this.activityModel.initializeRoutineState();
-            modelOwner.getSupportFragmentManager()
+            if (activityModel.getIsRoutineDone().getValue()) {
+                activityModel.initializeRoutineState();
+            }
+            requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, RoutineListFragment.newInstance())
+                    .replace(R.id.fragment_container, RoutineListFragment.newInstance()) // Ensure this is the correct fragment
+                    .addToBackStack(null) // Add this fragment to the back stack
                     .commit();
-
         });
-
-        activityModel.loadTaskList().observe(tasks -> {
-            if (tasks == null) return;
-
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(tasks));
-            adapter.notifyDataSetChanged();
-        });
-
 
         return view.getRoot();
     }

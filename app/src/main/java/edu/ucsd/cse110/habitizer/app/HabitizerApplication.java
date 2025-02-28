@@ -31,6 +31,11 @@ public class HabitizerApplication extends Application {
         var sharedPreferences = getSharedPreferences("habitizer", MODE_PRIVATE);
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
 
+        routineRepository.clearRoutineTable();
+        routineRepository.clearTaskTable();
+        routineRepository.addRoutineList(dataSource.getRoutineList());
+
+
         if (isFirstRun && database.routineDao().getRoutineCount() == 0 &&
                 database.routineTaskDao().count() == 0) {
             var routines = dataSource.getRoutineList();

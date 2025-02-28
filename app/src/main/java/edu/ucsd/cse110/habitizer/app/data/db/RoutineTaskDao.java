@@ -17,11 +17,6 @@ public interface RoutineTaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(List<RoutineTaskEntity> tasks);
 
-    @Transaction
-    default int addTaskToRoutine(RoutineTaskEntity task) {
-        return Math.toIntExact(insert(task));
-    }
-
     @Query("SELECT * FROM tasks WHERE routine_id = :routineId")
     LiveData<List<RoutineTaskEntity>> getTaskList(int routineId);
 
@@ -32,7 +27,7 @@ public interface RoutineTaskDao {
     boolean getIsTaskChecked(int id, int routineId);
 
     @Query("UPDATE tasks SET title = :newTitle WHERE id = :id AND routine_id = :routineId")
-    void updateInTaskTitle(int id, int routineId, String newTitle);
+    void updateTaskTitle(int id, int routineId, String newTitle);
 
     @Query("UPDATE tasks SET is_checked = false, elapsed_time = '-' WHERE routine_id = :routineId")
     void initializeTask(int routineId);
@@ -45,6 +40,12 @@ public interface RoutineTaskDao {
 
     @Query("SELECT COUNT(*) FROM tasks")
     int count();
+
+    @Query("DELETE FROM tasks WHERE id = :id AND routine_id = :routineId")
+    void deleteTask(int id, int routineId);
+
+    @Query("DELETE FROM tasks")
+    void clearTaskTable();
 
 
 

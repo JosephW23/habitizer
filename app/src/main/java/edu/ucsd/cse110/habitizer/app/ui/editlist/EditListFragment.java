@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.ui.editlist;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 
 public class EditListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -74,6 +76,7 @@ public class EditListFragment extends Fragment {
         view.addTaskButton.setOnClickListener(v -> showAddTaskDialog());
         // Back Button functionality to navigate back
         view.backButton.setOnClickListener(v -> {
+            activityModel.initializeRoutineState();
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, RoutineListFragment.newInstance()) // Ensure this is the correct fragment

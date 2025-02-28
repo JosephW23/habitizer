@@ -59,6 +59,10 @@ public class RoutineTask {
         this.title = newTitle;
     }
 
+    public void setRoutineId(int routineId) {
+        this.routineId = routineId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

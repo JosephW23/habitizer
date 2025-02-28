@@ -120,10 +120,7 @@ public class TaskListFragment extends Fragment {
         });
 
         view.backButton.setOnClickListener(v -> {
-            Log.d("Load Task", String.valueOf(activityModel.getIsRoutineDone().getValue()));
-            if (activityModel.getIsRoutineDone().getValue()) {
                 activityModel.initializeRoutineState();
-            }
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, RoutineListFragment.newInstance()) // Ensure this is the correct fragment

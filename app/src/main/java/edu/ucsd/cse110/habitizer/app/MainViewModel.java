@@ -32,6 +32,7 @@ public class MainViewModel extends ViewModel {
     private MutableSubject<String> goalTime;
     private MutableSubject<Boolean> isRoutineDone;
 
+    private boolean isFirstRun;
     private int routineId;
     private final ElapsedTimer routineTimer;
     private final ElapsedTimer taskTimer;
@@ -60,6 +61,8 @@ public class MainViewModel extends ViewModel {
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
         isRoutineDone = new SimpleSubject<>();
+
+        isFirstRun = true;
 
         routineId = -1;
 
@@ -107,6 +110,13 @@ public class MainViewModel extends ViewModel {
 
     public MutableSubject<Routine> getCurrentRoutine() {
         return currentRoutine;
+    }
+    public boolean getIsFirstRun() {
+        return isFirstRun;
+    }
+
+    public void setIsFirstRun() {
+        isFirstRun = false;
     }
 
     public int getRoutineId() {

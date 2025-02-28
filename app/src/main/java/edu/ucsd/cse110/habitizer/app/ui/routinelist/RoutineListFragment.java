@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
 
 public class RoutineListFragment extends Fragment {
     private MainViewModel activityModel;
+    private FragmentActivity modelOwner;
     private RoutineListAdapter adapter; // adapter for ListView
     private FragmentRoutineListBinding view;
 
@@ -38,7 +40,7 @@ public class RoutineListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstance) {
         super.onCreate(savedInstance);
 
-        var modelOwner = requireActivity();
+        modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
@@ -58,6 +60,19 @@ public class RoutineListFragment extends Fragment {
             adapter.clear();
             adapter.addAll(new ArrayList<>(routines));
             adapter.notifyDataSetChanged();
+        });
+
+        activityModel.getCurrentRoutine().observe(routine -> {
+            Log.d("Swapping", String.valueOf(activityModel.getIsFirstRun()));
+            Log.d("Swapping", String.valueOf(routine != null));
+            if (activityModel.getIsFirstRun() && routine != null && routine.isInProgress()) {
+                activityModel.setIsFirstRun();
+                Log.d("Swapping", "Swapping");
+                modelOwner.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, TaskListFragment.newInstance())
+                        .commit();
+            }
         });
 
         return view.getRoot();

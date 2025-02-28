@@ -23,8 +23,6 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
 
-    private MutableSubject<List<RoutineTask>> taskList;
-    private MutableSubject<List<Routine>> routineList;
     private MutableSubject<Routine> currentRoutine;
 
     private MutableSubject<String> routineElapsedTime;
@@ -56,8 +54,6 @@ public class MainViewModel extends ViewModel {
         this.routineRepository = routineRepository;
 
         currentRoutine = new SimpleSubject<>();
-        taskList = new SimpleSubject<>();
-        routineList = new SimpleSubject<>();
         routineElapsedTime = new SimpleSubject<>();
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
@@ -68,7 +64,11 @@ public class MainViewModel extends ViewModel {
 
         routineRepository.getRoutineList().observe(routines -> {
             if (routines == null) return;;
-            routineList.setValue(routines);
+            for (var routine : routines){
+                if (routine.isInProgress()) {
+                    currentRoutine.setValue(routine);
+                }
+            }
         });
 
         // when routineId changes, update taskList.
@@ -79,17 +79,12 @@ public class MainViewModel extends ViewModel {
             taskElapsedTime.setValue(routine.taskElapsedTime());
             goalTime.setValue(routine.goalTime());
             isRoutineDone.setValue(routine.isDone());
-            taskList.setValue(routine.tasks());
 
             if (routineRepository.checkRoutineDone(routineId)) {
                 updateInProgressRoutine(routineId, true);
                 isRoutineDone.setValue(true);
             }
         });
-
-//        routineRepository.getInProgressRoutine().observe(routine -> {
-//            Log.d("Routine Null", String.valueOf(routine == null));
-//        });
     }
 
     public void startRoutine() {
@@ -105,10 +100,10 @@ public class MainViewModel extends ViewModel {
     }
 
     public Subject<List<RoutineTask>> loadTaskList() {
-        return taskList;
+        return routineRepository.getTaskList(routineId);
     }
     public Subject<List<Routine>> loadRoutineList() {
-        return routineList;
+        return routineRepository.getRoutineList();
     }
 
     public MutableSubject<Routine> getCurrentRoutine() {

@@ -54,8 +54,8 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
             activityModel.checkOffTask(id);
         });
 
-        activityModel.getIsRoutineDone().observe(isTaskDone -> {
-            if (isTaskDone) {
+        activityModel.getIsRoutineDone().observe(isRoutineDone -> {
+            if (isRoutineDone) {
                 binding.taskButton.setEnabled(false);
             }
         });

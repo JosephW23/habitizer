@@ -29,7 +29,7 @@ public interface RoutineTaskDao {
     @Query("UPDATE tasks SET title = :newTitle WHERE id = :id AND routine_id = :routineId")
     void updateTaskTitle(int id, int routineId, String newTitle);
 
-    @Query("UPDATE tasks SET is_checked = false, elapsed_time = '-' WHERE routine_id = :routineId")
+    @Query("UPDATE tasks SET is_checked = false, elapsed_time = 0 WHERE routine_id = :routineId")
     void initializeTask(int routineId);
 
     @Query("UPDATE tasks SET is_checked = true, elapsed_time = :elapsedTime WHERE id = :id AND routine_id = :routineId")

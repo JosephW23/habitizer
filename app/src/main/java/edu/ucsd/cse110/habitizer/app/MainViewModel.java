@@ -65,7 +65,7 @@ public class MainViewModel extends ViewModel {
         routineRepository.getRoutineList().observe(routines -> {
             if (routines == null) return;
             for (var routine : routines){
-                if (routine.isInProgress()) {
+                if (routine.isInProgress() || routine.isInEdit()) {
                     currentRoutine.setValue(routine);
                 }
             }
@@ -172,6 +172,9 @@ public class MainViewModel extends ViewModel {
 
     public void updateInProgressRoutine(int newRoutineId, boolean newInProgress) {
         routineRepository.updateInProgressRoutine(newRoutineId, newInProgress);
+    }
+    public void updateInEditRoutine(int newRoutineId, boolean newInEdit) {
+        routineRepository.updateInEditRoutine(newRoutineId, newInEdit);
     }
 
     private void updateTime() {

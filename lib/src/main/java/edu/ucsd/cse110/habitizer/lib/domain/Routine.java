@@ -15,13 +15,14 @@ public class Routine {
     private List<RoutineTask> tasks;
 
     private boolean isInProgress;
+    private boolean isInEdit;
     private boolean isDone;
 
     private int routineElapsedTime;
     private int taskElapsedTime;
     private int goalTime;
 
-    public Routine(@NonNull int id, @NonNull String title, int sortOrder, boolean isInProgress, boolean isdone,
+    public Routine(@NonNull int id, @NonNull String title, int sortOrder, boolean isInProgress, boolean isInEdit, boolean isdone,
                    int routineElapsedTime, int taskElapsedTime, int goalTime) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("Routine title cannot be blank");
@@ -30,6 +31,7 @@ public class Routine {
         this.title = title;
         this.sortOrder = sortOrder;
         this.isInProgress = isInProgress;
+        this.isInEdit = isInEdit;
         this.isDone = isdone;
 
         this.routineElapsedTime = routineElapsedTime;
@@ -43,6 +45,7 @@ public class Routine {
     public String title() { return title; }
     public int sortOrder() { return sortOrder; }
     public boolean isInProgress() { return isInProgress; }
+    public boolean isInEdit() { return isInEdit; }
     public boolean isDone() { return isDone; }
     public int routineElapsedTime() { return routineElapsedTime; }
     public int taskElapsedTime() { return taskElapsedTime; }
@@ -82,6 +85,10 @@ public class Routine {
 
     public void setInProgress(boolean newInProgress) {
         isInProgress = newInProgress;
+    }
+
+    public void setInEdit(boolean newInEdit) {
+        isInEdit = newInEdit;
     }
 
     public void initialize() {

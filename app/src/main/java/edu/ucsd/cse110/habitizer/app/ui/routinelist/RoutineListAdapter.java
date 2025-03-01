@@ -32,6 +32,7 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d("Current Task", String.valueOf(position));
         var routine = getItem(position);
         assert routine != null;
 
@@ -58,7 +59,7 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
 
         //swaping to editing fragment when clicking the edit button
         binding.editRoutineButton.setOnClickListener(v -> {
-            activityModel.updateInProgressRoutine(routine.id(), true);
+            activityModel.updateInEditRoutine(routine.id(), true);
             this.modelOwner.getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, EditListFragment.newInstance())

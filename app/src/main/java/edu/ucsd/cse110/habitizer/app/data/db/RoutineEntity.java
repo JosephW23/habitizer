@@ -22,6 +22,9 @@ public class RoutineEntity {
     @ColumnInfo(name = "is_in_progress")
     public boolean isInProgress;
 
+    @ColumnInfo(name = "is_in_edit")
+    public boolean isInEdit;
+
     @ColumnInfo(name = "is_done")
     public boolean isDone;
 
@@ -36,11 +39,12 @@ public class RoutineEntity {
 
 
     RoutineEntity(
-            String title, int sortOrder, boolean isInProgress, boolean isDone,
+            String title, int sortOrder, boolean isInProgress, boolean isInEdit, boolean isDone,
             int routineElapsedTime, int taskElapsedTime, int goalTime){
         this.title = title;
         this.sortOrder = sortOrder;
         this.isInProgress = isInProgress;
+        this.isInEdit = isInEdit;
         this.isDone = isDone;
         this.routineElapsedTime = routineElapsedTime;
         this.taskElapsedTime = taskElapsedTime;
@@ -50,13 +54,13 @@ public class RoutineEntity {
     public static RoutineEntity fromRoutine(@NonNull Routine routine){
         var routineEntity = new RoutineEntity(
                 routine.title(), routine.sortOrder(),
-                routine.isInProgress(), routine.isDone(),
+                routine.isInProgress(), routine.isInEdit(), routine.isDone(),
                 routine.routineElapsedTime(), routine.taskElapsedTime(), routine.goalTime());
         return routineEntity;
     }
 
     public Routine toRoutine(){
-        return new Routine(id, title, sortOrder, isInProgress, isDone,
+        return new Routine(id, title, sortOrder, isInProgress, isInEdit, isDone,
                 routineElapsedTime, taskElapsedTime, goalTime);
     }
 }

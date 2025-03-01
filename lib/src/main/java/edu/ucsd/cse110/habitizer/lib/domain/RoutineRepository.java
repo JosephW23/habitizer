@@ -8,6 +8,7 @@ public interface RoutineRepository {
     Subject<List<Routine>> getRoutineList();
     Subject<Routine> getRoutineWithId(int routineId);
     Subject<Routine> getInProgressRoutine();
+    Subject<Routine> getInEditRoutine();
 
 
     Subject<List<RoutineTask>> getTaskList(int routineId);
@@ -39,6 +40,7 @@ public interface RoutineRepository {
 
 
     void updateInProgressRoutine(int routineId, boolean newInProgress);
+    void updateInEditRoutine(int routineId, boolean newInEdit);
     void updateIsDone(int routineId, boolean newIsDone);
     void initializeRoutineState(int routineId);
     boolean checkRoutineDone(int routineId);

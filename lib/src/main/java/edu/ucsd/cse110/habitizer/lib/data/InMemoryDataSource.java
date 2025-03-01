@@ -19,7 +19,7 @@ public class InMemoryDataSource {
 
     public void initializeDefaultRoutine() {
         Routine DEFAULT_MORNING_ROUTINE = new Routine(1, "Morning", 0,
-                false, false, 0, 0, 60);
+                false, false, false, 0, 0, 60);
         DEFAULT_MORNING_ROUTINE.setTasks(List.of(
                 new RoutineTask(0, 1, "Wake Up", false, 0),
                 new RoutineTask(1, 1, "Eat Breakfast", false, 1),
@@ -27,7 +27,7 @@ public class InMemoryDataSource {
         ));
 
         Routine DEFAULT_EVENING_ROUTINE = new Routine(2, "Evening", 0,
-                false, false, 0, 0, 60);
+                false, false, false, 0, 0, 60);
         DEFAULT_EVENING_ROUTINE.setTasks(List.of(
                 new RoutineTask(0, 2, "Eat Dinner", false, 0),
                 new RoutineTask(1, 2, "Brush Teeth", false, 1),

@@ -46,13 +46,6 @@ public class RoutineListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         this.adapter = new RoutineListAdapter(requireContext(), List.of(), activityModel, modelOwner);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = FragmentRoutineListBinding.inflate(inflater, container, false);
-        view.routineList.setAdapter(adapter);
 
         activityModel.loadRoutineList().observe(routines -> {
             if (routines == null) return;
@@ -61,26 +54,49 @@ public class RoutineListFragment extends Fragment {
             adapter.addAll(new ArrayList<>(routines));
             adapter.notifyDataSetChanged();
         });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.view = FragmentRoutineListBinding.inflate(inflater, container, false);
+        view.routineList.setAdapter(adapter);
 
         activityModel.getCurrentRoutine().observe(routine -> {
-            if (activityModel.getIsFirstRun() && routine != null && routine.isInProgress()) {
+            if (activityModel.getIsFirstRun() && routine != null) {
                 activityModel.setIsFirstRun();
 
-                var routineTimer = activityModel.getRoutineTimer();
-                var taskTimer = activityModel.getTaskTimer();
-                routineTimer.setSeconds(routine.routineElapsedTime());
-                taskTimer.setSeconds(routine.taskElapsedTime());
+                if (routine.isInProgress()) {
 
-                routineTimer.resumeTimer();
-                taskTimer.resumeTimer();
+                    var routineTimer = activityModel.getRoutineTimer();
+                    var taskTimer = activityModel.getTaskTimer();
+                    routineTimer.setSeconds(routine.routineElapsedTime());
+                    taskTimer.setSeconds(routine.taskElapsedTime());
 
-                activityModel.startTimerUpdates();
+                    routineTimer.resumeTimer();
+                    taskTimer.resumeTimer();
 
-                modelOwner.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, TaskListFragment.newInstance())
-                        .commit();
+                    activityModel.startTimerUpdates();
+
+                    modelOwner.getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, TaskListFragment.newInstance())
+                            .commit();
+                } else if (routine.isInEdit()) {
+                    modelOwner.getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, EditListFragment.newInstance())
+                            .commit();
+                }
             }
+        });
+
+        activityModel.loadRoutineList().observe(routines -> {
+            if (routines == null) return;
+
+            adapter.clear();
+            adapter.addAll(new ArrayList<>(routines));
+            adapter.notifyDataSetChanged();
         });
 
         return view.getRoot();

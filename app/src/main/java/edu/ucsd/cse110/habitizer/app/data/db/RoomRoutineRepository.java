@@ -59,6 +59,16 @@ public class RoomRoutineRepository implements RoutineRepository {
         }
     }
 
+    public Subject<Routine> getInEditRoutine() {
+        if (routineDao.getInEditCount() != 0) {
+            var entityLiveData = routineDao.getInEditRoutine();
+            var routineLiveData = Transformations.map(entityLiveData, RoutineEntity::toRoutine);
+            return new LiveDataSubjectAdapter<>(routineLiveData);
+        } else {
+            return new SimpleSubject<Routine>();
+        }
+    }
+
     // return a List of RoutineTask
     public Subject<List<RoutineTask>> getTaskList(int routineId) {
         var entitiesLiveData = routineTaskDao.getTaskList(routineId);
@@ -79,6 +89,10 @@ public class RoomRoutineRepository implements RoutineRepository {
 
     public void updateInProgressRoutine(int routineId, boolean newInProgress) {
         routineDao.updateInProgressRoutine(routineId, newInProgress);
+    }
+
+    public void updateInEditRoutine(int routineId, boolean newInEdit) {
+        routineDao.updateInEditRoutine(routineId, newInEdit);
     }
 
     public void addTask(RoutineTask task) {

@@ -30,6 +30,11 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
+    public Subject<Routine> getInEditRoutine() {
+        return null;
+    }
+
+    @Override
     public Subject<RoutineTask> getTaskWithId(int id, int routineId) {
         return dataSource.getTaskWithIdSubject(id, routineId);
     }
@@ -62,6 +67,11 @@ public class SimpleRoutineRepository implements RoutineRepository {
     @Override
     public void updateInProgressRoutine(int routineId, boolean newInProgress) {
         dataSource.updateInProgressRoutine(routineId, newInProgress);
+    }
+
+    @Override
+    public void updateInEditRoutine(int routineId, boolean newInEdit) {
+
     }
 
     @Override

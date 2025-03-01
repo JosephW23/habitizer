@@ -60,9 +60,6 @@ public class TaskListFragment extends Fragment {
             view.routineText.setText(routine.title() + " Routine");
         });
 
-        // start two timers
-        activityModel.startRoutine();
-
         // Bind routine_updating_timer to elapsed time from MainViewModel
         activityModel.getRoutineElapsedTime().observe(time -> {
             view.routineUpdatingTimer.setText(time); // Updates UI dynamically
@@ -120,7 +117,7 @@ public class TaskListFragment extends Fragment {
         });
 
         view.backButton.setOnClickListener(v -> {
-                activityModel.initializeRoutineState();
+            activityModel.initializeRoutineState();
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, RoutineListFragment.newInstance()) // Ensure this is the correct fragment

@@ -9,7 +9,7 @@ public class RoutineTask {
     private Integer routineId;
     private @NonNull String title;
     private boolean isChecked;
-    private String elapsedTime;
+    private int elapsedTime;
     private int sortOrder;
 
     public RoutineTask(@Nullable Integer id, Integer routineId, @NonNull String title, boolean isChecked, int sortOrder) {
@@ -21,7 +21,7 @@ public class RoutineTask {
         this.routineId = routineId;
         this.title = title;
         this.isChecked = isChecked;
-        this.elapsedTime = "-";
+        this.elapsedTime = 0;
         this.sortOrder = sortOrder;
     }
 
@@ -30,12 +30,11 @@ public class RoutineTask {
     public int sortOrder() { return sortOrder; }
     public Integer routineId() { return this.routineId; }
     public boolean isChecked() { return isChecked; }
-    public String elapsedTime() { return elapsedTime; }
+    public int elapsedTime() { return elapsedTime; }
 
-    // initialize task
     public void initialize() {
         this.isChecked = false;
-        this.elapsedTime = "-";
+        this.elapsedTime = 0;
     }
 
     public void setId(Integer id) {
@@ -45,12 +44,12 @@ public class RoutineTask {
     public void setSortOrder(int sortOrder) {
         this.sortOrder = sortOrder;
     }
-    public void checkOff(String elapsedTime) {
+    public void checkOff(int elapsedTime) {
         this.isChecked = true;
         setElapsedTime(elapsedTime); // set elapsed time when task is done
     }
 
-    public void setElapsedTime(String elapsedTime) {
+    public void setElapsedTime(int elapsedTime) {
         this.elapsedTime = elapsedTime;
     }
 

@@ -23,13 +23,13 @@ public class RoutineTaskEntity {
     public boolean isChecked;
 
     @ColumnInfo(name = "elapsed_time")
-    public String elapsedTime;
+    public int elapsedTime;
 
     @ColumnInfo(name = "sort_order")
     public int sortOrder;
 
     RoutineTaskEntity(@NonNull Integer routineId, @NonNull String title,
-                      @NonNull boolean isChecked, @NonNull String elapsedTime, @NonNull int sortOrder) {
+                      @NonNull boolean isChecked, @NonNull int elapsedTime, @NonNull int sortOrder) {
         this.routineId = routineId;
         this.title = title;
         this.isChecked = isChecked;

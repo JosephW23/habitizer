@@ -63,11 +63,19 @@ public class RoutineListFragment extends Fragment {
         });
 
         activityModel.getCurrentRoutine().observe(routine -> {
-            Log.d("Swapping", String.valueOf(activityModel.getIsFirstRun()));
-            Log.d("Swapping", String.valueOf(routine != null));
             if (activityModel.getIsFirstRun() && routine != null && routine.isInProgress()) {
                 activityModel.setIsFirstRun();
-                Log.d("Swapping", "Swapping");
+
+                var routineTimer = activityModel.getRoutineTimer();
+                var taskTimer = activityModel.getTaskTimer();
+                routineTimer.setSeconds(routine.routineElapsedTime());
+                taskTimer.setSeconds(routine.taskElapsedTime());
+
+                routineTimer.resumeTimer();
+                taskTimer.resumeTimer();
+
+                activityModel.startTimerUpdates();
+
                 modelOwner.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, TaskListFragment.newInstance())

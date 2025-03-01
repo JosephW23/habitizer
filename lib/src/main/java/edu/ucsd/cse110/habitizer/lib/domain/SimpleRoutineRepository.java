@@ -95,12 +95,12 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
-    public void updateTime(int routineId, String routineElapsedTime, String taskElapsedTime) {
+    public void updateTime(int routineId, int routineElapsedTime, int taskElapsedTime) {
         dataSource.updateTime(routineId, routineElapsedTime, taskElapsedTime);
     }
 
     @Override
-    public void updateGoalTime(int routineId, String newTime) {
+    public void updateGoalTime(int routineId, int newTime) {
         dataSource.updateGoalTime(routineId, newTime);
     }
 

@@ -17,12 +17,12 @@ public class Routine {
     private boolean isInProgress;
     private boolean isDone;
 
-    private String routineElapsedTime;
-    private String taskElapsedTime;
-    private String goalTime;
+    private int routineElapsedTime;
+    private int taskElapsedTime;
+    private int goalTime;
 
     public Routine(@NonNull int id, @NonNull String title, int sortOrder, boolean isInProgress, boolean isdone,
-                   String routineElapsedTime, String taskElapsedTime, String goalTime) {
+                   int routineElapsedTime, int taskElapsedTime, int goalTime) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("Routine title cannot be blank");
         }
@@ -44,9 +44,9 @@ public class Routine {
     public int sortOrder() { return sortOrder; }
     public boolean isInProgress() { return isInProgress; }
     public boolean isDone() { return isDone; }
-    public String routineElapsedTime() { return routineElapsedTime; }
-    public String taskElapsedTime() { return taskElapsedTime; }
-    public String goalTime() { return goalTime; }
+    public int routineElapsedTime() { return routineElapsedTime; }
+    public int taskElapsedTime() { return taskElapsedTime; }
+    public int goalTime() { return goalTime; }
     public List<RoutineTask> tasks() { return List.copyOf(tasks); }
 
     public void setTasks(List<RoutineTask> tasks) {
@@ -67,12 +67,12 @@ public class Routine {
         setTasks(newTasks);
     }
 
-    public void setElapsedTime(String routineElapsedTime, String taskElapsedTime) {
+    public void setElapsedTime(int routineElapsedTime, int taskElapsedTime) {
         this.routineElapsedTime = routineElapsedTime;
         this.taskElapsedTime = taskElapsedTime;
     }
 
-    public void setGoalTime(String newTime) {
+    public void setGoalTime(int newTime) {
         this.goalTime = newTime;
     }
 
@@ -89,7 +89,7 @@ public class Routine {
         isInProgress = false;
         tasks = new ArrayList<>();
 
-        this.routineElapsedTime = "-";
-        this.taskElapsedTime = "-";
+        this.routineElapsedTime = 0;
+        this.taskElapsedTime = 0;
     }
 }

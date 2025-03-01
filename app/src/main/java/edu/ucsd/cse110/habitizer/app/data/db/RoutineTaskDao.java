@@ -33,7 +33,7 @@ public interface RoutineTaskDao {
     void initializeTask(int routineId);
 
     @Query("UPDATE tasks SET is_checked = true, elapsed_time = :elapsedTime WHERE id = :id AND routine_id = :routineId")
-    void checkOffTask(int id, int routineId, String elapsedTime);
+    void checkOffTask(int id, int routineId, int elapsedTime);
 
     @Query("SELECT is_checked FROM tasks WHERE routine_id = :routineId")
     List<Boolean> checkIsRoutineDone(int routineId);

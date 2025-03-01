@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,8 +55,11 @@ public class GoalTimeDialogFragment extends DialogFragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
-        var time = view.routineGoalTime.getText().toString();
-        activityModel.updateGoalTime(time);
+        String goalTime = view.routineGoalTime.getText().toString();
+        if (goalTime != null) {
+            int time = Integer.parseInt(goalTime);
+            activityModel.updateGoalTime(time);
+        }
         dialog.dismiss();
     }
 

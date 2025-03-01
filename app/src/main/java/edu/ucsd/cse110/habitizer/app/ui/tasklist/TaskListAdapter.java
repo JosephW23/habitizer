@@ -60,10 +60,7 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
             }
         });
 
-        // When the elapsed time changes for task, update task_view text view.
-        activityModel.getTaskElapsedTime().observe(time -> {
-            binding.taskTime.setText(task.elapsedTime());
-        });
+        binding.taskTime.setText(activityModel.getRoundedDownTime(task.elapsedTime()));
 
         return binding.getRoot();
     }

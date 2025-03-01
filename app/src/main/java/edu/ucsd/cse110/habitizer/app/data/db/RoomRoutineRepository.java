@@ -124,7 +124,7 @@ public class RoomRoutineRepository implements RoutineRepository {
     }
 
     public void checkOffTask(int id, int routineId) {
-        String taskElapsedTime = routineDao.getTaskElapsedTime(routineId);
+        int taskElapsedTime = routineDao.getTaskElapsedTime(routineId);
         routineTaskDao.checkOffTask(id, routineId, taskElapsedTime);
     }
     public boolean getIsTaskChecked(int id, int routineId) {
@@ -139,11 +139,11 @@ public class RoomRoutineRepository implements RoutineRepository {
         routineDao.updateRoutineTitle(routineId, newTitle);
     }
 
-    public void updateTime(int routineId, String routineElapsedTime, String taskElapsedTime) {
+    public void updateTime(int routineId, int routineElapsedTime, int taskElapsedTime) {
         routineDao.updateTime(routineId, routineElapsedTime, taskElapsedTime);
     }
 
-    public void updateGoalTime(int routineId, String newTime) {
+    public void updateGoalTime(int routineId, int newTime) {
         routineDao.updateGoalTime(routineId, newTime);
     }
 

@@ -26,18 +26,18 @@ public class RoutineEntity {
     public boolean isDone;
 
     @ColumnInfo(name = "routine_elapsed_time")
-    public String routineElapsedTime;
+    public int routineElapsedTime;
 
     @ColumnInfo(name = "task_elapsed_time")
-    public String taskElapsedTime;
+    public int taskElapsedTime;
 
     @ColumnInfo(name = "goal_time")
-    public String goalTime;
+    public int goalTime;
 
 
     RoutineEntity(
             String title, int sortOrder, boolean isInProgress, boolean isDone,
-            String routineElapsedTime, String taskElapsedTime, String goalTime){
+            int routineElapsedTime, int taskElapsedTime, int goalTime){
         this.title = title;
         this.sortOrder = sortOrder;
         this.isInProgress = isInProgress;

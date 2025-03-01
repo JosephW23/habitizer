@@ -20,7 +20,7 @@ public interface RoutineDao {
     void updateInProgressRoutine(int routineId, boolean newInProgress);
 
     @Query("SELECT task_elapsed_time FROM routines WHERE id = :routineId")
-    String getTaskElapsedTime(int routineId);
+    int getTaskElapsedTime(int routineId);
 
     @Query("SELECT * FROM routines ORDER BY sort_order")
     LiveData<List<RoutineEntity>> getRoutineList();
@@ -34,10 +34,10 @@ public interface RoutineDao {
     @Query("UPDATE routines " +
             "SET routine_elapsed_time = :routineElapsedTime, " +
             "task_elapsed_time = :taskElapsedTime WHERE id = :routineId")
-    void updateTime(int routineId, String routineElapsedTime, String taskElapsedTime);
+    void updateTime(int routineId, int routineElapsedTime, int taskElapsedTime);
 
     @Query("UPDATE routines SET goal_time = :newTime WHERE id = :routineId")
-    void updateGoalTime(int routineId, String newTime);
+    void updateGoalTime(int routineId, int newTime);
 
     @Query("UPDATE routines SET is_done = :newIsDone WHERE id = :routineId")
     void updateIsDone(int routineId, boolean newIsDone);

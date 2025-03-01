@@ -25,6 +25,7 @@ public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
 
     private MutableSubject<Routine> currentRoutine;
+    private MutableSubject<List<RoutineTask>> taskList;
 
     private MutableSubject<String> routineElapsedTime;
     private MutableSubject<String> taskElapsedTime;
@@ -51,6 +52,7 @@ public class MainViewModel extends ViewModel {
         this.routineRepository = routineRepository;
 
         currentRoutine = new SimpleSubject<>();
+        taskList = new SimpleSubject<>();
         routineElapsedTime = new SimpleSubject<>();
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
@@ -65,6 +67,7 @@ public class MainViewModel extends ViewModel {
         routineRepository.getRoutineList().observe(routines -> {
             if (routines == null) return;
             for (var routine : routines){
+                routine.setTasks(routineRepository.getTaskListValue(routine.id()));
                 if (routine.isInProgress() || routine.isInEdit()) {
                     currentRoutine.setValue(routine);
                 }
@@ -79,7 +82,9 @@ public class MainViewModel extends ViewModel {
             goalTime.setValue(String.valueOf(routine.goalTime()));
             routineElapsedTime.setValue(routineTimer.getRoundedDownTime());
             taskElapsedTime.setValue(taskTimer.getRoundedDownTime());
+            taskList.setValue(routine.tasks());
         });
+
     }
 
     public String getRoundedDownTime(int seconds) {
@@ -101,7 +106,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public Subject<List<RoutineTask>> loadTaskList() {
-        return routineRepository.getTaskList(routineId);
+        return taskList;
     }
     public Subject<List<Routine>> loadRoutineList() {
         return routineRepository.getRoutineList();

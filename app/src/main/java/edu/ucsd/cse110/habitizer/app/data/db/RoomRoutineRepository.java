@@ -40,6 +40,14 @@ public class RoomRoutineRepository implements RoutineRepository {
         }
     }
 
+    @Override
+    public List<RoutineTask> getTaskListValue(int routineId) {
+        var tasks = routineTaskDao.getTaskListValue(routineId).stream()
+                .map(RoutineTaskEntity::toRoutineTask)
+                .collect(Collectors.toList());
+        return tasks;
+    }
+
     // return a Routine with id
     public Subject<Routine> getRoutineWithId(int routineId) {
         var entityLiveData = routineDao.getRoutineWithId(routineId);

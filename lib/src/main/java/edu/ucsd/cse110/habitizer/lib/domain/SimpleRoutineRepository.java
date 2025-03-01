@@ -85,6 +85,9 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
+    public List<RoutineTask> getTaskListValue(int routineId) { return null; }
+
+    @Override
     public void checkOffTask(int id, int routineId) {
         dataSource.checkOffTask(id, routineId);
     }

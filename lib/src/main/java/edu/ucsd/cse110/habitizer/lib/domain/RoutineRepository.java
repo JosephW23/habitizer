@@ -12,6 +12,7 @@ public interface RoutineRepository {
 
 
     Subject<List<RoutineTask>> getTaskList(int routineId);
+    List<RoutineTask> getTaskListValue(int routineId);
     Subject<RoutineTask> getTaskWithId(int id, int routineId);
 
 

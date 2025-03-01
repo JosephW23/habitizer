@@ -20,6 +20,9 @@ public interface RoutineTaskDao {
     @Query("SELECT * FROM tasks WHERE routine_id = :routineId")
     LiveData<List<RoutineTaskEntity>> getTaskList(int routineId);
 
+    @Query("SELECT * FROM tasks WHERE routine_id = :routineId")
+    List<RoutineTaskEntity> getTaskListValue(int routineId);
+
     @Query("SELECT * FROM tasks WHERE id = :id AND routine_id = :routineId")
     LiveData<RoutineTaskEntity> getTaskWithId(int id, int routineId);
 

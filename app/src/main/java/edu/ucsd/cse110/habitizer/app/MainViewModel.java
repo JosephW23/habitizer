@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,7 +26,11 @@ public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
 
     private MutableSubject<Routine> currentRoutine;
+    private MutableSubject<List<Routine>> routineList;
     private MutableSubject<List<RoutineTask>> taskList;
+
+    private Routine routine;
+    private List<Routine> routines;
 
     private MutableSubject<String> routineElapsedTime;
     private MutableSubject<String> taskElapsedTime;
@@ -33,7 +38,6 @@ public class MainViewModel extends ViewModel {
     private MutableSubject<Boolean> isRoutineDone;
 
     private boolean isFirstRun;
-    private int routineId;
     private final ElapsedTimer routineTimer;
     private final ElapsedTimer taskTimer;
     private final Handler timerHandler = new Handler(Looper.getMainLooper());
@@ -51,23 +55,31 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(RoutineRepository routineRepository) {
         this.routineRepository = routineRepository;
 
+        routineList = new SimpleSubject<>();
         currentRoutine = new SimpleSubject<>();
         taskList = new SimpleSubject<>();
+
         routineElapsedTime = new SimpleSubject<>();
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
         isRoutineDone = new SimpleSubject<>();
 
         isFirstRun = true;
-        routineId = -1;
 
         this.routineTimer = new RegularTimer();
         this.taskTimer = new RegularTimer();
 
-        routineRepository.getRoutineList().observe(routines -> {
+        routineRepository.findRoutineList().observe(routines -> {
             if (routines == null) return;
+            routineList.setValue(routines);
+        });
+
+        routineList.observe(routines -> {
+            if (routines == null) return;
+            this.routines = routines;
             for (var routine : routines){
-                routine.setTasks(routineRepository.getTaskListValue(routine.id()));
+                routine.setTasks(routineRepository.findTaskList(routine.id()));
+
                 if (routine.isInProgress() || routine.isInEdit()) {
                     currentRoutine.setValue(routine);
                 }
@@ -76,71 +88,63 @@ public class MainViewModel extends ViewModel {
 
         currentRoutine.observe(routine -> {
             if (routine == null) return;
-            routineId = routine.id();
-            isRoutineDone.setValue(routine.isDone());
+            this.routine = routine;
 
+            isRoutineDone.setValue(routine.isDone());
             goalTime.setValue(String.valueOf(routine.goalTime()));
             routineElapsedTime.setValue(routineTimer.getRoundedDownTime());
             taskElapsedTime.setValue(taskTimer.getRoundedDownTime());
             taskList.setValue(routine.tasks());
         });
-
     }
 
-    public String getRoundedDownTime(int seconds) {
-        int minutes = (seconds % 3600) / 60;
-
-        if (minutes == 0) {
-            return "-";
-        }
-
-        return String.format(Locale.getDefault(), "%01d", minutes);
-    }
-
-    public void startRoutine() {
-        // Start updating elapsed time periodically
-        routineTimer.resetTimer();
-        // Start updating task elapsed time periodically
-        taskTimer.resetTimer();
-        startTimerUpdates();
-    }
-
-    public Subject<List<RoutineTask>> loadTaskList() {
-        return taskList;
-    }
     public Subject<List<Routine>> loadRoutineList() {
-        return routineRepository.getRoutineList();
+        return routineList;
     }
-
     public MutableSubject<Routine> getCurrentRoutine() {
         return currentRoutine;
     }
+    public Subject<List<RoutineTask>> loadTaskList() {
+        return taskList;
+    }
+
+    public void saveRoutineTask(RoutineTask newTask) {
+        var newTasks = new ArrayList<RoutineTask>();
+
+        boolean duplicate = false;
+        for (var task : this.routine.tasks()) {
+            if (task.id() == newTask.id()) {
+                newTasks.add(newTask);
+                duplicate = true;
+            } else {
+                newTasks.add(task);
+            }
+        }
+        if (!duplicate) {
+            newTasks.add(newTask);
+        }
+        this.routine.setTasks(newTasks);
+        saveRoutine(this.routine);
+    }
+    public void saveRoutine(Routine routine) {
+        routineRepository.saveRoutine(routine);
+    }
+
     public boolean getIsFirstRun() {
         return isFirstRun;
     }
-
     public void setIsFirstRun() {
         isFirstRun = false;
     }
 
-    public int getRoutineId() {
-        return routineId;
-    }
+    public void checkOffTask(RoutineTask task) {
+        if (!task.isChecked()) {
+            task.checkOff(taskTimer.getSeconds());
+            saveRoutineTask(task);
 
-    // New Method: Add Task to Routine**
-    public void addTaskToRoutine(String taskName) {
-        var task = new RoutineTask(null, routineId, taskName, false, -1);
-        routineRepository.addTask(task);
-    }
-
-    // check off a task with id
-    public void checkOffTask(int id) {
-        if (!routineRepository.getIsTaskChecked(id, routineId)) {
-            Log.d("Task Timer", taskTimer.getRoundedDownTime());
-            routineRepository.checkOffTask(id, routineId);
-            if (routineRepository.checkRoutineDone(routineId)) {
-                routineRepository.updateIsDone(routineId, true);
-                isRoutineDone.setValue(true);
+            if (checkIsRoutineDone()) {
+                this.routine.setIsDone(true);
+                saveRoutine(this.routine);
             }
 
             timerHandler.removeMessages(0);
@@ -153,21 +157,14 @@ public class MainViewModel extends ViewModel {
         }
     }
 
-    // Get Timer object
-    public ElapsedTimer getRoutineTimer() {
-        return routineTimer;
-    }
-    public ElapsedTimer getTaskTimer() {
-        return taskTimer;
+    public boolean checkIsRoutineDone() {
+        boolean isDone = true;
+        for (var task : this.routine.tasks()) {
+            isDone = isDone && task.isChecked();
+        }
+        return isDone;
     }
 
-    // Expose elapsed time for UI updates
-    public Subject<String> getRoutineElapsedTime() {
-        return routineElapsedTime;
-    }
-    public Subject<String> getTaskElapsedTime() {
-        return taskElapsedTime;
-    }
     public Subject<String> getGoalTime() {
         return goalTime;
     }
@@ -175,40 +172,63 @@ public class MainViewModel extends ViewModel {
         return isRoutineDone;
     }
 
-    public void updateInProgressRoutine(int newRoutineId, boolean newInProgress) {
-        routineRepository.updateInProgressRoutine(newRoutineId, newInProgress);
+    public void updateInProgressRoutine(Routine routine, boolean newInProgress) {
+        routine.setInProgress(newInProgress);
+        saveRoutine(routine);
+
     }
-    public void updateInEditRoutine(int newRoutineId, boolean newInEdit) {
-        routineRepository.updateInEditRoutine(newRoutineId, newInEdit);
+    public void updateInEditRoutine(Routine routine, boolean newInEdit) {
+        routine.setInEdit(newInEdit);
+        saveRoutine(routine);
     }
 
     private void updateTime() {
-        Log.d("Seconds", String.valueOf(taskTimer.getSeconds()));
-        routineRepository.updateTime(routineId,
-                routineTimer.getSeconds(), taskTimer.getSeconds());
+        this.routine.setElapsedTime(routineTimer.getSeconds(), taskTimer.getSeconds());
+        saveRoutine(this.routine);
     }
-
     public void updateGoalTime(int newTime) {
-        routineRepository.updateGoalTime(routineId, newTime);
+        this.routine.setGoalTime(newTime);
+        saveRoutine(this.routine);
+    }
+    public void updateTaskName(RoutineTask task, String newTitle) {
+        task.setTitle(newTitle);
+        saveRoutineTask(task);
+    }
+    public void updateIsDone(boolean newIsDone) {
+        this.routine.setIsDone(newIsDone);
+        saveRoutine(this.routine);
     }
 
-    // Updates task name when in edit task dialog
-    public void updateTaskName(int id, String newTitle) {
-        routineRepository.updateTaskTitle(id, routineId, newTitle);
-    }
-
-    // initialize all tasks and routine state
     public void initializeRoutineState() {
-        routineRepository.initializeRoutineState(routineId);
-        routineId = -1;
+        this.routine.initialize();
+        saveRoutine(this.routine);
         endRoutine();
     }
 
-    public void updateIsDone(boolean newIsDone) {
-        routineRepository.updateIsDone(routineId, newIsDone);
-        isRoutineDone.setValue(true);
-    }
 
+    // Get Timer object
+    public ElapsedTimer getRoutineTimer() {
+        return routineTimer;
+    }
+    public ElapsedTimer getTaskTimer() {
+        return taskTimer;
+    }
+    public String getRoundedDownTime(int seconds) {
+        int minutes = (seconds % 3600) / 60;
+
+        if (minutes == 0) {
+            return "-";
+        }
+
+        return String.format(Locale.getDefault(), "%01d", minutes);
+    }
+    public void startRoutine() {
+        // Start updating elapsed time periodically
+        routineTimer.resetTimer();
+        // Start updating task elapsed time periodically
+        taskTimer.resetTimer();
+        startTimerUpdates();
+    }
     public void stopRoutineTimer() {
         routineTimer.stopTimer();
     }

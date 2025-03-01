@@ -78,15 +78,12 @@ public class Routine {
     public void setGoalTime(int newTime) {
         this.goalTime = newTime;
     }
-
     public void setIsDone(boolean newIsDone) {
         isDone = newIsDone;
     }
-
     public void setInProgress(boolean newInProgress) {
         isInProgress = newInProgress;
     }
-
     public void setInEdit(boolean newInEdit) {
         isInEdit = newInEdit;
     }

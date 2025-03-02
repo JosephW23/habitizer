@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
+import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmInitializeRoutineFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.GoalTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 
@@ -126,12 +127,8 @@ public class TaskListFragment extends Fragment {
         });
 
         view.backButton.setOnClickListener(v -> {
-            activityModel.initializeRoutineState();
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, RoutineListFragment.newInstance()) // Ensure this is the correct fragment
-                    .addToBackStack(null) // Add this fragment to the back stack
-                    .commit();
+            var dialogFragment = ConfirmInitializeRoutineFragment.newInstance();
+            dialogFragment.show(getParentFragmentManager(), "ConfirmInitializeRoutineFragment");
         });
 
         activityModel.loadTaskList().observe(tasks -> {

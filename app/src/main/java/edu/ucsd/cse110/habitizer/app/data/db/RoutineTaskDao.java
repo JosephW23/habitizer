@@ -18,6 +18,6 @@ public interface RoutineTaskDao {
     @Query("SELECT * FROM tasks WHERE routine_id = :routineId")
     List<RoutineTaskEntity> findTaskList(int routineId);
 
-    @Query("DELETE FROM tasks WHERE id = :id AND routine_id = :routineId")
-    void deleteTask(int id, int routineId);
+    @Query("DELETE FROM tasks")
+    void deleteTasks();
 }

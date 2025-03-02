@@ -69,6 +69,12 @@ public class InMemoryDataSource {
         routinesList = List.copyOf(newRoutines);
         routineSubjects.setValue(newRoutines);
     }
+
+    public void deleteRoutines() {
+        routinesMap.clear();
+        routinesList = List.of();
+        routineSubjects = new SimpleSubject<>();
+    }
 }
 
 

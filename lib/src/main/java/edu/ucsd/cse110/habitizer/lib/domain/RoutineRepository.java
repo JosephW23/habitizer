@@ -10,5 +10,5 @@ public interface RoutineRepository {
 
     void saveRoutine(Routine routine);
 
-    void deleteRoutine(Routine routine);
+    void deleteRoutines();
 }

@@ -20,7 +20,7 @@ public interface RoutineDao {
     @Query("SELECT * FROM routines ORDER BY sort_order")
     LiveData<List<RoutineEntity>> findRoutineList();
 
-    @Query("DELETE FROM routines WHERE id = :routineId")
-    void deleteRoutine(int routineId);
+    @Query("DELETE FROM routines")
+    void deleteRoutines();
 
 }

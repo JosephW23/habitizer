@@ -29,8 +29,8 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
-    public void deleteRoutine(Routine routine) {
-        dataSource.saveRoutine(routine);
+    public void deleteRoutines() {
+        dataSource.deleteRoutines();
     }
 }
 

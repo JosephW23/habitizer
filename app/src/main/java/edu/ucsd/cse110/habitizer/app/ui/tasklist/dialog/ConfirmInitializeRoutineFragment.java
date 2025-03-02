@@ -31,7 +31,7 @@ public class ConfirmInitializeRoutineFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity())
-                .setTitle("Delete Card")
+                .setTitle("Finish Routine")
                 .setMessage("Are you sure you want to finish Routine?\nAll information would be discarded.")
                 .setPositiveButton("Yes", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)

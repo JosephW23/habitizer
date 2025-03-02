@@ -12,25 +12,25 @@ public class SimpleRoutineRepository implements RoutineRepository {
         this.dataSource = dataSource;
     }
 
-
     @Override
     public Subject<List<Routine>> findRoutineList() {
-        return null;
+        return dataSource.findRoutineList();
     }
 
     @Override
     public List<RoutineTask> findTaskList(int routineId) {
-        return null;
+        return dataSource.findTaskList(routineId);
     }
 
     @Override
     public void saveRoutine(Routine routine) {
+        dataSource.saveRoutine(routine);
 
     }
 
     @Override
     public void deleteRoutine(Routine routine) {
-
+        dataSource.saveRoutine(routine);
     }
 }
 

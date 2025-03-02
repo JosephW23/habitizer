@@ -6,8 +6,6 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ucsd.cse110.habitizer.lib.util.SimpleSubject;
-
 public class Routine {
     private final @Nullable Integer id;
     private @NonNull String title;

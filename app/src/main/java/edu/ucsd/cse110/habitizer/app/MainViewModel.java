@@ -4,7 +4,6 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
@@ -78,7 +77,6 @@ public class MainViewModel extends ViewModel {
             for (var routine : routines){
                 routine.setTasks(routineRepository.findTaskList(routine.id()));
                 numTasks += routine.tasks().size();
-                Log.d("Routine Observer", "currentRoutine");
                 if (routine.isInProgress() || routine.isInEdit()) {
                     currentRoutine.setValue(routine);
                 }
@@ -175,7 +173,6 @@ public class MainViewModel extends ViewModel {
 
     public void updateInProgressRoutine(Routine routine, boolean newInProgress) {
         routine.setInProgress(newInProgress);
-        Log.d("new routine", String.valueOf(routine.id()));
         saveRoutine(routine);
 
     }
@@ -212,7 +209,6 @@ public class MainViewModel extends ViewModel {
 
     public void initializeRoutineState() {
         this.routine.initialize();
-        Log.d("Initialize Routine", routine.title() + routine.isInProgress());
         saveRoutine(this.routine);
         endRoutine();
     }

@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
-import java.time.Duration;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Timer;

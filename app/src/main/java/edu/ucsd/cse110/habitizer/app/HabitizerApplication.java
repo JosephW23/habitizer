@@ -20,7 +20,7 @@ public class HabitizerApplication extends Application {
 
         this.dataSource = InMemoryDataSource.fromDefault();
 
-        boolean useRoom = false;
+        boolean useRoom = true;
 
         if (useRoom) {
             var database = Room.databaseBuilder(

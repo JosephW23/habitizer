@@ -29,17 +29,7 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
-    public void saveRoutineTask(RoutineTask task) {
-
-    }
-
-    @Override
-    public void saveRoutineList(List<Routine> routine) {
-
-    }
-
-    @Override
-    public void saveRoutineTaskList(List<RoutineTask> task) {
+    public void deleteRoutine(Routine routine) {
 
     }
 }

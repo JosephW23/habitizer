@@ -31,13 +31,11 @@ public class HabitizerApplication extends Application {
         var sharedPreferences = getSharedPreferences("habitizer", MODE_PRIVATE);
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
 
-        if (isFirstRun && database.routineDao().getRoutineCount() == 0 &&
-                database.routineTaskDao().count() == 0) {
+        if (isFirstRun) {
             var routines = dataSource.getRoutineList();
 
-            routineRepository.addRoutineList(routines);
             for (var routine : routines) {
-                routineRepository.addTaskList(routine.tasks());
+                routineRepository.saveRoutine(routine);
             }
             sharedPreferences.edit().putBoolean("isFirstRun", false).apply();
         }

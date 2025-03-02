@@ -9,9 +9,9 @@ import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
 @Entity(tableName = "tasks")
 public class RoutineTaskEntity {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     @ColumnInfo(name = "id")
-    public Integer id = null;
+    public Integer id;
 
     @ColumnInfo(name = "routine_id")
     public Integer routineId;
@@ -28,8 +28,9 @@ public class RoutineTaskEntity {
     @ColumnInfo(name = "sort_order")
     public int sortOrder;
 
-    RoutineTaskEntity(@NonNull Integer routineId, @NonNull String title,
+    RoutineTaskEntity(@NonNull Integer id, @NonNull Integer routineId, @NonNull String title,
                       @NonNull boolean isChecked, @NonNull int elapsedTime, @NonNull int sortOrder) {
+        this.id = id;
         this.routineId = routineId;
         this.title = title;
         this.isChecked = isChecked;
@@ -38,7 +39,7 @@ public class RoutineTaskEntity {
     }
 
     public static RoutineTaskEntity fromRoutineTask(@NonNull RoutineTask task){
-        var routineTaskEntity = new RoutineTaskEntity(task.routineId(), task.title(),
+        var routineTaskEntity = new RoutineTaskEntity(task.id(), task.routineId(), task.title(),
                 task.isChecked(), task.elapsedTime(), task.sortOrder());
         return routineTaskEntity;
     }

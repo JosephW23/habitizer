@@ -50,8 +50,7 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
         // When task is clicked, the hidden button is clicked
         // and the events for checking off task are called
         binding.taskButton.setOnClickListener(v -> {
-            var id = task.id();
-            activityModel.checkOffTask(id);
+            activityModel.checkOffTask(task);
         });
 
         activityModel.getIsRoutineDone().observe(isRoutineDone -> {

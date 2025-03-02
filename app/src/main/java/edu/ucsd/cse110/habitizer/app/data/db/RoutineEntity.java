@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,9 +11,9 @@ import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 @Entity(tableName = "routines")
 public class RoutineEntity {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     @ColumnInfo(name = "id")
-    public Integer id = null;
+    public Integer id;
 
     @ColumnInfo(name = "title")
     public String title;
@@ -39,8 +41,9 @@ public class RoutineEntity {
 
 
     RoutineEntity(
-            String title, int sortOrder, boolean isInProgress, boolean isInEdit, boolean isDone,
+            int id, String title, int sortOrder, boolean isInProgress, boolean isInEdit, boolean isDone,
             int routineElapsedTime, int taskElapsedTime, int goalTime){
+        this.id = id;
         this.title = title;
         this.sortOrder = sortOrder;
         this.isInProgress = isInProgress;
@@ -53,7 +56,7 @@ public class RoutineEntity {
 
     public static RoutineEntity fromRoutine(@NonNull Routine routine){
         var routineEntity = new RoutineEntity(
-                routine.title(), routine.sortOrder(),
+                routine.id(), routine.title(), routine.sortOrder(),
                 routine.isInProgress(), routine.isInEdit(), routine.isDone(),
                 routine.routineElapsedTime(), routine.taskElapsedTime(), routine.goalTime());
         return routineEntity;

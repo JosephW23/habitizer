@@ -9,8 +9,6 @@ public interface RoutineRepository {
     List<RoutineTask> findTaskList(int routineId);
 
     void saveRoutine(Routine routine);
-    void saveRoutineTask(RoutineTask task);
 
-    void saveRoutineList(List<Routine> routine);
-    void saveRoutineTaskList(List<RoutineTask> task);
+    void deleteRoutine(Routine routine);
 }

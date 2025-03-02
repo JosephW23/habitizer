@@ -23,6 +23,7 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.TaskListFragment;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
 public class EditListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -108,7 +109,7 @@ public class EditListFragment extends Fragment {
         builder.setPositiveButton("Add", (dialog, which) -> {
             String taskName = input.getText().toString().trim();
             if (!taskName.isEmpty()) {
-                activityModel.addTaskToRoutine(taskName);
+                activityModel.addRoutineTask(taskName);
             }
         });
 

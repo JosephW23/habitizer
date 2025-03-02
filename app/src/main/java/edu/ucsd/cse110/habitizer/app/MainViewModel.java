@@ -30,8 +30,7 @@ public class MainViewModel extends ViewModel {
     private MutableSubject<List<RoutineTask>> taskList;
 
     private Routine routine;
-    private List<Routine> routines;
-
+    private int numTasks;
     private MutableSubject<String> routineElapsedTime;
     private MutableSubject<String> taskElapsedTime;
     private MutableSubject<String> goalTime;
@@ -76,10 +75,10 @@ public class MainViewModel extends ViewModel {
 
         routineList.observe(routines -> {
             if (routines == null) return;
-            this.routines = routines;
             for (var routine : routines){
                 routine.setTasks(routineRepository.findTaskList(routine.id()));
-
+                numTasks += routine.tasks().size();
+                Log.d("Routine Observer", "currentRoutine");
                 if (routine.isInProgress() || routine.isInEdit()) {
                     currentRoutine.setValue(routine);
                 }
@@ -121,6 +120,8 @@ public class MainViewModel extends ViewModel {
             }
         }
         if (!duplicate) {
+            newTask.setId(numTasks + 1);
+            newTask.setRoutineId(this.routine.id());
             newTasks.add(newTask);
         }
         this.routine.setTasks(newTasks);
@@ -168,12 +169,13 @@ public class MainViewModel extends ViewModel {
     public Subject<String> getGoalTime() {
         return goalTime;
     }
-    public MutableSubject<Boolean> getIsRoutineDone() {
+    public Subject<Boolean> getIsRoutineDone() {
         return isRoutineDone;
     }
 
     public void updateInProgressRoutine(Routine routine, boolean newInProgress) {
         routine.setInProgress(newInProgress);
+        Log.d("new routine", String.valueOf(routine.id()));
         saveRoutine(routine);
 
     }
@@ -190,9 +192,18 @@ public class MainViewModel extends ViewModel {
         this.routine.setGoalTime(newTime);
         saveRoutine(this.routine);
     }
-    public void updateTaskName(RoutineTask task, String newTitle) {
-        task.setTitle(newTitle);
+    public void addRoutineTask(String taskName) {
+        RoutineTask task = new RoutineTask(null, null, taskName, false, -1);
         saveRoutineTask(task);
+    }
+    public void updateTaskName(int taskId, String newTitle) {
+        for (var task : this.routine.tasks()) {
+            if (task.id() == taskId) {
+                task.setTitle(newTitle);
+                saveRoutineTask(task);
+                return;
+            }
+        }
     }
     public void updateIsDone(boolean newIsDone) {
         this.routine.setIsDone(newIsDone);
@@ -201,6 +212,7 @@ public class MainViewModel extends ViewModel {
 
     public void initializeRoutineState() {
         this.routine.initialize();
+        Log.d("Initialize Routine", routine.title() + routine.isInProgress());
         saveRoutine(this.routine);
         endRoutine();
     }

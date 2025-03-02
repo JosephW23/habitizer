@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
+import android.util.Log;
+
 import androidx.lifecycle.Transformations;
 
 import java.util.ArrayList;
@@ -41,13 +43,15 @@ public class RoomRoutineRepository implements RoutineRepository {
     }
     public void saveRoutine(Routine routine) {
         routineDao.insert(RoutineEntity.fromRoutine(routine));
+        var tasks = routine.tasks().stream().map(RoutineTaskEntity::fromRoutineTask).collect(Collectors.toList());
+        routineTaskDao.insert(tasks);
     }
 
     public void deleteTask(int id, int routineId) {
         routineTaskDao.deleteTask(id, routineId);
     }
-    public void deleteRoutine(int routineId) {
-        routineDao.deleteRoutine(routineId);
+    public void deleteRoutine(Routine routine) {
+        routineDao.deleteRoutine(routine.id());
     }
 }
 

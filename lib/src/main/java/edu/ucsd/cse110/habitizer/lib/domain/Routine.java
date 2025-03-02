@@ -91,7 +91,11 @@ public class Routine {
     public void initialize() {
         isDone = false;
         isInProgress = false;
-        tasks = new ArrayList<>();
+        isInEdit = false;
+
+        for (var task : tasks) {
+            task.initialize();
+        }
 
         this.routineElapsedTime = 0;
         this.taskElapsedTime = 0;

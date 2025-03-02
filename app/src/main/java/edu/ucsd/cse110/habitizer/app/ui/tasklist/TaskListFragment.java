@@ -53,7 +53,6 @@ public class TaskListFragment extends Fragment {
                 activityModel.updateIsDone(true);
                 return;
             }
-
             adapter.clear();
             adapter.addAll(new ArrayList<>(tasks));
             adapter.notifyDataSetChanged();
@@ -72,8 +71,9 @@ public class TaskListFragment extends Fragment {
         });
 
         // Bind routine_updating_timer to elapsed time from MainViewModel
-        activityModel.getRoutineElapsedTime().observe(time -> {
-            view.routineUpdatingTimer.setText(time); // Updates UI dynamically
+        activityModel.getCurrentRoutine().observe(routine -> {
+            int seconds = routine.routineElapsedTime();
+            view.routineUpdatingTimer.setText(activityModel.getRoundedDownTime(seconds));
         });
 
         // Pause Button functionality
@@ -96,7 +96,6 @@ public class TaskListFragment extends Fragment {
 
         // Add Elapse Time Button functionality
         view.routineAdd30SecButton.setOnClickListener(v -> {
-            // Advances timer by 30 seconds
             activityModel.advanceRoutineTimer();
             activityModel.advanceTaskTimer();
         });

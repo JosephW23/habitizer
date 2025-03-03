@@ -85,11 +85,11 @@ public class MockElapsedTimerTest {
         // GIVEN a timer that is running
         timer.startTimer();
         Thread.sleep(1100); // Timer should be roughly at "00:01"
-        // WHEN I advance the timer by 30 seconds
+        // WHEN I advance the timer by 15 seconds
         timer.advanceTimer();
-        // THEN the elapsed time should reflect an increase of 30 seconds
-        // (e.g., "00:01" becomes "00:31")
-        String expected = "00:31";
+        // THEN the elapsed time should reflect an increase of 15 seconds
+        // (e.g., "00:01" becomes "00:16")
+        String expected = "00:16";
         String actual = timer.getTime();
         assertEquals(expected, actual);
     }

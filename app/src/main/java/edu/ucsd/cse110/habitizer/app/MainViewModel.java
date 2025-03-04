@@ -30,6 +30,7 @@ public class MainViewModel extends ViewModel {
 
     private Routine routine;
     private int numTasks;
+    private int numRoutines;
     private MutableSubject<String> routineElapsedTime;
     private MutableSubject<String> taskElapsedTime;
     private MutableSubject<String> goalTime;
@@ -74,6 +75,7 @@ public class MainViewModel extends ViewModel {
 
         routineList.observe(routines -> {
             if (routines == null) return;
+            numRoutines = routines.size();
             for (var routine : routines){
                 routine.setTasks(routineRepository.findTaskList(routine.id()));
                 numTasks += routine.tasks().size();
@@ -207,6 +209,11 @@ public class MainViewModel extends ViewModel {
     public void addRoutineTask(String taskName) {
         RoutineTask task = new RoutineTask(null, null, taskName, false, -1);
         saveRoutineTask(task);
+    }
+
+    public void addRoutine(String routineName) {
+        Routine routine = new Routine(numRoutines + 1, routineName, numRoutines + 1, false, false, false, 0, 0, 60);
+        saveRoutine(routine);
     }
     public void updateTaskName(int taskId, String newTitle) {
         for (var task : this.routine.tasks()) {

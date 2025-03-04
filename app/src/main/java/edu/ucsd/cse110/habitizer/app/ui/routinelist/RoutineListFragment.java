@@ -119,7 +119,7 @@ public class RoutineListFragment extends Fragment {
         builder.setPositiveButton("Add", (dialog, which) -> {
             String taskName = input.getText().toString().trim();
             if (!taskName.isEmpty()) {
-//                activityModel.addRoutineTask(taskName);
+                activityModel.addRoutine(taskName);
             }
         });
 

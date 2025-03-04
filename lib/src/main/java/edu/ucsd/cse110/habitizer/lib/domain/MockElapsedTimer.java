@@ -66,13 +66,13 @@ public class MockElapsedTimer implements ElapsedTimer {
 
     @Override
     public void advanceTimer() {
-        // Advance timer by 30 seconds regardless of whether it's paused
+        // Advance timer by 15 seconds regardless of whether it's paused
         if (isRunning && start != null) {
             // Incorporate the time elapsed since the last start before advancing
             duration = duration.plus(Duration.between((LocalTime)start, LocalTime.now()));
             start = LocalTime.now();
         }
-        duration = duration.plusSeconds(30);
+        duration = duration.plusSeconds(15);
     }
 
     @Override

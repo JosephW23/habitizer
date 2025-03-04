@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
@@ -18,8 +19,10 @@ import edu.ucsd.cse110.habitizer.app.ui.editlist.dialog.EditTaskNameDialogFragme
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
 public class EditListAdapter extends ArrayAdapter<RoutineTask> {
+    private MainViewModel activityModel;
     public EditListAdapter(Context context, List<RoutineTask> tasks, MainViewModel activityModel) {
         super(context, 0, new ArrayList<>(tasks));
+        this.activityModel = activityModel;
     }
 
     @NonNull
@@ -36,12 +39,35 @@ public class EditListAdapter extends ArrayAdapter<RoutineTask> {
             binding = ListItemEditTaskBinding.inflate(layoutInflater, parent, false);
         }
 
-        // Set a tile of a task.
         binding.taskFrontText.setText(task.title());
 
         binding.renameTaskButton.setOnClickListener(v -> {
             EditTaskNameDialogFragment dialog = EditTaskNameDialogFragment.newInstance(task.id(), task.title());
             dialog.show(((FragmentActivity) getContext()).getSupportFragmentManager(), "EditTaskNameDialogFragment");
+        });
+
+        binding.buttonMoveUp.setOnClickListener(v -> {
+            var currentRoutine = activityModel.getCurrentRoutine().getValue();
+            if (currentRoutine != null && currentRoutine.isInEdit()) {
+                int currentPosition = this.getPosition(task);
+                if (currentPosition > 0) {
+                    List<RoutineTask> tasksList = new ArrayList<>(activityModel.loadTaskList().getValue());
+                    Collections.swap(tasksList, currentPosition, currentPosition - 1);
+                    activityModel.updateTaskOrder(tasksList);
+                }
+            }
+        });
+
+        binding.buttonMoveDown.setOnClickListener(v -> {
+            var currentRoutine = activityModel.getCurrentRoutine().getValue();
+            if (currentRoutine != null && currentRoutine.isInEdit()) {
+                int currentPosition = this.getPosition(task);
+                List<RoutineTask> tasksList = new ArrayList<>(activityModel.loadTaskList().getValue());
+                if (currentPosition < tasksList.size() - 1) {
+                    Collections.swap(tasksList, currentPosition, currentPosition + 1);
+                    activityModel.updateTaskOrder(tasksList);
+                }
+            }
         });
 
         return binding.getRoot();
@@ -54,11 +80,8 @@ public class EditListAdapter extends ArrayAdapter<RoutineTask> {
 
     @Override
     public long getItemId(int position) {
-        var routine = getItem(position);
-        assert routine != null;
-
-        var id = routine.id();
-
-        return id;
+        var task = getItem(position);
+        assert task != null;
+        return task.id();
     }
 }

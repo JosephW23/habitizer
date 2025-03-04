@@ -1,9 +1,11 @@
 package edu.ucsd.cse110.habitizer.app.ui.routinelist;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -98,7 +100,31 @@ public class RoutineListFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
+        view.addRoutineButton.setOnClickListener(v -> showAddRoutineDialog());
+
         return view.getRoot();
 
+    }
+
+    private void showAddRoutineDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Add New Routine");
+
+        // Set up input field
+        final EditText input = new EditText(requireContext());
+        input.setHint("Enter routine name");
+        builder.setView(input);
+
+        // Set up dialog buttons
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String taskName = input.getText().toString().trim();
+            if (!taskName.isEmpty()) {
+//                activityModel.addRoutineTask(taskName);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
     }
 }

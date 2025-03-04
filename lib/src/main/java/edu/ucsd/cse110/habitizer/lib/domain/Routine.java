@@ -57,6 +57,7 @@ public class Routine {
             newTasks.add(task);
         }
         this.tasks = List.copyOf(newTasks);
+        System.out.println("Size of List: " + this.tasks.size());
     }
 
     public void addTask(RoutineTask newTask) {
@@ -65,6 +66,17 @@ public class Routine {
             newTasks.add(task);
         }
         newTasks.add(newTask);
+        setTasks(newTasks);
+    }
+
+    public void removeTask(RoutineTask task) {
+        var newTasks = new ArrayList<RoutineTask>();
+
+        for (var t : tasks) {
+            if (!t.title().equals(task.title()))
+                newTasks.add(t);
+        }
+
         setTasks(newTasks);
     }
 

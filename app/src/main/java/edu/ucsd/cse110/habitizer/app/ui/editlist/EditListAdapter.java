@@ -47,8 +47,6 @@ public class EditListAdapter extends ArrayAdapter<RoutineTask> {
         });
 
         binding.deleteTaskButton.setOnClickListener(v -> {
-            System.out.println("Task delete button clicked");
-            // delete based on task id
             activityModel.removeTask(task);
         });
 

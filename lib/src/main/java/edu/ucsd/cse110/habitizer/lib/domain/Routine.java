@@ -57,7 +57,6 @@ public class Routine {
             newTasks.add(task);
         }
         this.tasks = List.copyOf(newTasks);
-        System.out.println("Size of List: " + this.tasks.size());
     }
 
     public void addTask(RoutineTask newTask) {

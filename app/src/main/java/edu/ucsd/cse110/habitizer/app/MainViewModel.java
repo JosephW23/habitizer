@@ -159,11 +159,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void removeTask(RoutineTask task) {
-        System.out.println("Remove Task Called");
-
         this.routine.removeTask(task);
-
-        //this.routineRepository.deleteRoutines();
         this.routineRepository.deleteRoutine(this.routine.id());
 
         saveRoutine(this.routine);

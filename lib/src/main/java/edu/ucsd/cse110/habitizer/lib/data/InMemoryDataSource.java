@@ -76,7 +76,7 @@ public class InMemoryDataSource {
         routineSubjects = new SimpleSubject<>();
     }
 
-    public void deleteRoutine(String routineName) {
+    public void deleteRoutine(int routineId) {
         // TODO
     }
 }

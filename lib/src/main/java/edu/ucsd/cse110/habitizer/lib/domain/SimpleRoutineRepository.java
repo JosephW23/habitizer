@@ -34,8 +34,8 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
 
     @Override
-    public void deleteRoutine(String routineName) {
-        dataSource.deleteRoutine(routineName);
+    public void deleteRoutine(int routineId) {
+        dataSource.deleteRoutine(routineId);
     }
 }
 

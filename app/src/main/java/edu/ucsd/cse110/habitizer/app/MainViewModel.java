@@ -162,7 +162,7 @@ public class MainViewModel extends ViewModel {
         var newTasks = new ArrayList<RoutineTask>();
 
         for (var t : this.routine.tasks()) {
-            if (t.id() != task.id()) {
+            if (!t.title().equals(task.title())) {
                 newTasks.add(t);
             }
         }

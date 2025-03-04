@@ -11,4 +11,6 @@ public interface RoutineRepository {
     void saveRoutine(Routine routine);
 
     void deleteRoutines();
+
+    void deleteRoutine(String routineName);
 }

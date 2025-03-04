@@ -127,6 +127,7 @@ public class MainViewModel extends ViewModel {
     }
     public void saveRoutine(Routine routine) {
         routineRepository.saveRoutine(routine);
+        System.out.println(routine.title());
     }
 
     public boolean getIsFirstRun() {
@@ -154,6 +155,20 @@ public class MainViewModel extends ViewModel {
             taskTimer.startTimer();
             startTimerUpdates();
         }
+    }
+
+    public void removeTask(RoutineTask task) {
+        System.out.println("Remove Task Called");
+        var newTasks = new ArrayList<RoutineTask>();
+
+        for (var t : this.routine.tasks()) {
+            if (t.id() != task.id()) {
+                newTasks.add(t);
+            }
+        }
+
+        this.routine.setTasks(newTasks);
+        saveRoutine(this.routine);
     }
 
     public boolean checkIsRoutineDone() {

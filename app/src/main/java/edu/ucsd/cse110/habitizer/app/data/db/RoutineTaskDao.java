@@ -15,7 +15,7 @@ public interface RoutineTaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(List<RoutineTaskEntity> tasks);
 
-    @Query("SELECT * FROM tasks WHERE routine_id = :routineId")
+    @Query("SELECT * FROM tasks WHERE routine_id = :routineId ORDER BY sort_order")
     List<RoutineTaskEntity> findTaskList(int routineId);
 
     @Query("DELETE FROM tasks")

@@ -76,7 +76,7 @@ public class MainViewModel extends ViewModel {
         routineList.observe(routines -> {
             if (routines == null) return;
             numRoutines = routines.size();
-            for (var routine : routines){
+            for (var routine : routines) {
                 routine.setTasks(routineRepository.findTaskList(routine.id()));
                 numTasks += routine.tasks().size();
                 if (routine.isInProgress() || routine.isInEdit()) {
@@ -183,7 +183,6 @@ public class MainViewModel extends ViewModel {
     public void updateInProgressRoutine(Routine routine, boolean newInProgress) {
         routine.setInProgress(newInProgress);
         saveRoutine(routine);
-
     }
     public void updateInEditRoutine(Routine routine, boolean newInEdit) {
         routine.setInEdit(newInEdit);
@@ -202,7 +201,6 @@ public class MainViewModel extends ViewModel {
         RoutineTask task = new RoutineTask(null, null, taskName, false, -1);
         saveRoutineTask(task);
     }
-
     public void addRoutine(String routineName) {
         Routine routine = new Routine(numRoutines + 1, routineName, numRoutines + 1, false, false, false, 0, 0, 60);
         saveRoutine(routine);
@@ -227,8 +225,16 @@ public class MainViewModel extends ViewModel {
         endRoutine();
     }
 
+    // Minimal edit: update task order by updating each task’s sortOrder before saving.
+    public void updateTaskOrder(List<RoutineTask> newTaskOrder) {
+        for (int i = 0; i < newTaskOrder.size(); i++) {
+            newTaskOrder.get(i).setSortOrder(i);
+        }
+        this.routine.setTasks(newTaskOrder);
+        saveRoutine(this.routine);
+        taskList.setValue(newTaskOrder);
+    }
 
-    // Get Timer object
     public ElapsedTimer getRoutineTimer() {
         return routineTimer;
     }
@@ -237,17 +243,13 @@ public class MainViewModel extends ViewModel {
     }
     public String getRoundedDownTime(int seconds) {
         int minutes = (seconds % 3600) / 60;
-
         if (minutes == 0) {
             return "-";
         }
-
         return String.format(Locale.getDefault(), "%01d", minutes);
     }
     public void startRoutine() {
-        // Start updating elapsed time periodically
         routineTimer.resetTimer();
-        // Start updating task elapsed time periodically
         taskTimer.resetTimer();
         startTimerUpdates();
     }
@@ -257,8 +259,6 @@ public class MainViewModel extends ViewModel {
     public void stopTaskTimer() {
         taskTimer.stopTimer();
     }
-
-    // Manually advance routine timer by 30 seconds (For US3c)
     public void advanceRoutineTimer() {
         routineTimer.advanceTimer();
         updateTime();
@@ -267,15 +267,11 @@ public class MainViewModel extends ViewModel {
         taskTimer.advanceTimer();
         updateTime();
     }
-
-    // stop two timers when finishing routine
     public void endRoutine() {
         stopRoutineTimer();
         stopTaskTimer();
         timerHandler.removeMessages(0);
     }
-
-    // Periodically update elapsed time every second
     public void startTimerUpdates() {
         timerHandler.postDelayed(new Runnable() {
             @Override

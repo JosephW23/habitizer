@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
@@ -50,6 +51,30 @@ public class EditListAdapter extends ArrayAdapter<RoutineTask> {
             activityModel.removeTask(task);
         });
 
+        binding.buttonMoveUp.setOnClickListener(v -> {
+            var currentRoutine = activityModel.getCurrentRoutine().getValue();
+            if (currentRoutine != null && currentRoutine.isInEdit()) {
+                int currentPosition = this.getPosition(task);
+                if (currentPosition > 0) {
+                    List<RoutineTask> tasksList = new ArrayList<>(activityModel.loadTaskList().getValue());
+                    Collections.swap(tasksList, currentPosition, currentPosition - 1);
+                    activityModel.updateTaskOrder(tasksList);
+                }
+            }
+        });
+
+        binding.buttonMoveDown.setOnClickListener(v -> {
+            var currentRoutine = activityModel.getCurrentRoutine().getValue();
+            if (currentRoutine != null && currentRoutine.isInEdit()) {
+                int currentPosition = this.getPosition(task);
+                List<RoutineTask> tasksList = new ArrayList<>(activityModel.loadTaskList().getValue());
+                if (currentPosition < tasksList.size() - 1) {
+                    Collections.swap(tasksList, currentPosition, currentPosition + 1);
+                    activityModel.updateTaskOrder(tasksList);
+                }
+            }
+        });
+
         return binding.getRoot();
     }
 
@@ -60,11 +85,8 @@ public class EditListAdapter extends ArrayAdapter<RoutineTask> {
 
     @Override
     public long getItemId(int position) {
-        var routine = getItem(position);
-        assert routine != null;
-
-        var id = routine.id();
-
-        return id;
+        var task = getItem(position);
+        assert task != null;
+        return task.id();
     }
 }

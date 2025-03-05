@@ -23,4 +23,7 @@ public interface RoutineDao {
     @Query("DELETE FROM routines")
     void deleteRoutines();
 
+    @Query("DELETE FROM routines WHERE id==:routineId")
+    void deleteRoutine(int routineId);
+
 }

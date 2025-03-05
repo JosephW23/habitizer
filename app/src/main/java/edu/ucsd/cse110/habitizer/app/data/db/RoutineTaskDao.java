@@ -20,4 +20,7 @@ public interface RoutineTaskDao {
 
     @Query("DELETE FROM tasks")
     void deleteTasks();
+
+    @Query("DELETE FROM tasks WHERE routine_id==:routineId")
+    void deleteTasksInRoutine(int routineId);
 }

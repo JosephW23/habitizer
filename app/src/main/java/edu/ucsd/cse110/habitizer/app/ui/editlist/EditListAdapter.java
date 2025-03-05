@@ -18,8 +18,10 @@ import edu.ucsd.cse110.habitizer.app.ui.editlist.dialog.EditTaskNameDialogFragme
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineTask;
 
 public class EditListAdapter extends ArrayAdapter<RoutineTask> {
+    private MainViewModel activityModel;
     public EditListAdapter(Context context, List<RoutineTask> tasks, MainViewModel activityModel) {
         super(context, 0, new ArrayList<>(tasks));
+        this.activityModel = activityModel;
     }
 
     @NonNull
@@ -42,6 +44,10 @@ public class EditListAdapter extends ArrayAdapter<RoutineTask> {
         binding.renameTaskButton.setOnClickListener(v -> {
             EditTaskNameDialogFragment dialog = EditTaskNameDialogFragment.newInstance(task.id(), task.title());
             dialog.show(((FragmentActivity) getContext()).getSupportFragmentManager(), "EditTaskNameDialogFragment");
+        });
+
+        binding.deleteTaskButton.setOnClickListener(v -> {
+            activityModel.removeTask(task);
         });
 
         return binding.getRoot();

@@ -224,4 +224,70 @@ public class MainViewModelTest {
 
         assertEquals(initialTaskCount - 1, testRoutine.tasks().size());
     }
+    // US12: Task Reordering
+    @Test
+    public void testUpdateTaskOrder_SingleTask_NoChange() {
+        List<RoutineTask> tasks = new ArrayList<>();
+        tasks.add(new RoutineTask(1, 1, "Task 1", false, 0));
+        mainViewModel.updateTaskOrder(tasks);
+        shadowOf(Looper.getMainLooper()).idle();
+        assertEquals(0, tasks.get(0).sortOrder());
+    }
+
+    @Test
+    public void testUpdateTaskOrder_MultipleTasks_Reordered() {
+        List<RoutineTask> tasks = new ArrayList<>();
+        tasks.add(new RoutineTask(1, 1, "Task 1", false, 0));
+        tasks.add(new RoutineTask(2, 1, "Task 2", false, 1));
+        tasks.add(new RoutineTask(3, 1, "Task 3", false, 2));
+        List<RoutineTask> newOrder = new ArrayList<>();
+        newOrder.add(tasks.get(2));
+        newOrder.add(tasks.get(0));
+        newOrder.add(tasks.get(1));
+
+        mainViewModel.updateTaskOrder(newOrder);
+        shadowOf(Looper.getMainLooper()).idle();
+
+        assertEquals(0, newOrder.get(0).sortOrder());
+        assertEquals(1, newOrder.get(1).sortOrder());
+        assertEquals(2, newOrder.get(2).sortOrder());
+    }
+
+    @Test
+    public void testUpdateTaskOrder_MoveToEnd() {
+        List<RoutineTask> tasks = new ArrayList<>();
+        tasks.add(new RoutineTask(1, 1, "Task 1", false, 0));
+        tasks.add(new RoutineTask(2, 1, "Task 2", false, 1));
+        tasks.add(new RoutineTask(3, 1, "Task 3", false, 2));
+        List<RoutineTask> newOrder = new ArrayList<>();
+        newOrder.add(tasks.get(1));
+        newOrder.add(tasks.get(2));
+        newOrder.add(tasks.get(0));
+
+        mainViewModel.updateTaskOrder(newOrder);
+        shadowOf(Looper.getMainLooper()).idle();
+
+        assertEquals(0, newOrder.get(0).sortOrder());
+        assertEquals(1, newOrder.get(1).sortOrder());
+        assertEquals(2, newOrder.get(2).sortOrder());
+    }
+
+    @Test
+    public void testUpdateTaskOrder_MoveToStart() {
+        List<RoutineTask> tasks = new ArrayList<>();
+        tasks.add(new RoutineTask(1, 1, "Task 1", false, 0));
+        tasks.add(new RoutineTask(2, 1, "Task 2", false, 1));
+        tasks.add(new RoutineTask(3, 1, "Task 3", false, 2));
+        List<RoutineTask> newOrder = new ArrayList<>();
+        newOrder.add(tasks.get(2));
+        newOrder.add(tasks.get(0));
+        newOrder.add(tasks.get(1));
+
+        mainViewModel.updateTaskOrder(newOrder);
+        shadowOf(Looper.getMainLooper()).idle();
+
+        assertEquals(0, newOrder.get(0).sortOrder());
+        assertEquals(1, newOrder.get(1).sortOrder());
+        assertEquals(2, newOrder.get(2).sortOrder());
+    }
 }

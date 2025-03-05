@@ -158,6 +158,13 @@ public class MainViewModel extends ViewModel {
         }
     }
 
+    public void removeTask(RoutineTask task) {
+        this.routine.removeTask(task);
+        this.routineRepository.deleteRoutine(this.routine.id());
+
+        saveRoutine(this.routine);
+    }
+
     public boolean checkIsRoutineDone() {
         boolean isDone = true;
         for (var task : this.routine.tasks()) {

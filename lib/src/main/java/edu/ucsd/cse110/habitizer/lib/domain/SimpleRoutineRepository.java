@@ -32,5 +32,10 @@ public class SimpleRoutineRepository implements RoutineRepository {
     public void deleteRoutines() {
         dataSource.deleteRoutines();
     }
+
+    @Override
+    public void deleteRoutine(int routineId) {
+        dataSource.deleteRoutine(routineId);
+    }
 }
 

@@ -75,6 +75,10 @@ public class InMemoryDataSource {
         routinesList = List.of();
         routineSubjects = new SimpleSubject<>();
     }
+
+    public void deleteRoutine(int routineId) {
+        // TODO
+    }
 }
 
 

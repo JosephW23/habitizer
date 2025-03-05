@@ -68,6 +68,17 @@ public class Routine {
         setTasks(newTasks);
     }
 
+    public void removeTask(RoutineTask task) {
+        var newTasks = new ArrayList<RoutineTask>();
+
+        for (var t : tasks) {
+            if (!t.title().equals(task.title()))
+                newTasks.add(t);
+        }
+
+        setTasks(newTasks);
+    }
+
     public void setElapsedTime(int routineElapsedTime, int taskElapsedTime) {
         this.routineElapsedTime = routineElapsedTime;
         this.taskElapsedTime = taskElapsedTime;

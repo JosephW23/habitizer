@@ -212,4 +212,16 @@ public class MainViewModelTest {
         assertNotNull(updatedList);
         assertEquals(1, updatedList.size());
     }
+
+    // US13: Delete Task From Routine
+    @Test
+    public void testDeleteTask_decreasesTaskList() {
+        var task = new RoutineTask(0, testRoutine.id(), "Get Wild", false, 0);
+        testRoutine.addTask(task);
+        int initialTaskCount = testRoutine.tasks().size();
+        mainViewModel.removeTask(task);
+        shadowOf(Looper.getMainLooper()).idle();
+
+        assertEquals(initialTaskCount - 1, testRoutine.tasks().size());
+    }
 }

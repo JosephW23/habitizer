@@ -142,6 +142,17 @@ public class TaskListFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
+        view.pauseRoutineButton.setOnClickListener(v -> {
+            if (view.pauseRoutineButton.getText().equals("Pause Routine")) {
+                activityModel.pauseRoutineTimer();
+                view.pauseRoutineButton.setText("Resume Routine");
+            } else {
+                activityModel.resumeRoutineTimer();
+                view.pauseRoutineButton.setText("Pause Routine");
+            }
+        });
+
+
         return view.getRoot();
     }
 

@@ -100,6 +100,7 @@ public class RoutineListFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
+
         view.addRoutineButton.setOnClickListener(v -> showAddRoutineDialog());
 
         return view.getRoot();

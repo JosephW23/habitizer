@@ -272,6 +272,15 @@ public class MainViewModel extends ViewModel {
         stopTaskTimer();
         timerHandler.removeMessages(0);
     }
+    public void pauseRoutineTimer() {
+        routineTimer.pauseTimer();
+        timerHandler.removeCallbacksAndMessages(null);
+    }
+
+    public void resumeRoutineTimer() {
+        routineTimer.resumeTimer();
+        startTimerUpdates();
+    }
     public void startTimerUpdates() {
         timerHandler.postDelayed(new Runnable() {
             @Override

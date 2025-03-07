@@ -42,15 +42,17 @@ public class MainViewModelTest {
         testRoutine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
         List<Routine> routineList = new ArrayList<>();
         routineList.add(testRoutine);
-        SimpleSubject<List<Routine>> defaultSubject = new SimpleSubject<>();
-        defaultSubject.setValue(routineList);
-        when(mockRoutineRepo.findRoutineList()).thenReturn(defaultSubject);
+        SimpleSubject<List<Routine>> routineSubject = new SimpleSubject<>();
+        routineSubject.setValue(routineList);
+        when(mockRoutineRepo.findRoutineList()).thenReturn(routineSubject);
+        when(mockRoutineRepo.findTaskList(anyInt())).thenReturn(new ArrayList<>());
         mainViewModel = new MainViewModel(mockRoutineRepo);
         setPrivateRoutineField(mainViewModel, testRoutine);
         mainViewModel.stopRoutineTimer();
         mainViewModel.stopTaskTimer();
         shadowOf(Looper.getMainLooper()).idle();
     }
+
     private void setPrivateRoutineField(MainViewModel viewModel, Routine routine)
             throws NoSuchFieldException, IllegalAccessException {
         Field routineField = MainViewModel.class.getDeclaredField("routine");
@@ -289,5 +291,18 @@ public class MainViewModelTest {
         assertEquals(0, newOrder.get(0).sortOrder());
         assertEquals(1, newOrder.get(1).sortOrder());
         assertEquals(2, newOrder.get(2).sortOrder());
+    }
+    @Test
+    public void testPauseAndResumeRoutineTimer() {
+        mainViewModel.startRoutine();
+        String timeBeforePause = mainViewModel.getRoutineTimer().getTime();
+        mainViewModel.pauseRoutineTimer();
+        try { Thread.sleep(2000); } catch (InterruptedException e) { }
+        String timeAfterPause = mainViewModel.getRoutineTimer().getTime();
+        assertEquals(timeBeforePause, timeAfterPause);
+        mainViewModel.resumeRoutineTimer();
+        try { Thread.sleep(2000); } catch (InterruptedException e) { }
+        String timeAfterResume = mainViewModel.getRoutineTimer().getTime();
+        assertNotEquals(timeAfterPause, timeAfterResume);
     }
 }

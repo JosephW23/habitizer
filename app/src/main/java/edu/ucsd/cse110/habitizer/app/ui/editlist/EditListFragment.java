@@ -80,6 +80,8 @@ public class EditListFragment extends Fragment {
                     .commit();
         });
 
+        view.deleteRoutineButton.setOnClickListener(v -> showDeleteRoutineDialog());
+
         activityModel.loadTaskList().observe(tasks -> {
             if (tasks == null) return;
 
@@ -108,6 +110,19 @@ public class EditListFragment extends Fragment {
             if (!taskName.isEmpty()) {
                 activityModel.addRoutineTask(taskName);
             }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    public void showDeleteRoutineDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Delete Routine");
+
+        builder.setPositiveButton("Delete", (dialog, which) -> {
+            activityModel.deleteRoutine();
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());

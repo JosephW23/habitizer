@@ -290,4 +290,63 @@ public class MainViewModelTest {
         assertEquals(1, newOrder.get(1).sortOrder());
         assertEquals(2, newOrder.get(2).sortOrder());
     }
+
+    //US19: Delete A Routine
+    @Test
+    public void testDeleteRoutine_removesRoutineFromViewModel() {
+        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
+        List<Routine> routineList = new ArrayList<>();
+        routineList.add(routine);
+        SimpleSubject<List<Routine>> updatedSubject = new SimpleSubject<>();
+        updatedSubject.setValue(routineList);
+        when(mockRoutineRepo.findRoutineList()).thenReturn(updatedSubject);
+        mainViewModel.deleteRoutine();
+        shadowOf(Looper.getMainLooper()).idle();
+        assertFalse(mainViewModel.loadRoutineList().getValue().contains(routine));
+        verify(mockRoutineRepo).deleteRoutine(routine.id());
+    }
+
+    @Test
+    public void testDeleteRoutine_decreasesRoutineCount() {
+        Routine routine1 = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
+        Routine routine2 = new Routine(2, "Workout Routine", 2, false, false, false, 0, 0, 30);
+        List<Routine> routineList = new ArrayList<>();
+        routineList.add(routine1);
+        routineList.add(routine2);
+        SimpleSubject<List<Routine>> updatedSubject = new SimpleSubject<>();
+        updatedSubject.setValue(routineList);
+        when(mockRoutineRepo.findRoutineList()).thenReturn(updatedSubject);
+        mainViewModel = new MainViewModel(mockRoutineRepo);
+        assertEquals(2, mainViewModel.loadRoutineList().getValue().size());
+
+        mainViewModel.getCurrentRoutine().setValue(routine1);
+        shadowOf(Looper.getMainLooper()).idle();
+        routineList.remove(routine1);
+        updatedSubject.setValue(routineList);
+        mainViewModel.deleteRoutine();
+        shadowOf(Looper.getMainLooper()).idle();
+        assertEquals(1, mainViewModel.loadRoutineList().getValue().size());
+    }
+
+    @Test
+    public void testDeleteRoutine_resetsCurrentRoutine() {
+        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
+        List<Routine> routineList = new ArrayList<>();
+        routineList.add(routine);
+        SimpleSubject<List<Routine>> routineSubject = new SimpleSubject<>();
+        routineSubject.setValue(routineList);
+        when(mockRoutineRepo.findRoutineList()).thenReturn(routineSubject);
+        mainViewModel = new MainViewModel(mockRoutineRepo);
+        mainViewModel.getCurrentRoutine().setValue(routine);
+        shadowOf(Looper.getMainLooper()).idle();
+        assertEquals(routine, mainViewModel.getCurrentRoutine().getValue());
+
+        routineList.remove(routine);
+        routineSubject.setValue(routineList);
+        mainViewModel.deleteRoutine();
+        shadowOf(Looper.getMainLooper()).idle();
+        mainViewModel.getCurrentRoutine().setValue(null);
+        shadowOf(Looper.getMainLooper()).idle();
+        assertNull(mainViewModel.getCurrentRoutine().getValue());
+    }
 }

@@ -283,6 +283,6 @@ public class MainViewModel extends ViewModel {
     }
 
     public void deleteRoutine() {
-        //TODO
+        routineRepository.deleteRoutine(routine.id());
     }
 }

@@ -119,10 +119,15 @@ public class EditListFragment extends Fragment {
 
     public void showDeleteRoutineDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Delete Routine");
+        builder.setTitle("Do you want to delete this routine?");
 
         builder.setPositiveButton("Delete", (dialog, which) -> {
             activityModel.deleteRoutine();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, RoutineListFragment.newInstance()) // Ensure this is the correct fragment
+                    .addToBackStack(null) // Add this fragment to the back stack
+                    .commit();
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());

@@ -121,7 +121,6 @@ public class TaskListFragment extends Fragment {
                 activityModel.endRoutine(); // Ends routine and stop timers
                 view.endRoutineButton.setText("Routine Ended"); // Updates button text
                 view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
-                view.pauseRoutineButton.setEnabled(false);
                 view.routinePauseTimeButton.setEnabled(false);
                 view.routineAdd30SecButton.setEnabled(false);
             }

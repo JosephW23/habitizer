@@ -299,14 +299,21 @@ public class MainViewModelTest {
         mainViewModel.startRoutine();
         String timeBeforePause = mainViewModel.getRoutineTimer().getTime();
         mainViewModel.pauseRoutineTimer();
-        try { Thread.sleep(2000); } catch (InterruptedException e) { }
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+        }
         String timeAfterPause = mainViewModel.getRoutineTimer().getTime();
         assertEquals(timeBeforePause, timeAfterPause);
         mainViewModel.resumeRoutineTimer();
-        try { Thread.sleep(2000); } catch (InterruptedException e) { }
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+        }
         String timeAfterResume = mainViewModel.getRoutineTimer().getTime();
         assertNotEquals(timeAfterPause, timeAfterResume);
-  
+    }
+
     //US16: Asynchronous Task TImer
     @Test
     public void testAsynchronousTaskTimer_beforeCheckOff() {

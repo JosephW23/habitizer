@@ -348,6 +348,7 @@ public class MainViewModelTest {
         mainViewModel.getCurrentRoutine().setValue(null);
         shadowOf(Looper.getMainLooper()).idle();
         assertNull(mainViewModel.getCurrentRoutine().getValue());
+    }
 
     //US16: Asynchronous Task TImer
     @Test

@@ -119,8 +119,8 @@ public class TaskListFragment extends Fragment {
         });
 
         //When routine is marked as done, disable button.
-        activityModel.getIsRoutineDone().observe(isTaskDone -> {
-            if (isTaskDone) {
+        activityModel.getIsRoutineDone().observe(isRoutineDone -> {
+            if (isRoutineDone) {
                 activityModel.endRoutine(); // Ends routine and stop timers
                 view.endRoutineButton.setText("Routine Ended"); // Updates button text
                 view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
@@ -148,30 +148,38 @@ public class TaskListFragment extends Fragment {
 
         view.pauseRoutineButton.setOnClickListener(v -> {
             if (view.pauseRoutineButton.getText().equals("Pause Routine")) {
-                activityModel.pauseRoutineTimer();
+                activityModel.pauseRoutine();
                 view.pauseRoutineButton.setText("Resume Routine");
 
                 // Disable "End Routine" when paused
-                view.endRoutineButton.setEnabled(false);
+//                view.endRoutineButton.setEnabled(false);
             } else {
-                activityModel.resumeRoutineTimer();
+                activityModel.resumeRoutine();
                 view.pauseRoutineButton.setText("Pause Routine");
 
                 // Re-enable "End Routine" when resumed
-                view.endRoutineButton.setEnabled(true);
+//                view.endRoutineButton.setEnabled(true);
+            }
+        });
+
+        activityModel.getIsRoutinePaused().observe(isRoutinePaused -> {
+            if (isRoutinePaused) {
+                view.pauseRoutineButton.setText("Resume Routine");
+            } else {
+                view.pauseRoutineButton.setText("Pause Routine");
             }
         });
 
         return view.getRoot();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        // Reset pause state when exiting the routine
-        view.pauseRoutineButton.setText("Pause Routine");
-        activityModel.resumeRoutineTimer();
-        view.endRoutineButton.setEnabled(true);
-    }
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//
+//        // Reset pause state when exiting the routine
+//        view.pauseRoutineButton.setText("Pause Routine");
+//        activityModel.resumeRoutineTimer();
+//        view.endRoutineButton.setEnabled(true);
+//    }
 }

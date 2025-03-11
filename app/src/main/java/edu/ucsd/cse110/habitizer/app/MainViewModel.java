@@ -35,6 +35,7 @@ public class MainViewModel extends ViewModel {
     private MutableSubject<String> taskElapsedTime;
     private MutableSubject<String> goalTime;
     private MutableSubject<Boolean> isRoutineDone;
+    private MutableSubject<Boolean> isRoutinePaused;
 
     private boolean isFirstRun;
     private final ElapsedTimer routineTimer;
@@ -62,6 +63,7 @@ public class MainViewModel extends ViewModel {
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
         isRoutineDone = new SimpleSubject<>();
+        isRoutinePaused = new SimpleSubject<>();
 
         isFirstRun = true;
 
@@ -90,6 +92,7 @@ public class MainViewModel extends ViewModel {
             this.routine = routine;
 
             isRoutineDone.setValue(routine.isDone());
+            isRoutinePaused.setValue(routine.isPaused());
             goalTime.setValue(String.valueOf(routine.goalTime()));
             routineElapsedTime.setValue(routineTimer.getRoundedDownTime());
             taskElapsedTime.setValue(taskTimer.getRoundedDownTime());
@@ -181,6 +184,9 @@ public class MainViewModel extends ViewModel {
     }
     public Subject<Boolean> getIsRoutineDone() {
         return isRoutineDone;
+    }
+    public Subject<Boolean> getIsRoutinePaused() {
+        return isRoutinePaused;
     }
 
     public void updateInProgressRoutine(Routine routine, boolean newInProgress) {
@@ -296,9 +302,19 @@ public class MainViewModel extends ViewModel {
         timerHandler.removeMessages(0);
     }
 
+    public void pauseRoutine() {
+        routine.setIsPaused(true);
+        saveRoutine(routine);
+        pauseRoutineTimer();
+    }
     public void pauseRoutineTimer() {
         routineTimer.pauseTimer();
         timerHandler.removeCallbacksAndMessages(null);
+    }
+    public void resumeRoutine() {
+        routine.setIsPaused(false);
+        saveRoutine(routine);
+        resumeRoutineTimer();
     }
     public void resumeRoutineTimer() {
         routineTimer.resumeTimer();

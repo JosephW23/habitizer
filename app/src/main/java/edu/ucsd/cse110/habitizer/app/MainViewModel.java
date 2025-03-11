@@ -248,6 +248,20 @@ public class MainViewModel extends ViewModel {
         }
         return String.format(Locale.getDefault(), "%01d", minutes);
     }
+
+    public String getRoundedUpTime(int seconds) {
+        if (seconds < 55) {
+            if (seconds % 5 == 0) {
+                return String.format(Locale.getDefault(), "%01ds", seconds);
+            }
+            int temp = (seconds / 5)+1;
+            int rounded_seconds = temp*5;
+            return String.format(Locale.getDefault(), "%01ds", rounded_seconds);
+        }
+        int minutes = (seconds % 3600) / 60;
+        return String.format(Locale.getDefault(), "%01d", minutes+1);
+    }
+
     public void startRoutine() {
         routineTimer.resetTimer();
         taskTimer.resetTimer();

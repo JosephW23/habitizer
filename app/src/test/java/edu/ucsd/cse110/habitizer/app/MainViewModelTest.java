@@ -48,8 +48,7 @@ public class MainViewModelTest {
         when(mockRoutineRepo.findTaskList(anyInt())).thenReturn(new ArrayList<>());
         mainViewModel = new MainViewModel(mockRoutineRepo);
         setPrivateRoutineField(mainViewModel, testRoutine);
-        mainViewModel.stopRoutineTimer();
-        mainViewModel.stopTaskTimer();
+        mainViewModel.startRoutine();
         shadowOf(Looper.getMainLooper()).idle();
     }
 

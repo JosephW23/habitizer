@@ -350,7 +350,6 @@ public class MainViewModelTest {
         shadowOf(Looper.getMainLooper()).idle();
         assertNull(mainViewModel.getCurrentRoutine().getValue());
     }
-}
 
     //US17: 5-Second Completed Task Times
     @Test
@@ -400,4 +399,3 @@ public class MainViewModelTest {
         assertEquals("0s", mainViewModel.getRoundedUpTime(task.elapsedTime()));
     }
 }
-

@@ -14,15 +14,48 @@
         android:layout_marginTop="64dp"
         android:background="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/routine_pause_time_button"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/routine_total_time_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                tools:layout_editor_absoluteX="165dp"
+                tools:layout_editor_absoluteY="10dp" />
+
+            <TextView
+                android:id="@+id/routine_total_time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/_60"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/routine_total_time_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TextSizeCheck,VisualLintOverlap" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/routine_add_30_sec_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="5dp"
             android:text="@string/add"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginBottom="10dp"
             android:text="@string/pause"
             android:textSize="14sp"
@@ -47,35 +80,22 @@
             android:id="@+id/of_text"
             android:layout_width="37dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="6dp"
             android:gravity="center"
             android:text="@string/of"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/routine_total_time"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextSizeCheck" />
 
-        <Button
-            android:id="@+id/routine_total_time_button"
-            android:layout_width="60dp"
-            android:layout_height="0dp"
-            android:alpha="0"
-            app:layout_constraintBottom_toBottomOf="@+id/routine_total_time"
-            app:layout_constraintEnd_toEndOf="@+id/routine_total_time"
-            app:layout_constraintHorizontal_bias="0.629"
-            app:layout_constraintStart_toEndOf="@+id/of_text"
-            app:layout_constraintTop_toTopOf="@+id/routine_total_time"
-            app:layout_constraintVertical_bias="1.0" />
-
         <TextView
             android:id="@+id/routine_updating_timer"
-            android:layout_width="72dp"
+            android:layout_width="50dp"
             android:layout_height="45dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="5dp"
             android:gravity="center"
             android:text="@string/_45"
             android:textAlignment="center"
@@ -83,24 +103,43 @@
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/of_text"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.434"
             tools:ignore="TextSizeCheck" />
 
         <TextView
-            android:id="@+id/routine_total_time"
-            android:layout_width="71dp"
-            android:layout_height="44dp"
-            android:layout_marginEnd="20dp"
+            android:id="@+id/task_updating_timer"
+            android:layout_width="50dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:gravity="center"
-            android:text="@string/_60"
+            android:text="@string/_45"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/routine_pause_time_button"
+            app:layout_constraintEnd_toStartOf="@+id/slash_text"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TextSizeCheck,VisualLintOverlap" />
+            app:layout_constraintVertical_bias="0.434"
+            tools:ignore="TextSizeCheck" />
+
+        <TextView
+            android:id="@+id/slash_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:gravity="center"
+            android:text="@string/bar"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/routine_updating_timer"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.434"
+            tools:ignore="TextSizeCheck" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -167,4 +206,5 @@
             tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck,ImageContrastCheck"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

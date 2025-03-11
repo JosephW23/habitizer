@@ -291,7 +291,6 @@ public class MainViewModelTest {
         assertEquals(2, newOrder.get(2).sortOrder());
     }
 
-
     //US19: Delete A Routine
     @Test
     public void testDeleteRoutine_removesRoutineFromViewModel() {
@@ -349,6 +348,36 @@ public class MainViewModelTest {
         mainViewModel.getCurrentRoutine().setValue(null);
         shadowOf(Looper.getMainLooper()).idle();
         assertNull(mainViewModel.getCurrentRoutine().getValue());
+
+    //US16: Asynchronous Task TImer
+    @Test
+    public void testAsynchronousTaskTimer_beforeCheckOff() {
+        RoutineTask task = new RoutineTask(1, 1, "Brush Teeth", false, -1);
+        testRoutine.setTasks(List.of(task));
+
+        for (int i = 0; i < 3; i++) {
+            mainViewModel.advanceRoutineTimer();
+            mainViewModel.advanceTaskTimer();
+            shadowOf(Looper.getMainLooper()).idle();
+        }
+        assertEquals(90, mainViewModel.getRoutineTimer().getSeconds());
+        assertEquals(90, mainViewModel.getTaskTimer().getSeconds());
+    }
+
+    @Test
+    public void testAsynchronousTaskTimer_afterCheckoff(){
+        RoutineTask task = new RoutineTask(1, 1, "Brush Teeth", false, -1);
+        testRoutine.setTasks(List.of(task));
+
+        for (int i = 0; i < 3; i++) {
+            mainViewModel.advanceRoutineTimer();
+            mainViewModel.advanceTaskTimer();
+            shadowOf(Looper.getMainLooper()).idle();
+        }
+        mainViewModel.checkOffTask(task);
+        shadowOf(Looper.getMainLooper()).idle();
+        assertEquals(90, mainViewModel.getRoutineTimer().getSeconds());
+        assertEquals(0, mainViewModel.getTaskTimer().getSeconds());
     }
 
     //US17: 5-Second Completed Task Times

@@ -352,7 +352,8 @@ public class MainViewModelTest {
         mainViewModel.getCurrentRoutine().setValue(null);
         shadowOf(Looper.getMainLooper()).idle();
         assertNull(mainViewModel.getCurrentRoutine().getValue());
-=======
+    }
+
     @Test
     public void testPauseAndResumeRoutineTimer() {
         mainViewModel.startRoutine();

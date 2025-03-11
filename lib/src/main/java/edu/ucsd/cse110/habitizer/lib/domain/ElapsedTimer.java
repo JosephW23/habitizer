@@ -32,4 +32,6 @@ public interface ElapsedTimer {
     // Reset the timer to 00:00
     void resetTimer();
 
+    // Checks if the timer is running
+    boolean isRunning();
 }

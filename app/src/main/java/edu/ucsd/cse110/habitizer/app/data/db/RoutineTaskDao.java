@@ -23,4 +23,7 @@ public interface RoutineTaskDao {
 
     @Query("DELETE FROM tasks WHERE routine_id==:routineId")
     void deleteTasksInRoutine(int routineId);
+
+    @Query("UPDATE tasks SET is_checked = 0 WHERE routine_id = :routineId")
+    void resetCheckedTasks(int routineId);
 }

@@ -47,6 +47,7 @@ public class TaskListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
             if (tasks == null || tasks.size() == 0) {
@@ -147,14 +148,28 @@ public class TaskListFragment extends Fragment {
             if (view.pauseRoutineButton.getText().equals("Pause Routine")) {
                 activityModel.pauseRoutineTimer();
                 view.pauseRoutineButton.setText("Resume Routine");
+
+                // Disable "End Routine" when paused
+                view.endRoutineButton.setEnabled(false);
             } else {
                 activityModel.resumeRoutineTimer();
                 view.pauseRoutineButton.setText("Pause Routine");
+
+                // Re-enable "End Routine" when resumed
+                view.endRoutineButton.setEnabled(true);
             }
         });
-
 
         return view.getRoot();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // Reset pause state when exiting the routine
+        view.pauseRoutineButton.setText("Pause Routine");
+        activityModel.resumeRoutineTimer();
+        view.endRoutineButton.setEnabled(true);
+    }
 }

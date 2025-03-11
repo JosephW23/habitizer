@@ -138,7 +138,11 @@ public class MainViewModel extends ViewModel {
         isFirstRun = false;
     }
 
+    // Minimal edit: If the routine timer isn't running (paused), do not allow checking off a task.
     public void checkOffTask(RoutineTask task) {
+        if (!routineTimer.isRunning()) {
+            return;
+        }
         if (!task.isChecked()) {
             task.checkOff(taskTimer.getSeconds());
             saveRoutineTask(task);
@@ -268,15 +272,19 @@ public class MainViewModel extends ViewModel {
         updateTime();
     }
     public void endRoutine() {
+        if (!routineTimer.isRunning()) { // Prevent ending if paused
+            return;
+        }
+
         stopRoutineTimer();
         stopTaskTimer();
         timerHandler.removeMessages(0);
     }
+
     public void pauseRoutineTimer() {
         routineTimer.pauseTimer();
         timerHandler.removeCallbacksAndMessages(null);
     }
-
     public void resumeRoutineTimer() {
         routineTimer.resumeTimer();
         startTimerUpdates();

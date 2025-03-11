@@ -28,6 +28,9 @@ public class RoutineEntity {
     @ColumnInfo(name = "is_done")
     public boolean isDone;
 
+    @ColumnInfo(name = "is_paused")
+    public boolean isPaused;
+
     @ColumnInfo(name = "routine_elapsed_time")
     public int routineElapsedTime;
 
@@ -39,7 +42,7 @@ public class RoutineEntity {
 
 
     RoutineEntity(
-            int id, String title, int sortOrder, boolean isInProgress, boolean isInEdit, boolean isDone,
+            int id, String title, int sortOrder, boolean isInProgress, boolean isInEdit, boolean isDone, boolean isPaused,
             int routineElapsedTime, int taskElapsedTime, int goalTime){
         this.id = id;
         this.title = title;
@@ -47,6 +50,7 @@ public class RoutineEntity {
         this.isInProgress = isInProgress;
         this.isInEdit = isInEdit;
         this.isDone = isDone;
+        this.isPaused = isPaused;
         this.routineElapsedTime = routineElapsedTime;
         this.taskElapsedTime = taskElapsedTime;
         this.goalTime = goalTime;
@@ -55,13 +59,13 @@ public class RoutineEntity {
     public static RoutineEntity fromRoutine(@NonNull Routine routine){
         var routineEntity = new RoutineEntity(
                 routine.id(), routine.title(), routine.sortOrder(),
-                routine.isInProgress(), routine.isInEdit(), routine.isDone(),
+                routine.isInProgress(), routine.isInEdit(), routine.isDone(), routine.isPaused(),
                 routine.routineElapsedTime(), routine.taskElapsedTime(), routine.goalTime());
         return routineEntity;
     }
 
     public Routine toRoutine(){
-        return new Routine(id, title, sortOrder, isInProgress, isInEdit, isDone,
+        return new Routine(id, title, sortOrder, isInProgress, isInEdit, isDone, isPaused,
                 routineElapsedTime, taskElapsedTime, goalTime);
     }
 }

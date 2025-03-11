@@ -205,7 +205,9 @@ public class MainViewModel extends ViewModel {
         saveRoutineTask(task);
     }
     public void addRoutine(String routineName) {
-        Routine routine = new Routine(numRoutines + 1, routineName, numRoutines + 1, false, false, false, 0, 0, 60);
+        Routine routine = new Routine(numRoutines + 1, routineName, numRoutines + 1,
+                false, false, false, false,
+                0, 0, 60);
         saveRoutine(routine);
     }
     public void updateTaskName(int taskId, String newTitle) {

@@ -292,6 +292,7 @@ public class MainViewModelTest {
         assertEquals(1, newOrder.get(1).sortOrder());
         assertEquals(2, newOrder.get(2).sortOrder());
     }
+
     @Test
     public void testPauseAndResumeRoutineTimer() {
         mainViewModel.startRoutine();
@@ -304,5 +305,54 @@ public class MainViewModelTest {
         try { Thread.sleep(2000); } catch (InterruptedException e) { }
         String timeAfterResume = mainViewModel.getRoutineTimer().getTime();
         assertNotEquals(timeAfterPause, timeAfterResume);
+    }
+}
+
+    //US17: 5-Second Completed Task Times
+    @Test
+    public void test5SecondCompletedTaskTimes_roundsCorrectly(){
+        RoutineTask task = new RoutineTask(1, 1, "Brush Teeth", false, -1);
+        testRoutine.setTasks(List.of(task));
+        mainViewModel.advanceTaskTimer();
+        shadowOf(Looper.getMainLooper()).idle();
+        mainViewModel.checkOffTask(task);
+        shadowOf(Looper.getMainLooper()).idle();
+        assertEquals("30s", mainViewModel.getRoundedUpTime(task.elapsedTime()));
+    }
+
+    @Test
+    public void test5SecondCompletedTaskTimes_over1Minute(){
+        RoutineTask task = new RoutineTask(1, 1, "Brush Teeth", false, -1);
+        testRoutine.setTasks(List.of(task));
+        shadowOf(Looper.getMainLooper()).idle();
+        mainViewModel.advanceTaskTimer();
+        mainViewModel.advanceTaskTimer();
+        mainViewModel.advanceTaskTimer();
+        shadowOf(Looper.getMainLooper()).idle();
+        mainViewModel.checkOffTask(task);
+        shadowOf(Looper.getMainLooper()).idle();
+        assertEquals("2", mainViewModel.getRoundedUpTime(task.elapsedTime()));
+    }
+
+    @Test
+    public void test5SecondCompletedTaskTimes_over55Seconds(){
+        RoutineTask task = new RoutineTask(1, 1, "Brush Teeth", false, -1);
+        testRoutine.setTasks(List.of(task));
+        shadowOf(Looper.getMainLooper()).idle();
+        mainViewModel.getTaskTimer().setSeconds(55);
+        shadowOf(Looper.getMainLooper()).idle();
+        mainViewModel.checkOffTask(task);
+        shadowOf(Looper.getMainLooper()).idle();
+        assertEquals("1", mainViewModel.getRoundedUpTime(task.elapsedTime()));
+    }
+
+    @Test
+    public void test5SecondCompletedTaskTimes_0Seconds(){
+        RoutineTask task = new RoutineTask(1, 1, "Brush Teeth", false, -1);
+        testRoutine.setTasks(List.of(task));
+        shadowOf(Looper.getMainLooper()).idle();
+        mainViewModel.checkOffTask(task);
+        shadowOf(Looper.getMainLooper()).idle();
+        assertEquals("0s", mainViewModel.getRoundedUpTime(task.elapsedTime()));
     }
 }

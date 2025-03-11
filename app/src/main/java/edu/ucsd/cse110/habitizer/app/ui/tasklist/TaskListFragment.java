@@ -73,8 +73,10 @@ public class TaskListFragment extends Fragment {
 
         // Bind routine_updating_timer to elapsed time from MainViewModel
         activityModel.getCurrentRoutine().observe(routine -> {
-            int seconds = routine.routineElapsedTime();
-            view.routineUpdatingTimer.setText(activityModel.getRoundedDownTime(seconds));
+            int routineSeconds = routine.routineElapsedTime();
+            int taskSeconds = routine.taskElapsedTime();
+            view.routineUpdatingTimer.setText(activityModel.getRoundedDownTime(routineSeconds));
+            view.taskUpdatingTimer.setText(activityModel.getRoundedDownTime(taskSeconds));
         });
 
         // Pause Button functionality

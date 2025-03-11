@@ -80,6 +80,8 @@ public class EditListFragment extends Fragment {
                     .commit();
         });
 
+        view.deleteRoutineButton.setOnClickListener(v -> showDeleteRoutineDialog());
+
         activityModel.loadTaskList().observe(tasks -> {
             if (tasks == null) return;
 
@@ -108,6 +110,24 @@ public class EditListFragment extends Fragment {
             if (!taskName.isEmpty()) {
                 activityModel.addRoutineTask(taskName);
             }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    public void showDeleteRoutineDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Do you want to delete this routine?");
+
+        builder.setPositiveButton("Delete", (dialog, which) -> {
+            activityModel.deleteRoutine();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, RoutineListFragment.newInstance()) // Ensure this is the correct fragment
+                    .addToBackStack(null) // Add this fragment to the back stack
+                    .commit();
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());

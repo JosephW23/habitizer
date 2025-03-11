@@ -311,4 +311,8 @@ public class MainViewModel extends ViewModel {
             }
         }, 0);
     }
+
+    public void deleteRoutine() {
+        routineRepository.deleteRoutine(routine.id());
+    }
 }

@@ -94,6 +94,7 @@ public class MainViewModelTest {
         shadowOf(Looper.getMainLooper()).idle();
         assertTrue(mainViewModel.checkIsRoutineDone());
     }
+
     // US3: Display Routine Elapsed Time
     @Test
     public void testRoutineElapsedTime_updatesCorrectly() {
@@ -306,7 +307,6 @@ public class MainViewModelTest {
         String timeAfterResume = mainViewModel.getRoutineTimer().getTime();
         assertNotEquals(timeAfterPause, timeAfterResume);
     }
-}
 
     //US17: 5-Second Completed Task Times
     @Test

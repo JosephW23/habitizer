@@ -138,7 +138,6 @@ public class MainViewModel extends ViewModel {
         isFirstRun = false;
     }
 
-    // Minimal edit: If the routine timer isn't running (paused), do not allow checking off a task.
     public void checkOffTask(RoutineTask task) {
         if (!routineTimer.isRunning()) {
             return;
@@ -226,10 +225,10 @@ public class MainViewModel extends ViewModel {
     public void initializeRoutineState() {
         this.routine.initialize();
         saveRoutine(this.routine);
+        saveRoutine(this.routine);
         endRoutine();
     }
 
-    // Minimal edit: update task order by updating each task’s sortOrder before saving.
     public void updateTaskOrder(List<RoutineTask> newTaskOrder) {
         for (int i = 0; i < newTaskOrder.size(); i++) {
             newTaskOrder.get(i).setSortOrder(i);

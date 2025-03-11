@@ -43,8 +43,10 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
         // so that checkmark appears when clicked
         if (task.isChecked()) {
             binding.taskCheck.setAlpha(255);
+            binding.taskTime.setText(activityModel.getRoundedUpTime(task.elapsedTime()));
         } else {
             binding.taskCheck.setAlpha(0);
+            binding.taskTime.setText(activityModel.getRoundedDownTime(task.elapsedTime()));
         }
 
         // When task is clicked, the hidden button is clicked
@@ -58,8 +60,6 @@ public class TaskListAdapter extends ArrayAdapter<RoutineTask> {
                 binding.taskButton.setEnabled(false);
             }
         });
-
-        binding.taskTime.setText(activityModel.getRoundedDownTime(task.elapsedTime()));
 
         return binding.getRoot();
     }

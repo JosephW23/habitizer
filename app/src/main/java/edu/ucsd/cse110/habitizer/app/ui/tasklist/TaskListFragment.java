@@ -47,6 +47,7 @@ public class TaskListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
             if (tasks == null || tasks.size() == 0) {
@@ -123,6 +124,7 @@ public class TaskListFragment extends Fragment {
                 activityModel.endRoutine(); // Ends routine and stop timers
                 view.endRoutineButton.setText("Routine Ended"); // Updates button text
                 view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
+                view.pauseRoutineButton.setEnabled(false);
                 view.routinePauseTimeButton.setEnabled(false);
                 view.routineAdd30SecButton.setEnabled(false);
             }
@@ -144,7 +146,32 @@ public class TaskListFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
+        view.pauseRoutineButton.setOnClickListener(v -> {
+            if (view.pauseRoutineButton.getText().equals("Pause Routine")) {
+                activityModel.pauseRoutineTimer();
+                view.pauseRoutineButton.setText("Resume Routine");
+
+                // Disable "End Routine" when paused
+                view.endRoutineButton.setEnabled(false);
+            } else {
+                activityModel.resumeRoutineTimer();
+                view.pauseRoutineButton.setText("Pause Routine");
+
+                // Re-enable "End Routine" when resumed
+                view.endRoutineButton.setEnabled(true);
+            }
+        });
+
         return view.getRoot();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // Reset pause state when exiting the routine
+        view.pauseRoutineButton.setText("Pause Routine");
+        activityModel.resumeRoutineTimer();
+        view.endRoutineButton.setEnabled(true);
+    }
 }

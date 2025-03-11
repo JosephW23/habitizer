@@ -139,6 +139,9 @@ public class MainViewModel extends ViewModel {
     }
 
     public void checkOffTask(RoutineTask task) {
+        if (!routineTimer.isRunning()) {
+            return;
+        }
         if (!task.isChecked()) {
             task.checkOff(taskTimer.getSeconds());
             saveRoutineTask(task);
@@ -222,10 +225,10 @@ public class MainViewModel extends ViewModel {
     public void initializeRoutineState() {
         this.routine.initialize();
         saveRoutine(this.routine);
+        saveRoutine(this.routine);
         endRoutine();
     }
 
-    // Minimal edit: update task order by updating each task’s sortOrder before saving.
     public void updateTaskOrder(List<RoutineTask> newTaskOrder) {
         for (int i = 0; i < newTaskOrder.size(); i++) {
             newTaskOrder.get(i).setSortOrder(i);
@@ -282,9 +285,22 @@ public class MainViewModel extends ViewModel {
         updateTime();
     }
     public void endRoutine() {
+        if (!routineTimer.isRunning()) { // Prevent ending if paused
+            return;
+        }
+
         stopRoutineTimer();
         stopTaskTimer();
         timerHandler.removeMessages(0);
+    }
+
+    public void pauseRoutineTimer() {
+        routineTimer.pauseTimer();
+        timerHandler.removeCallbacksAndMessages(null);
+    }
+    public void resumeRoutineTimer() {
+        routineTimer.resumeTimer();
+        startTimerUpdates();
     }
     public void startTimerUpdates() {
         timerHandler.postDelayed(new Runnable() {

@@ -15,12 +15,14 @@ public class Routine {
     private boolean isInProgress;
     private boolean isInEdit;
     private boolean isDone;
+    private boolean isPaused;
 
     private int routineElapsedTime;
     private int taskElapsedTime;
     private int goalTime;
 
-    public Routine(@NonNull int id, @NonNull String title, int sortOrder, boolean isInProgress, boolean isInEdit, boolean isdone,
+    public Routine(@NonNull int id, @NonNull String title, int sortOrder,
+                   boolean isInProgress, boolean isInEdit, boolean isdone, boolean isPaused,
                    int routineElapsedTime, int taskElapsedTime, int goalTime) {
         if (title.isBlank()) {
             throw new IllegalArgumentException("Routine title cannot be blank");
@@ -31,6 +33,7 @@ public class Routine {
         this.isInProgress = isInProgress;
         this.isInEdit = isInEdit;
         this.isDone = isdone;
+        this.isPaused = isPaused;
 
         this.routineElapsedTime = routineElapsedTime;
         this.taskElapsedTime = taskElapsedTime;
@@ -45,6 +48,7 @@ public class Routine {
     public boolean isInProgress() { return isInProgress; }
     public boolean isInEdit() { return isInEdit; }
     public boolean isDone() { return isDone; }
+    public boolean isPaused() { return isPaused; }
     public int routineElapsedTime() { return routineElapsedTime; }
     public int taskElapsedTime() { return taskElapsedTime; }
     public int goalTime() { return goalTime; }
@@ -95,6 +99,9 @@ public class Routine {
     }
     public void setInEdit(boolean newInEdit) {
         isInEdit = newInEdit;
+    }
+    public void setIsPaused(boolean newIsPaused) {
+        isPaused = newIsPaused;
     }
 
     public void initialize() {

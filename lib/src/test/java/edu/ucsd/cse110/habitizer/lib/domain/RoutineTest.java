@@ -20,7 +20,7 @@ public class RoutineTest {
         );
 
         // WHEN I construct a Routine with those tasks
-        Routine routine = new Routine(0, "My Routine", 0, false, false, false, 0, 0, 0);
+        Routine routine = new Routine(0, "My Routine", 0, false, false, false, false, 0, 0, 0);
         routine.setTasks(expected);
 
         // THEN .tasks() returns the same tasks I created it with
@@ -33,7 +33,7 @@ public class RoutineTest {
         // GIVEN ...
         // WHEN I try to create a Routine with a blank title.
         try {
-            new Routine(0, " ", 0, false, false, false, 0, 0, 0);
+            new Routine(0, " ", 0, false, false, false, false, 0, 0, 0);
             fail("Expected: IllegalArgumentException, blank title");
         }
         // THEN an IllegalArgumentException is thrown.
@@ -46,7 +46,7 @@ public class RoutineTest {
     @Test
     public void titleIsCorrect() {
         // GIVEN the title is "Test Routine"
-        Routine routine = new Routine(0, "Test Routine", 0, false, false, false, 0, 0, 0);
+        Routine routine = new Routine(0, "Test Routine", 0, false, false, false, false, 0, 0, 0);
         routine.setTasks(List.of(
                 new RoutineTask(1, 0,"Brush Teeth", false, 0)
         ));
@@ -60,7 +60,7 @@ public class RoutineTest {
     @Test
     public void checkId() {
         // GIVEN the title is "Test Routine"
-        Routine routine = new Routine(0, "Test Routine", 0, false, false, false, 0, 0, 0);
+        Routine routine = new Routine(0, "Test Routine", 0, false, false, false, false, 0, 0, 0);
         routine.setTasks(List.of(
                 new RoutineTask(1, 0, "Brush Teeth", false, 0)
         ));
@@ -77,11 +77,11 @@ public class RoutineTest {
 
         Routine routine;
 
-        routine = new Routine(0, "Test Routine", 0, false, false, false, 0, 0, 0);
+        routine = new Routine(0, "Test Routine", 0, false, false, false, false, 0, 0, 0);
         expectedSortOrder = 0;
         assertEquals(expectedSortOrder, routine.sortOrder());
 
-        routine = new Routine(0, "Test Routine", 3, false, false, false, 0, 0, 0);
+        routine = new Routine(0, "Test Routine", 3, false, false, false, false, 0, 0, 0);
         expectedSortOrder = 3;
         assertEquals(expectedSortOrder, routine.sortOrder());
 
@@ -90,9 +90,9 @@ public class RoutineTest {
     @Test
     public void routineSortOrder() {
         // GIVEN three routines with different sort orders
-        Routine routine1 = new Routine(0, "Morning Routine", 2, false, false, false, 0, 0, 0);
-        Routine routine2 = new Routine(1, "Evening Routine", 1, false, false, false, 0, 0, 0);
-        Routine routine3 = new Routine(2, "Workout Routine", 3, false, false, false, 0, 0, 0);
+        Routine routine1 = new Routine(0, "Morning Routine", 2, false, false, false, false, 0, 0, 0);
+        Routine routine2 = new Routine(1, "Evening Routine", 1, false, false, false, false, 0, 0, 0);
+        Routine routine3 = new Routine(2, "Workout Routine", 3, false, false, false, false, 0, 0, 0);
 
         List<Routine> routines = Arrays.asList(routine1, routine2, routine3);
 

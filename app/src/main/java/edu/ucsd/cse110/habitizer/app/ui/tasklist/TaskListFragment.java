@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmInitializeRoutineFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.GoalTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -58,6 +58,7 @@ public class TaskListFragment extends Fragment {
             adapter.addAll(new ArrayList<>(tasks));
             adapter.notifyDataSetChanged();
         });
+
     }
 
     @Nullable
@@ -82,18 +83,16 @@ public class TaskListFragment extends Fragment {
         // Pause Button functionality
         // For Resume and Pause I know you have to use R and add it to string xml but couldn't get it to work
         view.routinePauseTimeButton.setOnClickListener(v -> {
-            if (activityModel.getRoutineTimer() instanceof MockElapsedTimer) {
-                MockElapsedTimer routineTimer = (MockElapsedTimer) activityModel.getRoutineTimer();
-                MockElapsedTimer taskTimer = (MockElapsedTimer) activityModel.getTaskTimer();
-                if (routineTimer.isRunning()) {
-                    routineTimer.pauseTimer();
-                    taskTimer.pauseTimer();
-                    view.routinePauseTimeButton.setText("Resume");
-                } else {
-                    routineTimer.resumeTimer();
-                    taskTimer.resumeTimer();
-                    view.routinePauseTimeButton.setText("Pause");
-                }
+            var routineTimer = activityModel.getRoutineTimer();
+            var taskTimer = activityModel.getTaskTimer();
+            if (routineTimer.isRunning()) {
+                routineTimer.pauseTimer();
+                taskTimer.pauseTimer();
+                view.routinePauseTimeButton.setText("Resume");
+            } else {
+                routineTimer.resumeTimer();
+                taskTimer.resumeTimer();
+                view.routinePauseTimeButton.setText("Pause");
             }
         });
 
@@ -119,14 +118,20 @@ public class TaskListFragment extends Fragment {
         });
 
         //When routine is marked as done, disable button.
-        activityModel.getIsRoutineDone().observe(isTaskDone -> {
-            if (isTaskDone) {
+        activityModel.getIsRoutineDone().observe(isRoutineDone -> {
+            if (isRoutineDone) {
                 activityModel.endRoutine(); // Ends routine and stop timers
                 view.endRoutineButton.setText("Routine Ended"); // Updates button text
                 view.endRoutineButton.setEnabled(false); // Disables button to prevent multiple presses
                 view.pauseRoutineButton.setEnabled(false);
                 view.routinePauseTimeButton.setEnabled(false);
                 view.routineAdd30SecButton.setEnabled(false);
+            } else {
+                view.routinePauseTimeButton.setEnabled(true);
+                view.routineAdd30SecButton.setEnabled(true);
+                view.endRoutineButton.setEnabled(true);
+                view.pauseRoutineButton.setEnabled(true);
+
             }
         });
 
@@ -148,30 +153,36 @@ public class TaskListFragment extends Fragment {
 
         view.pauseRoutineButton.setOnClickListener(v -> {
             if (view.pauseRoutineButton.getText().equals("Pause Routine")) {
-                activityModel.pauseRoutineTimer();
+                activityModel.pauseRoutine();
+                view.routinePauseTimeButton.setText("Resume");
                 view.pauseRoutineButton.setText("Resume Routine");
 
-                // Disable "End Routine" when paused
                 view.endRoutineButton.setEnabled(false);
+                view.routinePauseTimeButton.setEnabled(false);
+                view.routineAdd30SecButton.setEnabled(false);
             } else {
-                activityModel.resumeRoutineTimer();
+                activityModel.resumeRoutine();
+                view.routinePauseTimeButton.setText("Pause");
                 view.pauseRoutineButton.setText("Pause Routine");
-
-                // Re-enable "End Routine" when resumed
                 view.endRoutineButton.setEnabled(true);
+                view.routinePauseTimeButton.setEnabled(true);
+                view.routineAdd30SecButton.setEnabled(true);
+            }
+        });
+
+        activityModel.getIsRoutinePaused().observe(isRoutinePaused -> {
+            if (isRoutinePaused) {
+                view.pauseRoutineButton.setText("Resume Routine");
+                view.endRoutineButton.setEnabled(false);
+                view.routinePauseTimeButton.setEnabled(false);
+                view.routineAdd30SecButton.setEnabled(false);
+            } else {
+                view.pauseRoutineButton.setText("Pause Routine");
+                view.routinePauseTimeButton.setEnabled(true);
+                view.routineAdd30SecButton.setEnabled(true);
             }
         });
 
         return view.getRoot();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        // Reset pause state when exiting the routine
-        view.pauseRoutineButton.setText("Pause Routine");
-        activityModel.resumeRoutineTimer();
-        view.endRoutineButton.setEnabled(true);
     }
 }

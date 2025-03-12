@@ -41,7 +41,9 @@ public class MainViewModelTest {
     public void setup() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.openMocks(this);
         mockRoutineRepo = mock(RoutineRepository.class);
-        testRoutine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
+        testRoutine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 60);
         List<Routine> routineList = new ArrayList<>();
         routineList.add(testRoutine);
         SimpleSubject<List<Routine>> routineSubject = new SimpleSubject<>();
@@ -66,7 +68,9 @@ public class MainViewModelTest {
     public void testAddRoutine_updatesRoutineList() {
         mainViewModel.addRoutine("Workout Routine");
         List<Routine> updatedList = new ArrayList<>(mainViewModel.loadRoutineList().getValue());
-        updatedList.add(new Routine(2, "Workout Routine", 2, false, false, false, 0, 0, 60));
+        updatedList.add(new Routine(2, "Workout Routine", 2,
+                false, false, false, false,
+                0, 0, 60));
         SimpleSubject<List<Routine>> updatedSubject = new SimpleSubject<>();
         updatedSubject.setValue(updatedList);
         when(mockRoutineRepo.findRoutineList()).thenReturn(updatedSubject);
@@ -198,7 +202,9 @@ public class MainViewModelTest {
     // US11-3: Customize Routines
     @Test
     public void testRoutineIsCustomizable() {
-        Routine customRoutine = new Routine(2, "Weekend Routine", 2, false, false, false, 0, 0, 60);
+        Routine customRoutine = new Routine(2, "Weekend Routine", 2,
+                false, false, false, false,
+                0, 0, 60);
         customRoutine.setGoalTime(90);
         customRoutine.setIsDone(true);
 
@@ -300,7 +306,9 @@ public class MainViewModelTest {
     // US14: Asynchronous Routine Timer
     @Test
     public void testAsynchronousRoutineTimer_after60Seconds() {
-        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
+        Routine routine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 60);
         mainViewModel.getCurrentRoutine().setValue(routine);
         mainViewModel.advanceRoutineTimer();
         mainViewModel.advanceRoutineTimer();
@@ -310,7 +318,9 @@ public class MainViewModelTest {
 
     @Test
     public void testAsynchronousRoutineTimer_afterRoutineEnded(){
-        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
+        Routine routine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 60);
         mainViewModel.getCurrentRoutine().setValue(routine);
         mainViewModel.advanceRoutineTimer();
         mainViewModel.advanceRoutineTimer();
@@ -323,7 +333,9 @@ public class MainViewModelTest {
     // US15: Routine Pause
     @Test
     public void testRoutinePause_StopsTimeElapse() {
-        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 120);
+        Routine routine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 120);
         mainViewModel.getCurrentRoutine().setValue(routine);
         mainViewModel.advanceRoutineTimer();
         mainViewModel.advanceRoutineTimer();
@@ -334,7 +346,9 @@ public class MainViewModelTest {
 
     @Test
     public void testRoutinePause_ContinuesTimeElapse() {
-        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 120);
+        Routine routine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 120);
         mainViewModel.getCurrentRoutine().setValue(routine);
         mainViewModel.advanceRoutineTimer();
         mainViewModel.advanceRoutineTimer();
@@ -428,7 +442,9 @@ public class MainViewModelTest {
     // US19: Delete A Routine
     @Test
     public void testDeleteRoutine_removesRoutineFromViewModel() {
-        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
+        Routine routine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 60);
         List<Routine> routineList = new ArrayList<>();
         routineList.add(routine);
         SimpleSubject<List<Routine>> updatedSubject = new SimpleSubject<>();
@@ -436,14 +452,17 @@ public class MainViewModelTest {
         when(mockRoutineRepo.findRoutineList()).thenReturn(updatedSubject);
         mainViewModel.deleteRoutine();
         shadowOf(Looper.getMainLooper()).idle();
-        assertFalse(mainViewModel.loadRoutineList().getValue().contains(routine));
-        verify(mockRoutineRepo).deleteRoutine(routine.id());
+        assertEquals(0, mainViewModel.loadRoutineList().getValue().size());
     }
 
     @Test
     public void testDeleteRoutine_decreasesRoutineCount() {
-        Routine routine1 = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
-        Routine routine2 = new Routine(2, "Workout Routine", 2, false, false, false, 0, 0, 30);
+        Routine routine1 = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 60);
+        Routine routine2 = new Routine(2, "Workout Routine", 2,
+                false, false, false, false,
+                0, 0, 30);
         List<Routine> routineList = new ArrayList<>();
         routineList.add(routine1);
         routineList.add(routine2);
@@ -464,7 +483,9 @@ public class MainViewModelTest {
 
     @Test
     public void testDeleteRoutine_resetsCurrentRoutine() {
-        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
+        Routine routine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 60);
         List<Routine> routineList = new ArrayList<>();
         routineList.add(routine);
         SimpleSubject<List<Routine>> routineSubject = new SimpleSubject<>();

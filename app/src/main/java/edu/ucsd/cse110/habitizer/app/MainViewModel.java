@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 import edu.ucsd.cse110.habitizer.lib.domain.ElapsedTimer;
+import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.RegularTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
@@ -29,12 +30,14 @@ public class MainViewModel extends ViewModel {
     private MutableSubject<List<RoutineTask>> taskList;
 
     private Routine routine;
+    private List<Routine> routines;
     private int numTasks;
     private int numRoutines;
     private MutableSubject<String> routineElapsedTime;
     private MutableSubject<String> taskElapsedTime;
     private MutableSubject<String> goalTime;
     private MutableSubject<Boolean> isRoutineDone;
+    private MutableSubject<Boolean> isRoutinePaused;
 
     private boolean isFirstRun;
     private final ElapsedTimer routineTimer;
@@ -62,6 +65,7 @@ public class MainViewModel extends ViewModel {
         taskElapsedTime = new SimpleSubject<>();
         goalTime = new SimpleSubject<>();
         isRoutineDone = new SimpleSubject<>();
+        isRoutinePaused = new SimpleSubject<>();
 
         isFirstRun = true;
 
@@ -76,6 +80,7 @@ public class MainViewModel extends ViewModel {
         routineList.observe(routines -> {
             if (routines == null) return;
             numRoutines = routines.size();
+            this.routines = routines;
             for (var routine : routines) {
                 routine.setTasks(routineRepository.findTaskList(routine.id()));
                 numTasks += routine.tasks().size();
@@ -90,6 +95,7 @@ public class MainViewModel extends ViewModel {
             this.routine = routine;
 
             isRoutineDone.setValue(routine.isDone());
+            isRoutinePaused.setValue(routine.isPaused());
             goalTime.setValue(String.valueOf(routine.goalTime()));
             routineElapsedTime.setValue(routineTimer.getRoundedDownTime());
             taskElapsedTime.setValue(taskTimer.getRoundedDownTime());
@@ -182,6 +188,9 @@ public class MainViewModel extends ViewModel {
     public Subject<Boolean> getIsRoutineDone() {
         return isRoutineDone;
     }
+    public Subject<Boolean> getIsRoutinePaused() {
+        return isRoutinePaused;
+    }
 
     public void updateInProgressRoutine(Routine routine, boolean newInProgress) {
         routine.setInProgress(newInProgress);
@@ -205,7 +214,9 @@ public class MainViewModel extends ViewModel {
         saveRoutineTask(task);
     }
     public void addRoutine(String routineName) {
-        Routine routine = new Routine(numRoutines + 1, routineName, numRoutines + 1, false, false, false, 0, 0, 60);
+        Routine routine = new Routine(numRoutines + 1, routineName, numRoutines + 1,
+                false, false, false, false,
+                0, 0, 60);
         saveRoutine(routine);
     }
     public void updateTaskName(int taskId, String newTitle) {
@@ -294,9 +305,25 @@ public class MainViewModel extends ViewModel {
         timerHandler.removeMessages(0);
     }
 
+    public void pauseRoutine() {
+        routine.setIsPaused(true);
+        saveRoutine(routine);
+        pauseRoutineTimer();
+        pauseTaskTimer();
+    }
     public void pauseRoutineTimer() {
         routineTimer.pauseTimer();
         timerHandler.removeCallbacksAndMessages(null);
+    }
+
+    public void pauseTaskTimer() {
+        taskTimer.pauseTimer();
+        timerHandler.removeCallbacksAndMessages(null);
+    }
+    public void resumeRoutine() {
+        routine.setIsPaused(false);
+        saveRoutine(routine);
+        resumeRoutineTimer();
     }
     public void resumeRoutineTimer() {
         routineTimer.resumeTimer();
@@ -313,6 +340,16 @@ public class MainViewModel extends ViewModel {
     }
 
     public void deleteRoutine() {
-        routineRepository.deleteRoutine(routine.id());
+        routineRepository.deleteRoutines();
+
+        if (routine == null) return;
+        var count = 1;
+        routines.removeIf(r -> routine == r);
+        for (var r : routines) {
+            r.setId(count);
+            count++;
+            saveRoutine(r);
+        }
+
     }
 }

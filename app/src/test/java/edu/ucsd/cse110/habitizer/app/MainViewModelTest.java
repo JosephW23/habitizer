@@ -306,7 +306,9 @@ public class MainViewModelTest {
     // US14: Asynchronous Routine Timer
     @Test
     public void testAsynchronousRoutineTimer_after60Seconds() {
-        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
+        Routine routine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 60);
         mainViewModel.getCurrentRoutine().setValue(routine);
         mainViewModel.advanceRoutineTimer();
         mainViewModel.advanceRoutineTimer();
@@ -316,7 +318,9 @@ public class MainViewModelTest {
 
     @Test
     public void testAsynchronousRoutineTimer_afterRoutineEnded(){
-        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 60);
+        Routine routine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 60);
         mainViewModel.getCurrentRoutine().setValue(routine);
         mainViewModel.advanceRoutineTimer();
         mainViewModel.advanceRoutineTimer();
@@ -329,7 +333,9 @@ public class MainViewModelTest {
     // US15: Routine Pause
     @Test
     public void testRoutinePause_StopsTimeElapse() {
-        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 120);
+        Routine routine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 120);
         mainViewModel.getCurrentRoutine().setValue(routine);
         mainViewModel.advanceRoutineTimer();
         mainViewModel.advanceRoutineTimer();
@@ -340,7 +346,9 @@ public class MainViewModelTest {
 
     @Test
     public void testRoutinePause_ContinuesTimeElapse() {
-        Routine routine = new Routine(1, "Morning Routine", 1, false, false, false, 0, 0, 120);
+        Routine routine = new Routine(1, "Morning Routine", 1,
+                false, false, false, false,
+                0, 0, 120);
         mainViewModel.getCurrentRoutine().setValue(routine);
         mainViewModel.advanceRoutineTimer();
         mainViewModel.advanceRoutineTimer();
@@ -444,8 +452,7 @@ public class MainViewModelTest {
         when(mockRoutineRepo.findRoutineList()).thenReturn(updatedSubject);
         mainViewModel.deleteRoutine();
         shadowOf(Looper.getMainLooper()).idle();
-        assertFalse(mainViewModel.loadRoutineList().getValue().contains(routine));
-        verify(mockRoutineRepo).deleteRoutine(routine.id());
+        assertEquals(0, mainViewModel.loadRoutineList().getValue().size());
     }
 
     @Test

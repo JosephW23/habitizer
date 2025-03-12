@@ -307,9 +307,15 @@ public class MainViewModel extends ViewModel {
         routine.setIsPaused(true);
         saveRoutine(routine);
         pauseRoutineTimer();
+        pauseTaskTimer();
     }
     public void pauseRoutineTimer() {
         routineTimer.pauseTimer();
+        timerHandler.removeCallbacksAndMessages(null);
+    }
+
+    public void pauseTaskTimer() {
+        taskTimer.pauseTimer();
         timerHandler.removeCallbacksAndMessages(null);
     }
     public void resumeRoutine() {

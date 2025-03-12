@@ -177,6 +177,8 @@ public class TaskListFragment extends Fragment {
             }
         });
 
+        view.endRoutineButton.setText(getString(R.string.end_routine));
+
         return view.getRoot();
     }
 }

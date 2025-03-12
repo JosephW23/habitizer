@@ -108,6 +108,7 @@ public class Routine {
         isDone = false;
         isInProgress = false;
         isInEdit = false;
+        isPaused = false;
 
         for (var task : tasks) {
             task.initialize();

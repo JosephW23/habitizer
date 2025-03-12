@@ -13,10 +13,6 @@ public interface RoutineDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(RoutineEntity routine);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insert(List<RoutineEntity> routines);
-
-
     @Query("SELECT * FROM routines ORDER BY sort_order")
     LiveData<List<RoutineEntity>> findRoutineList();
 

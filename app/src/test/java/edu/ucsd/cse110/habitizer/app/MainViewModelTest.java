@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import android.os.Looper;
-import android.os.SystemClock;
 
 import static org.robolectric.Shadows.shadowOf;
 

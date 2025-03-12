@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 

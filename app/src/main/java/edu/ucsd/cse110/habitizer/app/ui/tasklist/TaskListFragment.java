@@ -7,11 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import edu.ucsd.cse110.habitizer.app.R;
-import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmInitializeRoutineFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.GoalTimeDialogFragment;
-import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;

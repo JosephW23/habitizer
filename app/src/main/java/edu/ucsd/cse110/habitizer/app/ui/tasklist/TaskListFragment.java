@@ -58,6 +58,7 @@ public class TaskListFragment extends Fragment {
             adapter.addAll(new ArrayList<>(tasks));
             adapter.notifyDataSetChanged();
         });
+
     }
 
     @Nullable
@@ -82,22 +83,17 @@ public class TaskListFragment extends Fragment {
         // Pause Button functionality
         // For Resume and Pause I know you have to use R and add it to string xml but couldn't get it to work
         view.routinePauseTimeButton.setOnClickListener(v -> {
-            Log.d("Resume", "Resume");
-//            if (activityModel.getRoutineTimer() instanceof MockElapsedTimer) {
-//                MockElapsedTimer routineTimer = (MockElapsedTimer) activityModel.getRoutineTimer();
-//                MockElapsedTimer taskTimer = (MockElapsedTimer) activityModel.getTaskTimer();
             var routineTimer = activityModel.getRoutineTimer();
             var taskTimer = activityModel.getTaskTimer();
-                if (routineTimer.isRunning()) {
-                    routineTimer.pauseTimer();
-                    taskTimer.pauseTimer();
-                    view.routinePauseTimeButton.setText("Resume");
-                } else {
-                    routineTimer.resumeTimer();
-                    taskTimer.resumeTimer();
-                    view.routinePauseTimeButton.setText("Pause");
-                }
-//            }
+            if (routineTimer.isRunning()) {
+                routineTimer.pauseTimer();
+                taskTimer.pauseTimer();
+                view.routinePauseTimeButton.setText("Resume");
+            } else {
+                routineTimer.resumeTimer();
+                taskTimer.resumeTimer();
+                view.routinePauseTimeButton.setText("Pause");
+            }
         });
 
         // Add Elapse Time Button functionality
@@ -130,6 +126,12 @@ public class TaskListFragment extends Fragment {
                 view.pauseRoutineButton.setEnabled(false);
                 view.routinePauseTimeButton.setEnabled(false);
                 view.routineAdd30SecButton.setEnabled(false);
+            } else {
+                view.routinePauseTimeButton.setEnabled(true);
+                view.routineAdd30SecButton.setEnabled(true);
+                view.endRoutineButton.setEnabled(true);
+                view.pauseRoutineButton.setEnabled(true);
+
             }
         });
 

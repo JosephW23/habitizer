@@ -26,7 +26,6 @@ public class RoutineListFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentActivity modelOwner;
     private RoutineListAdapter adapter; // adapter for ListView
-    private FragmentRoutineListBinding view;
 
     public RoutineListFragment() {}
 
@@ -60,7 +59,7 @@ public class RoutineListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = FragmentRoutineListBinding.inflate(inflater, container, false);
+        edu.ucsd.cse110.habitizer.app.databinding.FragmentRoutineListBinding view = FragmentRoutineListBinding.inflate(inflater, container, false);
         view.routineList.setAdapter(adapter);
 
         activityModel.getCurrentRoutine().observe(routine -> {

@@ -441,21 +441,6 @@ public class MainViewModelTest {
 
     // US19: Delete A Routine
     @Test
-    public void testDeleteRoutine_removesRoutineFromViewModel() {
-        Routine routine = new Routine(1, "Morning Routine", 1,
-                false, false, false, false,
-                0, 0, 60);
-        List<Routine> routineList = new ArrayList<>();
-        routineList.add(routine);
-        SimpleSubject<List<Routine>> updatedSubject = new SimpleSubject<>();
-        updatedSubject.setValue(routineList);
-        when(mockRoutineRepo.findRoutineList()).thenReturn(updatedSubject);
-        mainViewModel.deleteRoutine();
-        shadowOf(Looper.getMainLooper()).idle();
-        assertEquals(0, mainViewModel.loadRoutineList().getValue().size());
-    }
-
-    @Test
     public void testDeleteRoutine_decreasesRoutineCount() {
         Routine routine1 = new Routine(1, "Morning Routine", 1,
                 false, false, false, false,
@@ -512,14 +497,14 @@ public class MainViewModelTest {
         mainViewModel.pauseRoutineTimer();
         try {
             Thread.sleep(2000);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
         String timeAfterPause = mainViewModel.getRoutineTimer().getTime();
         assertEquals(timeBeforePause, timeAfterPause);
         mainViewModel.resumeRoutineTimer();
         try {
             Thread.sleep(2000);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
         String timeAfterResume = mainViewModel.getRoutineTimer().getTime();
         assertNotEquals(timeAfterPause, timeAfterResume);

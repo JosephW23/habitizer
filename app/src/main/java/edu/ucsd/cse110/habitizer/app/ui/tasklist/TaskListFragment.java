@@ -1,17 +1,14 @@
 package edu.ucsd.cse110.habitizer.app.ui.tasklist;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 
 import edu.ucsd.cse110.habitizer.app.R;
-import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.ConfirmInitializeRoutineFragment;
 import edu.ucsd.cse110.habitizer.app.ui.tasklist.dialog.GoalTimeDialogFragment;
-import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -50,7 +47,7 @@ public class TaskListFragment extends Fragment {
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
-            if (tasks == null || tasks.size() == 0) {
+            if (tasks == null || tasks.isEmpty()) {
                 activityModel.updateIsDone(true);
                 return;
             }
@@ -142,7 +139,7 @@ public class TaskListFragment extends Fragment {
 
         activityModel.loadTaskList().observe(tasks -> {
             if (tasks == null) return;
-            if (tasks.size() == 0) {
+            if (tasks.isEmpty()) {
                 activityModel.updateIsDone(true);
             }
 
@@ -178,8 +175,6 @@ public class TaskListFragment extends Fragment {
                 view.routineAdd30SecButton.setEnabled(false);
             } else {
                 view.pauseRoutineButton.setText("Pause Routine");
-                view.routinePauseTimeButton.setEnabled(true);
-                view.routineAdd30SecButton.setEnabled(true);
             }
         });
 

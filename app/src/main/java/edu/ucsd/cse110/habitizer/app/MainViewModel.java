@@ -4,6 +4,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
@@ -11,9 +12,9 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.lib.domain.ElapsedTimer;
-import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.RegularTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
@@ -25,19 +26,19 @@ import edu.ucsd.cse110.habitizer.lib.util.Subject;
 public class MainViewModel extends ViewModel {
     private final RoutineRepository routineRepository;
 
-    private MutableSubject<Routine> currentRoutine;
-    private MutableSubject<List<Routine>> routineList;
-    private MutableSubject<List<RoutineTask>> taskList;
+    private final MutableSubject<Routine> currentRoutine;
+    private final MutableSubject<List<Routine>> routineList;
+    private final MutableSubject<List<RoutineTask>> taskList;
 
     private Routine routine;
     private List<Routine> routines;
     private int numTasks;
     private int numRoutines;
-    private MutableSubject<String> routineElapsedTime;
-    private MutableSubject<String> taskElapsedTime;
-    private MutableSubject<String> goalTime;
-    private MutableSubject<Boolean> isRoutineDone;
-    private MutableSubject<Boolean> isRoutinePaused;
+    private final MutableSubject<String> routineElapsedTime;
+    private final MutableSubject<String> taskElapsedTime;
+    private final MutableSubject<String> goalTime;
+    private final MutableSubject<Boolean> isRoutineDone;
+    private final MutableSubject<Boolean> isRoutinePaused;
 
     private boolean isFirstRun;
     private final ElapsedTimer routineTimer;
@@ -78,6 +79,7 @@ public class MainViewModel extends ViewModel {
         });
 
         routineList.observe(routines -> {
+            SystemClock.sleep(500);
             if (routines == null) return;
             numRoutines = routines.size();
             this.routines = routines;
@@ -118,7 +120,7 @@ public class MainViewModel extends ViewModel {
 
         boolean duplicate = false;
         for (var task : this.routine.tasks()) {
-            if (task.id() == newTask.id()) {
+            if (Objects.equals(task.id(), newTask.id())) {
                 newTasks.add(newTask);
                 duplicate = true;
             } else {
@@ -236,7 +238,6 @@ public class MainViewModel extends ViewModel {
     public void initializeRoutineState() {
         this.routine.initialize();
         saveRoutine(this.routine);
-        saveRoutine(this.routine);
         endRoutine();
     }
 
@@ -342,13 +343,24 @@ public class MainViewModel extends ViewModel {
     public void deleteRoutine() {
         routineRepository.deleteRoutines();
 
-        if (routine == null) return;
-        var count = 1;
-        routines.removeIf(r -> routine == r);
-        for (var r : routines) {
-            r.setId(count);
-            count++;
-            saveRoutine(r);
+        if (this.routine == null) return;
+        var routineId = 1;
+        var taskId = 1;
+        for (var routine : routines) {
+            if (routine.id() != this.routine.id()) {
+                routine.setId(routineId);
+                List<RoutineTask> newTasks = new ArrayList<>();
+                for (var task : routine.tasks()) {
+                    task.setRoutineId(routineId);
+                    task.setId(taskId);
+                    newTasks.add(task);
+                    taskId++;
+                }
+
+                routine.setTasks(newTasks);
+                saveRoutine(routine);
+                routineId++;
+            }
         }
 
     }

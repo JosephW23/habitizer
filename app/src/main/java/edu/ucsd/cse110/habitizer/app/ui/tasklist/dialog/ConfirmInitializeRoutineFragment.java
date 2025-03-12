@@ -15,7 +15,6 @@ import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routinelist.RoutineListFragment;
 
 public class ConfirmInitializeRoutineFragment extends DialogFragment {
-    private int flashcardId;
     private MainViewModel activityModel;
 
     ConfirmInitializeRoutineFragment() {}

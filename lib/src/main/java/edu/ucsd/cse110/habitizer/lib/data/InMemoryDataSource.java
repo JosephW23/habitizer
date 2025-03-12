@@ -77,7 +77,15 @@ public class InMemoryDataSource {
     }
 
     public void deleteRoutine(int routineId) {
-        // TODO
+        routinesMap.remove(routineId);
+        ArrayList<Routine> newRoutines = new ArrayList<>();
+        for (var routine : routinesList) {
+            if (routine.id() != routineId) {
+                newRoutines.add(routine);
+            }
+        }
+        routinesList = List.copyOf(newRoutines);
+        routineSubjects.setValue(newRoutines);
     }
 }
 

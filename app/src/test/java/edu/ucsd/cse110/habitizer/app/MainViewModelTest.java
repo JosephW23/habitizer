@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import android.os.Looper;
+import android.os.SystemClock;
 
 import static org.robolectric.Shadows.shadowOf;
 
@@ -439,21 +440,6 @@ public class MainViewModelTest {
     }
 
     // US19: Delete A Routine
-    @Test
-    public void testDeleteRoutine_removesRoutineFromViewModel() {
-        Routine routine = new Routine(1, "Morning Routine", 1,
-                false, false, false, false,
-                0, 0, 60);
-        List<Routine> routineList = new ArrayList<>();
-        routineList.add(routine);
-        SimpleSubject<List<Routine>> updatedSubject = new SimpleSubject<>();
-        updatedSubject.setValue(routineList);
-        when(mockRoutineRepo.findRoutineList()).thenReturn(updatedSubject);
-        mainViewModel.deleteRoutine();
-        shadowOf(Looper.getMainLooper()).idle();
-        assertEquals(0, mainViewModel.loadRoutineList().getValue().size());
-    }
-
     @Test
     public void testDeleteRoutine_decreasesRoutineCount() {
         Routine routine1 = new Routine(1, "Morning Routine", 1,

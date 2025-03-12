@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Routine {
-    private final @Nullable Integer id;
+    private @Nullable Integer id;
     private @NonNull String title;
     private int sortOrder;
     private List<RoutineTask> tasks;
@@ -102,6 +102,10 @@ public class Routine {
     }
     public void setIsPaused(boolean newIsPaused) {
         isPaused = newIsPaused;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void initialize() {

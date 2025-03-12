@@ -30,6 +30,7 @@ public class MainViewModel extends ViewModel {
     private MutableSubject<List<RoutineTask>> taskList;
 
     private Routine routine;
+    private List<Routine> routines;
     private int numTasks;
     private int numRoutines;
     private MutableSubject<String> routineElapsedTime;
@@ -79,6 +80,7 @@ public class MainViewModel extends ViewModel {
         routineList.observe(routines -> {
             if (routines == null) return;
             numRoutines = routines.size();
+            this.routines = routines;
             for (var routine : routines) {
                 routine.setTasks(routineRepository.findTaskList(routine.id()));
                 numTasks += routine.tasks().size();
@@ -332,6 +334,16 @@ public class MainViewModel extends ViewModel {
     }
 
     public void deleteRoutine() {
-        routineRepository.deleteRoutine(routine.id());
+        routineRepository.deleteRoutines();
+
+        if (routine == null) return;
+        var count = 1;
+        routines.removeIf(r -> routine == r);
+        for (var r : routines) {
+            r.setId(count);
+            count++;
+            saveRoutine(r);
+        }
+
     }
 }

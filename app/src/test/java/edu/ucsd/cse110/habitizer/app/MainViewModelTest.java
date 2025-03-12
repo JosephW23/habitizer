@@ -511,14 +511,14 @@ public class MainViewModelTest {
         mainViewModel.pauseRoutineTimer();
         try {
             Thread.sleep(2000);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
         String timeAfterPause = mainViewModel.getRoutineTimer().getTime();
         assertEquals(timeBeforePause, timeAfterPause);
         mainViewModel.resumeRoutineTimer();
         try {
             Thread.sleep(2000);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
         String timeAfterResume = mainViewModel.getRoutineTimer().getTime();
         assertNotEquals(timeAfterPause, timeAfterResume);

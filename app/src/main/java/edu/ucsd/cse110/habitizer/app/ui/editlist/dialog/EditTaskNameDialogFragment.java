@@ -19,7 +19,6 @@ public class EditTaskNameDialogFragment extends DialogFragment {
     private FragmentDialogEditTaskNameBinding view;
     private MainViewModel activityModel;
     private int taskId;
-    private String taskTitle;
 
     EditTaskNameDialogFragment () {
         // Required empty public constructor
@@ -45,7 +44,7 @@ public class EditTaskNameDialogFragment extends DialogFragment {
 
         if (getArguments() != null) {
             this.taskId = getArguments().getInt("taskId");
-            this.taskTitle = getArguments().getString("taskTitle");
+            String taskTitle = getArguments().getString("taskTitle");
         }
     }
 

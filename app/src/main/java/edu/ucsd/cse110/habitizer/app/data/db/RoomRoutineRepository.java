@@ -33,10 +33,9 @@ public class RoomRoutineRepository implements RoutineRepository {
     }
 
     public List<RoutineTask> findTaskList(int routineId) {
-        var tasks = routineTaskDao.findTaskList(routineId).stream()
+        return routineTaskDao.findTaskList(routineId).stream()
                     .map(RoutineTaskEntity::toRoutineTask)
                     .collect(Collectors.toList());
-        return tasks;
     }
     public void saveRoutine(Routine routine) {
         routineDao.insert(RoutineEntity.fromRoutine(routine));

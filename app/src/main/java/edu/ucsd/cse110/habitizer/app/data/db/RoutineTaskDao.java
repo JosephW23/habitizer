@@ -13,7 +13,7 @@ public interface RoutineTaskDao {
     Long insert(RoutineTaskEntity task);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insert(List<RoutineTaskEntity> tasks);
+    void insert(List<RoutineTaskEntity> tasks);
 
     @Query("SELECT * FROM tasks WHERE routine_id = :routineId ORDER BY sort_order")
     List<RoutineTaskEntity> findTaskList(int routineId);

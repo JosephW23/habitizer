@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface RoutineDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Long insert(RoutineEntity routine);
+    void insert(RoutineEntity routine);
 
     @Query("SELECT * FROM routines ORDER BY sort_order")
     LiveData<List<RoutineEntity>> findRoutineList();

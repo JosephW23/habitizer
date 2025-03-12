@@ -11,34 +11,34 @@ import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 public class RoutineEntity {
     @PrimaryKey()
     @ColumnInfo(name = "id")
-    public Integer id;
+    public final Integer id;
 
     @ColumnInfo(name = "title")
-    public String title;
+    public final String title;
 
     @ColumnInfo(name = "sort_order")
-    public int sortOrder;
+    public final int sortOrder;
 
     @ColumnInfo(name = "is_in_progress")
-    public boolean isInProgress;
+    public final boolean isInProgress;
 
     @ColumnInfo(name = "is_in_edit")
-    public boolean isInEdit;
+    public final boolean isInEdit;
 
     @ColumnInfo(name = "is_done")
-    public boolean isDone;
+    public final boolean isDone;
 
     @ColumnInfo(name = "is_paused")
-    public boolean isPaused;
+    public final boolean isPaused;
 
     @ColumnInfo(name = "routine_elapsed_time")
-    public int routineElapsedTime;
+    public final int routineElapsedTime;
 
     @ColumnInfo(name = "task_elapsed_time")
-    public int taskElapsedTime;
+    public final int taskElapsedTime;
 
     @ColumnInfo(name = "goal_time")
-    public int goalTime;
+    public final int goalTime;
 
 
     RoutineEntity(
@@ -57,11 +57,10 @@ public class RoutineEntity {
     }
 
     public static RoutineEntity fromRoutine(@NonNull Routine routine){
-        var routineEntity = new RoutineEntity(
+        return new RoutineEntity(
                 routine.id(), routine.title(), routine.sortOrder(),
                 routine.isInProgress(), routine.isInEdit(), routine.isDone(), routine.isPaused(),
                 routine.routineElapsedTime(), routine.taskElapsedTime(), routine.goalTime());
-        return routineEntity;
     }
 
     public Routine toRoutine(){

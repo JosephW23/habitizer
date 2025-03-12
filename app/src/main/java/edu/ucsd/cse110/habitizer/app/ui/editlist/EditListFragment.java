@@ -65,7 +65,7 @@ public class EditListFragment extends Fragment {
 
         activityModel.getCurrentRoutine().observe(routine -> {
             if (routine == null) return;
-            view.routineText.setText(routine.title() + " Routine Edit");
+            view.routineText.setText(routine.title() + " Edit");
         });
       
         // Set up Add Task Button

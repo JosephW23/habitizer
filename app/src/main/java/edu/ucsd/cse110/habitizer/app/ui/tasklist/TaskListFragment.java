@@ -46,7 +46,7 @@ public class TaskListFragment extends Fragment {
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel);
 
         activityModel.loadTaskList().observe(tasks -> {
-            if (tasks == null || tasks.size() == 0) {
+            if (tasks == null || tasks.isEmpty()) {
                 activityModel.updateIsDone(true);
                 return;
             }
@@ -138,7 +138,7 @@ public class TaskListFragment extends Fragment {
 
         activityModel.loadTaskList().observe(tasks -> {
             if (tasks == null) return;
-            if (tasks.size() == 0) {
+            if (tasks.isEmpty()) {
                 activityModel.updateIsDone(true);
             }
 
@@ -174,8 +174,6 @@ public class TaskListFragment extends Fragment {
                 view.routineAdd30SecButton.setEnabled(false);
             } else {
                 view.pauseRoutineButton.setText("Pause Routine");
-//                view.routinePauseTimeButton.setEnabled(true);
-//                view.routineAdd30SecButton.setEnabled(true);
             }
         });
 

@@ -178,8 +178,8 @@ public class TaskListFragment extends Fragment {
                 view.routineAdd30SecButton.setEnabled(false);
             } else {
                 view.pauseRoutineButton.setText("Pause Routine");
-                view.routinePauseTimeButton.setEnabled(true);
-                view.routineAdd30SecButton.setEnabled(true);
+//                view.routinePauseTimeButton.setEnabled(true);
+//                view.routineAdd30SecButton.setEnabled(true);
             }
         });
 

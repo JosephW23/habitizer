@@ -48,6 +48,7 @@ public class RoutineListAdapter extends ArrayAdapter<Routine> {
 
         // swap fragment when click the element
         binding.routineButton.setOnClickListener(v -> {
+            Log.d("Routine", "Update Is In Progress" + routine.title());
             activityModel.updateInProgressRoutine(routine, true);
             activityModel.startRoutine();
             this.modelOwner.getSupportFragmentManager()

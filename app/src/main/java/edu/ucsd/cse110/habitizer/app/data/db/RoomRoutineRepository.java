@@ -1,8 +1,5 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
-import android.os.SystemClock;
-import android.util.Log;
-
 import androidx.lifecycle.Transformations;
 
 import java.util.List;
@@ -26,7 +23,6 @@ public class RoomRoutineRepository implements RoutineRepository {
 
     @Override
     public Subject<List<Routine>> findRoutineList() {
-        SystemClock.sleep(1000);
         var entitiesLiveData = routineDao.findRoutineList();
         var routineLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()

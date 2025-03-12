@@ -4,7 +4,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import android.os.SystemClock;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 
 import edu.ucsd.cse110.habitizer.lib.domain.ElapsedTimer;
-import edu.ucsd.cse110.habitizer.lib.domain.MockElapsedTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.RegularTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
@@ -79,6 +78,7 @@ public class MainViewModel extends ViewModel {
         });
 
         routineList.observe(routines -> {
+            SystemClock.sleep(500);
             if (routines == null) return;
             numRoutines = routines.size();
             this.routines = routines;
@@ -342,13 +342,24 @@ public class MainViewModel extends ViewModel {
     public void deleteRoutine() {
         routineRepository.deleteRoutines();
 
-        if (routine == null) return;
-        var count = 1;
-        routines.removeIf(r -> routine == r);
-        for (var r : routines) {
-            r.setId(count);
-            count++;
-            saveRoutine(r);
+        if (this.routine == null) return;
+        var routineId = 1;
+        var taskId = 1;
+        for (var routine : routines) {
+            if (routine.id() != this.routine.id()) {
+                routine.setId(routineId);
+                List<RoutineTask> newTasks = new ArrayList<>();
+                for (var task : routine.tasks()) {
+                    task.setRoutineId(routineId);
+                    task.setId(taskId);
+                    newTasks.add(task);
+                    taskId++;
+                }
+
+                routine.setTasks(newTasks);
+                saveRoutine(routine);
+                routineId++;
+            }
         }
 
     }

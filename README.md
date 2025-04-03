@@ -7,160 +7,125 @@ David Sanchez, Emma Chen, Phillip Tran, Joseph Whiteman, Shouki Ibrahim, Jonghun
 
 ## 🔗 Milestone Links
 
-- **Milestone 1**
-  - [Start Routine Implementation](#)
-  - [Edit Routine Implementation](#)
+### Milestone 1
+- Start Routine Implementation  
+- Edit Routine Implementation  
 
-- **Milestone 2**
-  - [User Stories (BDD Style)](#)
-  - [Planning Poker Documentation](#)
-  - [Scenario-Based System Tests](#)
-  - [Postmortem Analysis](#)
+### Milestone 2
+- User Stories (BDD Style)  
+- Planning Poker Documentation  
+- Scenario-Based System Tests  
+- Postmortem Analysis  
 
 ---
 
 ## 📚 Overview
 
-**Habitizer** is a task and routine planning app that helps users track task durations, customize routines, and optimize their time management with intuitive features like real-time timers, persistent storage, and dual time tracking.
-
----
-
-## 🧠 PEAS Definition
-
-| Element      | Description |
-|--------------|-------------|
-| **Performance** | Routine adherence, task completion, timing accuracy |
-| **Environment** | Android app interface, local routine/task data |
-| **Actuators** | Tap, checkboxes, start/pause/end UI buttons |
-| **Sensors** | User interactions, system time, stored routine/task metadata |
+Habitizer is a mobile application designed to help users better manage their time and daily habits through custom routines. The app allows users to create personalized routines, track time spent on tasks with real-time timers, and monitor both total routine duration and individual task durations. Key features include task completion logic, dual time displays, sub-minute tracking, and planned support for persistent data storage.
 
 ---
 
 ## ✅ Milestone 1 Summary
 
-### 🚦 Iteration Planning
+### Planning & Execution
 
-- **Velocity:** 0.6  
-- **Total Weekly Hours:** 30  
-- **Effective Capacity:** 30 × 0.6 = 18 hours
+In our first milestone, our goal was to build the foundation of the app by implementing the ability to start a routine and to edit an existing routine. To stay within scope, we used agile practices and planning poker to estimate our work and determine what would fit within our team’s weekly working capacity.
 
-#### 🧮 Planning Poker Estimates
+With a team velocity of 0.6 and 30 total hours planned for the week, our effective capacity was 18 hours. Based on our estimates, we prioritized the following user stories:
 
-| User Story | Description              | Hours |
-|------------|--------------------------|--------|
-| US 1       | Start Routine            | 16     |
-| US 2       | Complete Task            | 8      |
-| US 3       | End Routine              | 4      |
-| US 4       | Edit Routine             | 2      |
-| US 5       | Edit Task                | 8      |
-| US 6       | Add Task                 | 8      |
-| US 7       | Set Routine Time         | 4      |
+- **US 1 – Start Routine** (16 hours)  
+- **US 4 – Edit Routine** (2 hours)  
 
-#### ✅ Iteration 1 Scope (18 Hours)
-- US 1 – Start Routine (16h)
-- US 4 – Edit Routine (2h)
+This brought us right to our 18-hour limit.
 
----
+### Completed Tasks
 
-### 🧪 Iteration 1 Tasks
+For the **Start Routine** functionality, we built data structures for Routines and Tasks and wired up the UI to allow a user to launch a routine and begin tracking time. This included creating the layout for the "Routine In Progress" screen, displaying task placeholders, and setting up a live timer that counts up during routine execution. We also ensured that routines without tasks would display a completion message immediately and added JUnit-based unit tests to confirm functionality.
 
-#### US 1 – Start Routine (16h)
-
-| Task | Description | Est. |
-|------|-------------|------|
-| Create Data Structures | Routine & Task classes with name, task list, expected time | 2h |
-| Main Screen & Button | UI Button to Start Routine, link to in-progress screen | 2h |
-| RoutineInProgress Screen | XML layout for timer + task list | 3h |
-| Timer Logic | CountUp Timer (Handler/Runnable) with live display | 3h |
-| Link Routine Data | Pass data from main to routine screen | 3h |
-| Testing & Fixes | Edge cases (empty routine), JUnit tests | 3h |
-
-#### US 4 – Edit Routine (2h)
-
-| Task | Description | Est. |
-|------|-------------|------|
-| Edit Button & Screen | Show task list in edit view | 1h |
-| Disable During Routine | Prevent edits while active | 0.5h |
-| Testing | Ensure edit logic behaves correctly | 0.5h |
+The **Edit Routine** feature added the ability to navigate to an edit screen, where users can view and adjust the tasks for a routine. To prevent data issues, we disabled editing while a routine is running and tested this behavior manually and through edge case validation.
 
 ---
 
 ## ✅ Milestone 2 Summary
 
-### 🔁 Velocity Calculations
+### Velocity and Iteration Reflection
 
-| Iteration | Estimated Hours | Worked Hours | Velocity |
-|-----------|------------------|---------------|----------|
-| Iteration 1 | 18 | 24 | 0.45 |
-| Iteration 2 | 35 | 42 | 0.375 |
+As we continued development, we tracked our team’s actual output to recalculate velocity:
 
----
+- **Iteration 1:** Estimated 18 hours, worked 24 → Velocity = 0.45  
+- **Iteration 2:** Estimated 35 hours, worked 42 → Velocity = 0.375  
 
-### 📘 Milestone 2 User Stories (BDD + Estimates)
+This helped us re-scope stories more realistically for future planning.
 
-| Story # | Description                         | Est. |
-|---------|-------------------------------------|------|
-| 11      | Add Custom Routines                 | 4h   |
-| 12      | Reorder Tasks in a Routine          | 8h   |
-| 13      | Delete A Task                       | 4h   |
-| 14      | Continuous Count-Up Timer           | 2h   |
-| 15      | Pause and Resume Routine            | 2h   |
-| 16      | Sub-Minute Task Times in 5s         | 2h   |
-| 17      | Dual Time Display                   | 2h   |
-| 18      | Rename Routine                      | 2h   |
-| 19      | Delete a Routine                    | 4h   |
-| 20      | Persistence of Data                 | 16h  |
+### User Stories & Features Implemented
 
----
+During Milestone 2, we expanded Habitizer with multiple user-centered features including:
 
-### 🧪 Scenario-Based System Tests
+- Adding custom routines  
+- Reordering and deleting tasks  
+- Sub-minute task tracking (rounded to 5-second increments)  
+- Dual time displays (routine and task)  
+- Pause and resume timers  
+- Renaming and deleting routines  
+- Persistent data (planned with Room)  
 
-Tests simulate real user flows from task creation to routine execution. They include:
-
-- Creating, reordering, and deleting tasks
-- Sub-minute and dual time tracking
-- Persisting changes after app relaunch
-- Timer rounding, pause/resume logic
-
-> ✅ See: `Scenario-Based System Test Table` (Jonghun)
+We wrote our user stories in BDD format and prioritized features based on estimated impact and effort.
 
 ---
 
-### 🧾 Postmortem Reflection
+## 🧪 System Testing
 
-#### ❌ What Didn’t Go Well
-- Assigned work by task, not story
-- Merged branches too frequently at low-level
-- Insufficient test coverage early on
-- Some team members didn’t contribute commits equally
+To ensure robust behavior, we developed scenario-based system tests covering all core flows:
 
-#### ✅ What Went Well
-- Strong adherence to SOLID principles
-- Consistent commit and PR structure
-- Open communication through Discord
-- Well-documented logic and reusable architecture
+- Creating routines and tasks
+- Reordering and deleting tasks
+- Pausing/resuming timers and observing correct rounding
+- Displaying sub-minute task durations accurately
+- Ensuring persistence of changes across app restarts (planned)
+- Confirming timers and task states behave correctly when routines are ended manually or automatically
 
-#### 🧩 Risk Mitigation for Future Milestones
-- Use **story-based branching**
-- Require test completion before merge
-- Assign full stories to pairs or individuals
-- Weekly check-ins on code contributions
+These tests were designed to mimic real user behavior and confirm that each story delivers usable, predictable functionality.
 
 ---
 
-## 📦 Tech Stack & Tools
+## 🧾 Postmortem Reflection
 
-- **Java + Android SDK** – Mobile app development
-- **JUnit** – Unit testing framework
-- **GitHub Projects + Branching Strategy** – Task management
-- **Room (Planned)** – Persistent data layer
-- **Figma (Planned)** – UI prototyping and user flow planning
+### What Didn't Go Well
+- We initially assigned tasks instead of whole user stories, leading to fragmented ownership.
+- Merges were sometimes done at too low a level (task vs. feature).
+- Testing coverage was delayed in early stages of development.
+- Team contributions varied; not all members committed code regularly.
+
+### What Went Well
+- We applied agile practices such as planning poker and velocity tracking effectively.
+- Code structure followed SOLID principles and MVP architecture.
+- Communication was open and productive via Discord.
+- Documentation and variable naming were clean and understandable.
+- Team reviews helped catch bugs early and ensured good code hygiene.
+
+### Improvements Moving Forward
+- Assign stories instead of individual tasks to promote ownership.
+- Require tests before pull requests can be merged.
+- Encourage balanced participation from all team members.
+- Maintain consistent weekly progress updates and check-ins.
 
 ---
 
-## 🗓️ Looking Ahead to Milestone 3
+## 🧰 Tech Stack & Tools
 
-- Polish UI: Animations, better list visuals
-- Add Firebase or local JSON backup
-- Weekly stats (time spent, most completed tasks)
-- Improve scoring logic for task efficiency
+- **Java** & **Android SDK** – Mobile application development  
+- **JUnit** – Unit testing  
+- **Room (planned)** – Persistent data storage  
+- **GitHub Projects** – Project tracking  
+- **Figma (planned)** – UI/UX design  
+- **Discord** – Team communication and check-ins  
+
+---
+
+## ✅ Conclusion
+
+Habitizer has grown from a simple routine timer into a more thoughtful and structured application for habit-building. Through two development milestones, our team successfully implemented key features such as customizable routines, real-time task tracking, editing flows, and sub-minute time recording. We also gained hands-on experience working in an agile environment, tracking our velocity, using planning poker for estimations, and collaborating through clear code review processes.
+
+While there are still enhancements we’d love to explore — such as UI polish, persistent data storage, and advanced analytics — we’re proud of the foundation we’ve built. Habitizer reflects our team’s ability to plan, execute, and iterate on a meaningful software product while applying industry-relevant tools and practices.
+
+We look forward to applying these lessons in future development work, both in and beyond the classroom.

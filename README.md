@@ -1,4 +1,4 @@
-# Habitizer: Smart Routine Manager
+# Habitizer: Routine Manager
 
 **Contributors:**  
 David Sanchez, Emma Chen, Phillip Tran, Joseph Whiteman, Shouki Ibrahim, Jonghun Park
